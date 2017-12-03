@@ -5,11 +5,27 @@
 [![License](https://img.shields.io/cocoapods/l/FRadioPlayer.svg?style=flat)](http://cocoapods.org/pods/FRadioPlayer)
 [![Platform](https://img.shields.io/cocoapods/p/FRadioPlayer.svg?style=flat)](http://cocoapods.org/pods/FRadioPlayer)
 
+FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
+## Features
+- [x] Support internet radio URL playback
+- [x] Update and parse track metadata
+- [x] Update and show album artwork (via iTunes API)
+- [x] Automatic handling of interruptions
+- [x] Automatic handling to route changes
+- [x] Support bluetooth playback
+- [x] [Swift 4](https://developer.apple.com/swift/)
+- [] Support for Audio Taps
+- [] Support for Audio Recording
+
 ## Requirements
+- iOS 9 +
+- Xcode 9
+- Swift 4
 
 ## Installation
 
