@@ -19,8 +19,8 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 - [x] Automatic handling to route changes
 - [x] Support bluetooth playback
 - [x] [Swift 4](https://developer.apple.com/swift/)
-- [] Support for Audio Taps
-- [] Support for Audio Recording
+- [ ] Support for Audio Taps
+- [ ] Support for Audio Recording
 
 ## Requirements
 - iOS 9 +
@@ -38,7 +38,7 @@ pod 'FRadioPlayer'
 
 ## Author
 
-[Fethi El Hassasna]] (https://twitter.com/fethica)
+[Fethi El Hassasna] (https://twitter.com/fethica)
 
 ## License
 
