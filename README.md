@@ -38,7 +38,7 @@ pod 'FRadioPlayer'
 
 ## Author
 
-[Fethi El Hassasna] (https://twitter.com/fethica)
+[Fethi El Hassasna](https://twitter.com/fethica)
 
 ## License
 
