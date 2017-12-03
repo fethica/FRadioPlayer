@@ -30,7 +30,7 @@ FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
 
   s.ios.deployment_target = '9.0'
 
-  s.source_files = 'FRadioPlayer/Source/*.swift'
+  s.source_files = 'Source/*.swift'
   
   # s.resource_bundles = {
   #   'FRadioPlayer' => ['FRadioPlayer/Assets/*.png']
