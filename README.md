@@ -22,7 +22,7 @@ pod 'FRadioPlayer'
 
 ## Author
 
-fethica, e.fethi.c@gmail.com
+[Fethi El Hassasna]] (https://twitter.com/fethica)
 
 ## License
 
