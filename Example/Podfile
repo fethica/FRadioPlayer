@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'FRadioPlayer_Example' do
+  pod 'FRadioPlayer', :path => '../'
+
+  target 'FRadioPlayer_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
