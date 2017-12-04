@@ -106,7 +106,7 @@ Called when player changes state
 func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayerState)
 ```
 
-Called when the player change the playing state
+Called when the player changes the playing state
 ```swift
 func radioPlayer(_ player: FRadioPlayer, player isPlaying: Bool)
 ```
