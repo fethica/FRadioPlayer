@@ -3,12 +3,21 @@
 # * https://github.com/supermarin/xcpretty#usage
 
 osx_image: xcode9.1
-language: swift
-# cache: cocoapods
+anguage: swift
+
+sudo: required
+
+env:
+  global:
+    - WORKSPACE=Example/FRadioPlayer.xcworkspace
+    - SCHEME=FRadioPlayer-Example
+    - SDK=iphonesimulator11.1
+  matrix:
+    - DESTINATION="platform=iOS Simulator,name=iPhone 8,OS=11.1"
 podfile: Example/Podfile
 before_install:
 - gem install cocoapods # Since Travis is not always on latest version
 - pod install --project-directory=Example
 script:
-- set -o pipefail && xcodebuild test -enableCodeCoverage YES -workspace Example/FRadioPlayer.xcworkspace -scheme FRadioPlayer-Example -sdk iphonesimulator11.1 ONLY_ACTIVE_ARCH=NO | xcpretty
+- set -o pipefail && xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c
 - pod lib lint
