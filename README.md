@@ -18,7 +18,10 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 - [x] Automatic handling of interruptions
 - [x] Automatic handling to route changes
 - [x] Support bluetooth playback
-- [x] [Swift 4](https://developer.apple.com/swift/)
+- [x] Swift 4
+- [ ] Full documentation
+- [ ] Handling network errors
+- [ ] Support for Carthage
 - [ ] Support for Audio Taps
 - [ ] Support for Audio Recording
 
@@ -29,11 +32,103 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Installation
 
+### CocoaPods
+
 FRadioPlayer is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
 pod 'FRadioPlayer'
+```
+
+### Manual
+
+Drag the `Source` folder into your project.
+
+## Usage
+
+### Basics
+
+1. Import `FRadioPlayer` (if you are using Cocoapods)
+
+```swift
+import FRadioPlayer
+```
+
+2. Get the singleton `FRadioPlayer` instance
+
+```swift
+let player = FRadioPlayer.shared
+```
+
+3. Set the delegate for the player
+
+```swift
+player.delegate = self
+```
+
+4. Set the radio URL
+```swift
+player.radioURL = URL(string: "http://example.com/station.mp3")
+```
+
+### Properties
+
+- `isAutoPlay: Bool` The player starts playing when the `radioURL` property gets set. (default == `true`)
+
+- `enableArtwork: Bool` Enable fetching albums artwork from the iTunes API. (default == `true`)
+
+- `artworkSize: Int` Artwork image size. (default == `100` | 100x100).
+
+- `rate: Float?` Read only property to get the current `AVPlayer` rate.
+
+### Playback controls
+
+- Play
+```swift
+player.play()
+```
+
+- Pause
+```swift
+player.pause()
+```
+
+- Stop
+```swift
+player.stop()
+```
+
+### Delegate methods
+
+Called when player changes state
+```swift
+func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayerState)
+```
+
+Called when the player change the playing state
+```swift
+func radioPlayer(_ player: FRadioPlayer, player isPlaying: Bool)
+```
+
+Called when player changes the current player item
+```swift
+func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?)
+```
+
+Called when player item changes the timed metadata value
+```swift
+func radioPlayer(_ player: FRadioPlayer, metadataDidChange artistName: String?, trackName: String?)
+```
+
+Called when player item changes the timed metadata value
+```swift
+func radioPlayer(_ player: FRadioPlayer, metadataDidChange rawValue: String?)
+```
+
+Called when the player gets the artwork for the playing song
+```swift
+func radioPlayer(_ player: FRadioPlayer, artworkDidChange artURL: URL?)
 ```
 
 ## Author
@@ -43,3 +138,4 @@ pod 'FRadioPlayer'
 ## License
 
 FRadioPlayer is available under the MIT license. See the LICENSE file for more info.
+
