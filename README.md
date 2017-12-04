@@ -16,7 +16,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 - [x] Update and parse track metadata
 - [x] Update and show album artwork (via iTunes API)
 - [x] Automatic handling of interruptions
-- [x] Automatic handling to route changes
+- [x] Automatic handling of route changes
 - [x] Support bluetooth playback
 - [x] Swift 4
 - [ ] Full documentation
