@@ -19,7 +19,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 - [x] Automatic handling of route changes
 - [x] Support bluetooth playback
 - [x] Swift 4
-- [ ] Full documentation
+- [x] [Full documentation](https://fethica.github.io/FRadioPlayer/)
 - [ ] Handling network errors
 - [ ] Support for Carthage
 - [ ] Support for Audio Taps
