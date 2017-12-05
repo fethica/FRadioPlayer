@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>FRadioPlayer  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="FRadioPlayer  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">FRadioPlayer Docs</a> (100% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">FRadioPlayer Reference</a>
+        <img id="carat" src="img/carat.png" />
+        FRadioPlayer  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/FRadioPlayer.html">FRadioPlayer</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/FRadioPlayerState.html">FRadioPlayerState</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/FRadioPlayerDelegate.html">FRadioPlayerDelegate</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <h1 id='fradioplayer' class='heading'>FRadioPlayer</h1>
+
+<p><a href="https://travis-ci.org/fethica/FRadioPlayer"><img src="http://img.shields.io/travis/fethica/FRadioPlayer.svg?style=flat" alt="CI Status"></a>
+<a href="http://cocoapods.org/pods/FRadioPlayer"><img src="https://img.shields.io/cocoapods/v/FRadioPlayer.svg?style=flat" alt="Version"></a>
+<a href="http://cocoapods.org/pods/FRadioPlayer"><img src="https://img.shields.io/cocoapods/l/FRadioPlayer.svg?style=flat" alt="License"></a>
+<a href="http://cocoapods.org/pods/FRadioPlayer"><img src="https://img.shields.io/cocoapods/p/FRadioPlayer.svg?style=flat" alt="Platform"></a></p>
+
+<p>FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.</p>
+<h2 id='example' class='heading'>Example</h2>
+
+<p>To run the example project, clone the repo, and run <code>pod install</code> from the Example directory first.</p>
+<h2 id='features' class='heading'>Features</h2>
+
+<ul>
+<li>[x] Support internet radio URL playback</li>
+<li>[x] Update and parse track metadata</li>
+<li>[x] Update and show album artwork (via iTunes API)</li>
+<li>[x] Automatic handling of interruptions</li>
+<li>[x] Automatic handling of route changes</li>
+<li>[x] Support bluetooth playback</li>
+<li>[x] Swift 4</li>
+<li>[x] Full documentation</li>
+<li>[ ] Handling network errors</li>
+<li>[ ] Support for Carthage</li>
+<li>[ ] Support for Audio Taps</li>
+<li>[ ] Support for Audio Recording</li>
+</ul>
+<h2 id='requirements' class='heading'>Requirements</h2>
+
+<ul>
+<li>iOS 9 +</li>
+<li>Xcode 9</li>
+<li>Swift 4</li>
+</ul>
+<h2 id='installation' class='heading'>Installation</h2>
+<h3 id='cocoapods' class='heading'>CocoaPods</h3>
+
+<p>FRadioPlayer is available through <a href="http://cocoapods.org">CocoaPods</a>. To install
+it, simply add the following line to your Podfile:</p>
+<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s1">'FRadioPlayer'</span>
+</code></pre>
+<h3 id='manual' class='heading'>Manual</h3>
+
+<p>Drag the <code>Source</code> folder into your project.</p>
+<h2 id='usage' class='heading'>Usage</h2>
+<h3 id='basics' class='heading'>Basics</h3>
+
+<ol>
+<li>Import <code><a href="Classes/FRadioPlayer.html">FRadioPlayer</a></code> (if you are using Cocoapods)</li>
+</ol>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">FRadioPlayer</span>
+</code></pre>
+
+<ol>
+<li>Get the singleton <code><a href="Classes/FRadioPlayer.html">FRadioPlayer</a></code> instance</li>
+</ol>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">player</span> <span class="o">=</span> <span class="kt">FRadioPlayer</span><span class="o">.</span><span class="n">shared</span>
+</code></pre>
+
+<ol>
+<li>Set the delegate for the player</li>
+</ol>
+<pre class="highlight swift"><code><span class="n">player</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="k">self</span>
+</code></pre>
+
+<ol>
+<li>Set the radio URL
+<code>swift
+player.radioURL = URL(string: &quot;http://example.com/station.mp3&quot;)
+</code></li>
+</ol>
+<h3 id='properties' class='heading'>Properties</h3>
+
+<ul>
+<li><p><code>isAutoPlay: Bool</code> The player starts playing when the <code>radioURL</code> property gets set. (default == <code>true</code>)</p></li>
+<li><p><code>enableArtwork: Bool</code> Enable fetching albums artwork from the iTunes API. (default == <code>true</code>)</p></li>
+<li><p><code>artworkSize: Int</code> Artwork image size. (default == <code>100</code> | 100x100).</p></li>
+<li><p><code>rate: Float?</code> Read only property to get the current <code>AVPlayer</code> rate.</p></li>
+</ul>
+<h3 id='playback-controls' class='heading'>Playback controls</h3>
+
+<ul>
+<li><p>Play</p>
+<pre class="highlight swift"><code><span class="n">player</span><span class="o">.</span><span class="nf">play</span><span class="p">()</span>
+</code></pre></li>
+<li><p>Pause</p>
+<pre class="highlight swift"><code><span class="n">player</span><span class="o">.</span><span class="nf">pause</span><span class="p">()</span>
+</code></pre></li>
+<li><p>Stop</p>
+<pre class="highlight swift"><code><span class="n">player</span><span class="o">.</span><span class="nf">stop</span><span class="p">()</span>
+</code></pre></li>
+</ul>
+<h3 id='delegate-methods' class='heading'>Delegate methods</h3>
+
+<p>Called when player changes state</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt">FRadioPlayer</span><span class="p">,</span> <span class="n">playerStateDidChange</span> <span class="nv">state</span><span class="p">:</span> <span class="kt">FRadioPlayerState</span><span class="p">)</span>
+</code></pre>
+
+<p>Called when the player changes the playing state</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt">FRadioPlayer</span><span class="p">,</span> <span class="n">player</span> <span class="nv">isPlaying</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span>
+</code></pre>
+
+<p>Called when player changes the current player item</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt">FRadioPlayer</span><span class="p">,</span> <span class="n">itemDidChange</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?)</span>
+</code></pre>
+
+<p>Called when player item changes the timed metadata value</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt">FRadioPlayer</span><span class="p">,</span> <span class="n">metadataDidChange</span> <span class="nv">artistName</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">trackName</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span>
+</code></pre>
+
+<p>Called when player item changes the timed metadata value</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt">FRadioPlayer</span><span class="p">,</span> <span class="n">metadataDidChange</span> <span class="nv">rawValue</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span>
+</code></pre>
+
+<p>Called when the player gets the artwork for the playing song</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt">FRadioPlayer</span><span class="p">,</span> <span class="n">artworkDidChange</span> <span class="nv">artURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?)</span>
+</code></pre>
+<h2 id='author' class='heading'>Author</h2>
+
+<p><a href="https://twitter.com/fethica">Fethi El Hassasna</a></p>
+<h2 id='license' class='heading'>License</h2>
+
+<p>FRadioPlayer is available under the MIT license. See the LICENSE file for more info.</p>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2017 <a class="link" href="https://fethica.com" target="_blank" rel="external">Fethi El Hassasna</a>. All rights reserved. (Last updated: 2017-12-05)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

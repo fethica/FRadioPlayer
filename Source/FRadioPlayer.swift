@@ -8,6 +8,8 @@
 
 import AVFoundation
 
+// MARK: - FRadioPlayerState
+
 /**
  `FRadioPlayerState` is the Player status enum
  */
@@ -41,6 +43,12 @@ import AVFoundation
     }
 }
 
+// MARK: - FRadioPlayerDelegate
+
+/**
+ The `FRadioPlayerDelegate` protocol defines methods you can implement to respond to playback events associated with an `FRadioPlayer` object.
+ */
+
 @objc public protocol FRadioPlayerDelegate: class {
     /**
      Called when player changes state
@@ -51,7 +59,7 @@ import AVFoundation
     func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayerState)
     
     /**
-     Called when the player change the playing state
+     Called when the player changes the playing state
      
      - parameter player: FRadioPlayer
      - parameter playing: Bool value
@@ -67,7 +75,7 @@ import AVFoundation
     @objc optional func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?)
     
     /**
-     Called when player item changes the timed metadata value
+     Called when player item changes the timed metadata value, it uses (separatedBy: " - ") to get the artist/song name, if you want more control over the raw metadata, consider using `metadataDidChange rawValue` instead
      
      - parameter player: FRadioPlayer
      - parameter artistName: The artist name
@@ -92,31 +100,52 @@ import AVFoundation
     @objc optional func radioPlayer(_ player: FRadioPlayer, artworkDidChange artURL: URL?)
 }
 
+// MARK: - FRadioPlayer
+
+/**
+ FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
+ */
+
 open class FRadioPlayer: NSObject {
+    
+    // MARK: - Properties
     
     /// Returns the singleton `FRadioPlayer` instance.
     open static let shared = FRadioPlayer()
     
+    /**
+     The delegate object for the `FRadioPlayer`.
+     Implement the methods declared by the `FRadioPlayerDelegate` object to respond to user interactions and the player output.
+     */
     open weak var delegate: FRadioPlayerDelegate?
     
+    /// The player current radio URL
     open var radioURL: URL? {
         didSet {
             radioURLDidChange(with: radioURL)
         }
     }
     
+    /// The player starts playing when the radioURL property gets set. (default == true)
     open var isAutoPlay = true
     
+    /// Enable fetching albums artwork from the iTunes API. (default == true)
     open var enableArtwork = true
     
+    /// Artwork image size. (default == 100 | 100x100)
     open var artworkSize = 100
     
+    /// Read only property to get the current AVPlayer rate.
     open var rate: Float? {
         return player?.rate
     }
     
+    // MARK: - Private properties
+    
+    /// AVPlayer
     private var player: AVPlayer?
     
+    /// Player state of type `FRadioPlayerState`
     private var state = FRadioPlayerState.urlNotSet {
         didSet {
             guard oldValue != state else { return }
@@ -134,6 +163,7 @@ open class FRadioPlayer: NSObject {
     /// Last player item
     private var lastPlayerItem: AVPlayerItem?
     
+    /// Check for headphones, used to handle audio route change
     private var headphonesConnected: Bool = false
     
     /// Default player item
@@ -143,28 +173,7 @@ open class FRadioPlayer: NSObject {
         }
     }
     
-    open func play() {
-        guard let player = player else { return }
-        if player.currentItem == nil, playerItem != nil {
-            player.replaceCurrentItem(with: playerItem)
-        }
-        
-        player.play()
-        isPlaying = true
-    }
-    
-    open func pause() {
-        guard let player = player else { return }
-        player.pause()
-        isPlaying = false
-    }
-    
-    open func stop() {
-        guard let player = player else { return }
-        player.replaceCurrentItem(with: nil)
-        timedMetadataDidChange(rawValue: nil)
-        isPlaying = false
-    }
+    // MARK: - Initialization
     
     private override init() {
         super.init()
@@ -180,9 +189,44 @@ open class FRadioPlayer: NSObject {
         checkHeadphonesConnection(outputs: AVAudioSession.sharedInstance().currentRoute.outputs)
     }
     
+    // MARK: - Control Methods
     
+    /**
+     Trigger the play function of the radio player
+     
+     */
+    open func play() {
+        guard let player = player else { return }
+        if player.currentItem == nil, playerItem != nil {
+            player.replaceCurrentItem(with: playerItem)
+        }
+        
+        player.play()
+        isPlaying = true
+    }
     
-    // -MARK: private helpers
+    /**
+     Trigger the pause function of the radio player
+     
+     */
+    open func pause() {
+        guard let player = player else { return }
+        player.pause()
+        isPlaying = false
+    }
+    
+    /**
+     Trigger the stop function of the radio player
+     
+     */
+    open func stop() {
+        guard let player = player else { return }
+        player.replaceCurrentItem(with: nil)
+        timedMetadataDidChange(rawValue: nil)
+        isPlaying = false
+    }
+    
+    // MARK: - Private helpers
     
     private func radioURLDidChange(with url: URL?) {
         guard let url = url else {
@@ -360,6 +404,7 @@ open class FRadioPlayer: NSObject {
     
     // MARK: - KVO
     
+    /// :nodoc:
     override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
         if let item = object as? AVPlayerItem, let keyPath = keyPath, item == self.playerItem {

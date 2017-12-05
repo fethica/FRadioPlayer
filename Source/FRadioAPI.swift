@@ -8,8 +8,10 @@
 
 import Foundation
 
-// MARK: iTunes API
+// MARK: - iTunes API
 internal struct FRadioAPI {
+    
+    // MARK: - Util methods
     
     static func getArtwork(for metadata: String, size: Int, completionHandler: @escaping (_ artworkURL: URL?) -> ()) {
         
@@ -53,6 +55,8 @@ internal struct FRadioAPI {
         components.queryItems?.append(URLQueryItem(name: Keys.entity, value: Values.entity))
         return components.url
     }
+    
+    // MARK: - Constants
     
     private struct Domain {
         static let scheme = "https"
