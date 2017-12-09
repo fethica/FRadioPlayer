@@ -140,7 +140,7 @@ open class FRadioPlayer: NSObject {
         return player?.rate
     }
     
-    /// Check `is playing` state
+    /// Check if the player is playing
     open private(set) var isPlaying: Bool = false {
         didSet {
             guard oldValue != isPlaying else { return }
@@ -148,7 +148,7 @@ open class FRadioPlayer: NSObject {
         }
     }
     
-    /// Player state of type `FRadioPlayerState`
+    /// Player current state of type `FRadioPlayerState`
     open private(set) var state = FRadioPlayerState.urlNotSet {
         didSet {
             guard oldValue != state else { return }

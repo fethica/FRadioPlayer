@@ -82,6 +82,10 @@ player.radioURL = URL(string: "http://example.com/station.mp3")
 
 - `rate: Float?` Read only property to get the current `AVPlayer` rate.
 
+- `isPlaying: Bool` Check if the player is playing.
+
+- `state: FRadioPlayerState` Player current state of type `FRadioPlayerState`.
+
 ### Playback controls
 
 - Play
@@ -128,7 +132,7 @@ func radioPlayer(_ player: FRadioPlayer, metadataDidChange rawValue: String?)
 
 Called when the player gets the artwork for the playing song
 ```swift
-func radioPlayer(_ player: FRadioPlayer, artworkDidChange artURL: URL?)
+func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?)
 ```
 
 ## Author
