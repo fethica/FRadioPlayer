@@ -148,18 +148,18 @@ open class FRadioPlayer: NSObject {
         }
     }
     
-    // MARK: - Private properties
-    
-    /// AVPlayer
-    private var player: AVPlayer?
-    
     /// Player state of type `FRadioPlayerState`
-    private var state = FRadioPlayerState.urlNotSet {
+    open private(set) var state = FRadioPlayerState.urlNotSet {
         didSet {
             guard oldValue != state else { return }
             delegate?.radioPlayer(self, playerStateDidChange: state)
         }
     }
+    
+    // MARK: - Private properties
+    
+    /// AVPlayer
+    private var player: AVPlayer?
     
     /// Last player item
     private var lastPlayerItem: AVPlayerItem?
