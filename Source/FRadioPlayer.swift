@@ -95,9 +95,9 @@ import AVFoundation
      Called when the player gets the artwork for the playing song
      
      - parameter player: FRadioPlayer
-     - parameter artURL: URL for the artwork from iTunes
+     - parameter artworkURL: URL for the artwork from iTunes
      */
-    @objc optional func radioPlayer(_ player: FRadioPlayer, artworkDidChange artURL: URL?)
+    @objc optional func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?)
 }
 
 // MARK: - FRadioPlayer

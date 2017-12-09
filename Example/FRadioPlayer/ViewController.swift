@@ -131,10 +131,10 @@ extension ViewController: FRadioPlayerDelegate {
         infoContainer.isHidden = (rawValue == nil)
     }
     
-    func radioPlayer(_ player: FRadioPlayer, artworkDidChange artURL: URL?) {
+    func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?) {
         
         // Please note that the following example is for demonstration purposes only, consider using asynchronous network calls to set the image from a URL.
-        guard let artURL = artURL, let data = try? Data(contentsOf: artURL) else {
+        guard let artworkURL = artworkURL, let data = try? Data(contentsOf: artworkURL) else {
             artworkImageView.image = stations[selectedIndex].image
             return
         }
