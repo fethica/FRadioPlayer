@@ -12,6 +12,7 @@ import FRadioPlayer
 
 class ViewController: UIViewController {
     
+    // IB UI
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var artistLabel: UILabel!
@@ -20,8 +21,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var artworkImageView: UIImageView!
     @IBOutlet weak var playButton: UIButton!
     
+    // Singleton ref to player
     let player: FRadioPlayer = FRadioPlayer.shared
     
+    // List of stations
     let stations = [Station(name: "Newport Folk Radio",
                             detail: "Are you ready to Folk?",
                             url: URL(string: "http://rfcmedia.streamguys1.com/Newport.mp3")!,
@@ -37,6 +40,7 @@ class ViewController: UIViewController {
                              url: URL(string: "http://jupiter.prostreaming.net/altmixxlow")!,
                              image: #imageLiteral(resourceName: "station3"))]
     
+    // Selected station index
     var selectedIndex = 0 {
         didSet {
             defer {
@@ -109,6 +113,8 @@ class ViewController: UIViewController {
     }
 }
 
+// MARK: - FRadioPlayerDelegate
+
 extension ViewController: FRadioPlayerDelegate {
 
     func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayerState) {
@@ -144,6 +150,8 @@ extension ViewController: FRadioPlayerDelegate {
     }
 }
 
+// MARK: - UITableViewDelegate
+
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -162,6 +170,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         selectedIndex = indexPath.item
     }
 }
+
+// MARK: - Remote Controls / Lock screen
 
 extension ViewController {
     
