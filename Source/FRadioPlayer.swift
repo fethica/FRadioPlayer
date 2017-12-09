@@ -140,6 +140,14 @@ open class FRadioPlayer: NSObject {
         return player?.rate
     }
     
+    /// Check `is playing` state
+    open private(set) var isPlaying: Bool = false {
+        didSet {
+            guard oldValue != isPlaying else { return }
+            delegate?.radioPlayer?(self, player: isPlaying)
+        }
+    }
+    
     // MARK: - Private properties
     
     /// AVPlayer
@@ -150,13 +158,6 @@ open class FRadioPlayer: NSObject {
         didSet {
             guard oldValue != state else { return }
             delegate?.radioPlayer(self, playerStateDidChange: state)
-        }
-    }
-    
-    /// Check is playing state
-    private var isPlaying: Bool = false {
-        didSet {
-            delegate?.radioPlayer?(self, player: isPlaying)
         }
     }
     
