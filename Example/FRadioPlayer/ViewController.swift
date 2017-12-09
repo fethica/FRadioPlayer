@@ -66,6 +66,9 @@ class ViewController: UIViewController {
         // Set the delegate for the radio player
         player.delegate = self
         
+        // Show current player state
+        statusLabel.text = player.state.description
+        
         tableView.tableFooterView = UIView()
         infoContainer.isHidden = true
         
