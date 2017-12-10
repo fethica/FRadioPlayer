@@ -11,6 +11,10 @@ FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
+<p align="center">
+    <img alt="FRadioPlayer" src="https://fethica.com/img/web/fradioplayer-example.png" width="485">
+</p>
+
 ## Features
 - [x] Support internet radio URL playback
 - [x] Update and parse track metadata
