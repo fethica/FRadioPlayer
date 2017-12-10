@@ -1,3 +1,7 @@
+<p align="center">
+<img alt="FRadioPlayer" src="https://fethica.com/img/web/repo-hero.png" width="749">
+</p>
+
 # FRadioPlayer
 
 [![CI Status](http://img.shields.io/travis/fethica/FRadioPlayer.svg?style=flat)](https://travis-ci.org/fethica/FRadioPlayer)
