@@ -230,11 +230,8 @@ open class FRadioPlayer: NSObject {
     // MARK: - Private helpers
     
     private func radioURLDidChange(with url: URL?) {
-        guard let url = url else {
-            state = .urlNotSet
-            stop()
-            return
-        }
+        stop()
+        guard let url = url else { state = .urlNotSet; return }
         
         state = .loading
         
