@@ -1,0 +1,6 @@
+framework module FRadioPlayer {
+  umbrella header "FRadioPlayer-umbrella.h"
+
+  export *
+  module * { export * }
+}
