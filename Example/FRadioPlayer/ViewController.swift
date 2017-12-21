@@ -215,10 +215,6 @@ extension ViewController {
         // Define Now Playing Info
         var nowPlayingInfo = [String : Any]()
         
-        if let image = track?.image {
-            nowPlayingInfo[MPMediaItemPropertyArtwork] = image
-        }
-        
         if let artist = track?.artist {
             nowPlayingInfo[MPMediaItemPropertyArtist] = artist
         }
