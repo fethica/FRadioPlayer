@@ -227,6 +227,14 @@ open class FRadioPlayer: NSObject {
         isPlaying = false
     }
     
+    /**
+     Toggle isPlaying state
+     
+     */
+    open func togglePlaying() {
+        isPlaying ? pause() : play()
+    }
+    
     // MARK: - Private helpers
     
     private func radioURLDidChange(with url: URL?) {
