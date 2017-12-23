@@ -111,6 +111,11 @@ player.pause()
 player.stop()
 ```
 
+- Toggle playing state
+```swift
+player.togglePlaying()
+```
+
 ### Delegate methods
 
 Called when player changes state
