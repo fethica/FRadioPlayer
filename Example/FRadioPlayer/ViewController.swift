@@ -80,7 +80,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func playTap(_ sender: Any) {
-        togglePlaying()
+        player.togglePlaying()
     }
     
     @IBAction func stopTap(_ sender: Any) {
@@ -93,10 +93,6 @@ class ViewController: UIViewController {
     
     @IBAction func nextTap(_ sender: Any) {
         next()
-    }
-    
-    func togglePlaying() {
-        playButton.isSelected ? player.pause() : player.play()
     }
     
     func next() {
