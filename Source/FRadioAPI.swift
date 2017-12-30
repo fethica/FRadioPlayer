@@ -15,7 +15,7 @@ internal struct FRadioAPI {
     
     static func getArtwork(for metadata: String, size: Int, completionHandler: @escaping (_ artworkURL: URL?) -> ()) {
         
-        guard let url = getURL(with: metadata) else {
+        guard !metadata.isEmpty, metadata !=  " - ", let url = getURL(with: metadata) else {
             completionHandler(nil)
             return
         }
