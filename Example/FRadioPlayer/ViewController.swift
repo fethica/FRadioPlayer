@@ -117,8 +117,8 @@ extension ViewController: FRadioPlayerDelegate {
         statusLabel.text = state.description
     }
     
-    func radioPlayer(_ player: FRadioPlayer, player isPlaying: Bool) {
-        playButton.isSelected = isPlaying
+    func radioPlayer(_ player: FRadioPlayer, playbackStateDidChange state: FRadioPlaybackState) {
+        playButton.isSelected = player.isPlaying
     }
     
     func radioPlayer(_ player: FRadioPlayer, metadataDidChange artistName: String?, trackName: String?) {
