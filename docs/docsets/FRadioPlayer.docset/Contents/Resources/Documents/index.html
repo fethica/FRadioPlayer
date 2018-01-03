@@ -144,8 +144,9 @@ player.radioURL = URL(string: &quot;http://example.com/station.mp3&quot;)
 <li><p><code>enableArtwork: Bool</code> Enable fetching albums artwork from the iTunes API. (default == <code>true</code>)</p></li>
 <li><p><code>artworkSize: Int</code> Artwork image size. (default == <code>100</code> | 100x100).</p></li>
 <li><p><code>rate: Float?</code> Read only property to get the current <code>AVPlayer</code> rate.</p></li>
-<li><p><code>isPlaying: Bool</code> Check if the player is playing.</p></li>
+<li><p><code>isPlaying: Bool</code> Read only property to check if the player is playing.</p></li>
 <li><p><code>state: FRadioPlayerState</code> Player current state of type <code><a href="Enums/FRadioPlayerState.html">FRadioPlayerState</a></code>.</p></li>
+<li><p><code>playbackState: FRadioPlaybackState</code> Playing state of type <code><a href="Enums/FRadioPlaybackState.html">FRadioPlaybackState</a></code>.</p></li>
 </ul>
 <h3 id='playback-controls' class='heading'>Playback controls</h3>
 
@@ -169,8 +170,8 @@ player.radioURL = URL(string: &quot;http://example.com/station.mp3&quot;)
 <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt">FRadioPlayer</span><span class="p">,</span> <span class="n">playerStateDidChange</span> <span class="nv">state</span><span class="p">:</span> <span class="kt">FRadioPlayerState</span><span class="p">)</span>
 </code></pre>
 
-<p>Called when the player changes the playing state</p>
-<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt">FRadioPlayer</span><span class="p">,</span> <span class="n">player</span> <span class="nv">isPlaying</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span>
+<p>Called when the playback changes state</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt">FRadioPlayer</span><span class="p">,</span> <span class="n">playbackStateDidChange</span> <span class="nv">state</span><span class="p">:</span> <span class="kt">FRadioPlaybackState</span><span class="p">)</span>
 </code></pre>
 
 <p>Called when player changes the current player item</p>
