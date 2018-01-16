@@ -28,9 +28,9 @@ import AVFoundation
     /// Return a readable description
     public var description: String {
         switch self {
-        case .playing: return "URL is not set"
-        case .paused: return "Ready to play"
-        case .stopped: return "Loading"
+        case .playing: return "Player is playing"
+        case .paused: return "Player is paused"
+        case .stopped: return "Player is stopped"
         }
     }
 }
