@@ -275,13 +275,14 @@ open class FRadioPlayer: NSObject {
     // MARK: - Private helpers
     
     private func radioURLDidChange(with url: URL?) {
-        stop()
+        resetPlayer()
         guard let url = url else { state = .urlNotSet; return }
         
         state = .loading
         
         preparePlayer(with: AVAsset(url: url)) { (success, asset) in
             guard success, let asset = asset else {
+                self.resetPlayer()
                 self.state = .error
                 return
             }
@@ -380,10 +381,9 @@ open class FRadioPlayer: NSObject {
     }
     
     private func resetPlayer() {
-        radioURL = nil
+        stop()
         playerItem = nil
         lastPlayerItem = nil
-        player?.replaceCurrentItem(with: nil)
         player = nil
     }
     
