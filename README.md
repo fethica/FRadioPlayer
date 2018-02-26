@@ -28,7 +28,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 - [x] Support bluetooth playback
 - [x] Swift 4
 - [x] [Full documentation](https://fethica.github.io/FRadioPlayer/)
-- [ ] Handling network errors
+- [x] Network interruptions handling 
 - [ ] Support for Carthage
 - [ ] Support for Audio Taps
 - [ ] Support for Audio Recording
@@ -149,6 +149,14 @@ Called when the player gets the artwork for the playing song
 ```swift
 func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?)
 ```
+
+## Swift Radio App
+
+For more complete app features, check out [Swift Radio App](https://github.com/analogcode/Swift-Radio-Pro) based on **FRadioPlayer**
+
+<p align="center">
+    <img alt="Swift Radio" src="https://fethica.com/img/web/swift-radio.jpg">
+</p>
 
 ## Author
 
