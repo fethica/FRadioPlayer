@@ -1,0 +1,13 @@
+name: FRadioPlayer
+options:
+  bundleIdPrefix: org.fethica
+  deploymentTarget:
+    iOS: 10.0
+targets:
+  FRadioPlayer:
+    type: framework
+    platform: [iOS]
+    sources: Source
+    scheme: {}
+    settings:
+      INFOPLIST_FILE: CarthageInfo.plist

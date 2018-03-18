@@ -28,8 +28,8 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 - [x] Support bluetooth playback
 - [x] Swift 4
 - [x] [Full documentation](https://fethica.github.io/FRadioPlayer/)
-- [x] Network interruptions handling 
-- [ ] Support for Carthage
+- [x] Network interruptions handling
+- [x] Support for Carthage
 - [ ] Support for Audio Taps
 - [ ] Support for Audio Recording
 
@@ -47,6 +47,14 @@ it, simply add the following line to your Podfile:
 
 ```ruby
 pod 'FRadioPlayer'
+```
+
+### Carthage
+
+FRadioPlayer is available through [Carthage](https://github.com/Carthage/Carthage). To install it, simply add the following line to your Cartfile:
+
+```text
+github "fethica/FRadioPlayer" ~> 0.1.10
 ```
 
 ### Manual
@@ -157,6 +165,15 @@ For more complete app features, check out [Swift Radio App](https://github.com/a
 <p align="center">
     <img alt="Swift Radio" src="https://fethica.com/img/web/swift-radio.jpg">
 </p>
+
+## Hacking
+
+The Xcode project is generated automatically from `project.yml` using [XcodeGen](https://github.com/yonaskolb/XcodeGen). It's only checked in because Carthage needs it, do not edit it manually.
+
+```sh
+$ mint run yonaskolb/xcodegen
+💾  Saved project to FRadioPlayer.xcodeproj
+```
 
 ## Author
 
