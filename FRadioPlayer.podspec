@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'FRadioPlayer'
-  s.version          = '0.1.9'
+  s.version          = '0.1.10'
   s.summary          = 'A radio player for iOS'
 
 # This description is used to generate tags and improve search results.
@@ -31,7 +31,7 @@ FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
   s.ios.deployment_target = '9.0'
   s.source = { :git => 'https://github.com/fethica/FRadioPlayer.git', :tag => s.version.to_s }
   s.source_files = 'Source/*.swift'
-  
+
   # s.resource_bundles = {
   #   'FRadioPlayer' => ['FRadioPlayer/Assets/*.png']
   # }
