@@ -2,7 +2,7 @@ name: FRadioPlayer
 options:
   bundleIdPrefix: com.fethica
   deploymentTarget:
-    iOS: 9.0
+    iOS: 10.0
 targets:
   FRadioPlayer:
     type: framework
