@@ -26,7 +26,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 - [x] Automatic handling of interruptions
 - [x] Automatic handling of route changes
 - [x] Support bluetooth playback
-- [x] Swift 4
+- [x] Swift 4.2
 - [x] [Full documentation](https://fethica.github.io/FRadioPlayer/)
 - [x] Network interruptions handling
 - [x] Support for Carthage
@@ -34,9 +34,9 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 - [ ] Support for Audio Recording
 
 ## Requirements
-- iOS 9 +
-- Xcode 9
-- Swift 4
+- iOS 10 +
+- Xcode 10
+- Swift 4.2
 
 ## Installation
 
