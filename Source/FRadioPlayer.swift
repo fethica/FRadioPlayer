@@ -98,8 +98,9 @@ import AVFoundation
      
      - parameter player: FRadioPlayer
      - parameter url: Radio URL
+     - parameter totalTime: player item total time, == 0 if not available (live stream)
      */
-    @objc optional func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?)
+    @objc optional func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?, totalTime: TimeInterval)
     
     /**
      Called when player item changes the timed metadata value, it uses (separatedBy: " - ") to get the artist/song name, if you want more control over the raw metadata, consider using `metadataDidChange rawValue` instead
@@ -125,6 +126,15 @@ import AVFoundation
      - parameter artworkURL: URL for the artwork from iTunes
      */
     @objc optional func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?)
+    
+    /**
+     Called when the current playing time gets changed
+     
+     - parameter player: FRadioPlayer
+     - parameter currentTime: current time
+     - parameter totalTime: player item total time
+     */
+    @objc optional func radioPlayer(_ player: FRadioPlayer, playTimeDidChange currentTime: TimeInterval, totalTime: TimeInterval)
 }
 
 // MARK: - FRadioPlayer
@@ -192,6 +202,9 @@ open class FRadioPlayer: NSObject {
             delegate?.radioPlayer(self, playbackStateDidChange: playbackState)
         }
     }
+    
+    /// Store the current time
+    open var currentTime: Double? = nil
     
     // MARK: - Private properties
     
@@ -304,6 +317,10 @@ open class FRadioPlayer: NSObject {
     private func setupPlayer(with asset: AVAsset) {
         if player == nil {
             player = AVPlayer()
+            
+            player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1.0, preferredTimescale: Int32(NSEC_PER_SEC)), queue: .main, using: { time in
+                self.periodicTimeUpdate(self.player, time)
+            })
         }
         
         playerItem = AVPlayerItem(asset: asset)
@@ -340,7 +357,13 @@ open class FRadioPlayer: NSObject {
             if isAutoPlay { play() }
         }
         
-        delegate?.radioPlayer?(self, itemDidChange: radioURL)
+        var totalTime = 0.0
+        
+        if let duration = player?.currentItem?.duration, duration.isNumeric {
+            totalTime = Double(CMTimeGetSeconds(duration))
+        }
+        
+        delegate?.radioPlayer?(self, itemDidChange: radioURL, totalTime: totalTime)
     }
     
     /** Prepare the player from the passed AVAsset
@@ -526,4 +549,42 @@ open class FRadioPlayer: NSObject {
             }
         }
     }
+}
+
+// MARK: - WIP: Add time track
+
+extension FRadioPlayer {
+    
+    private func periodicTimeUpdate(_ player: AVPlayer?, _ time: CMTime) {
+        guard let player = player, let duration = player.currentItem?.duration, duration.isNumeric else { return }
+        
+        let playedTime = CMTimeGetSeconds(time)
+        let totalTime = CMTimeGetSeconds(duration)
+        
+        if playedTime == totalTime {
+            self.itemDidPlayToEnd()
+        }
+        
+        self.currentTime = playedTime
+        self.delegate?.radioPlayer?(self, playTimeDidChange: playedTime, totalTime: totalTime)
+    }
+    
+    @objc func itemDidPlayToEnd() {
+        guard let player = player else { return }
+        player.pause()
+        player.seek(to: .zero)
+        
+    }
+    
+    func seek(to seconds: Int64, completion:(()->Void)?) {
+        let seekTime = CMTime(seconds: Double(seconds), preferredTimescale: 1)
+        
+        player?.seek(to: seekTime, toleranceBefore: .zero, toleranceAfter: .positiveInfinity, completionHandler: { _ in
+            self.play()
+            // self.state = .playing
+            
+            completion?()
+        })
+    }
+    
 }
