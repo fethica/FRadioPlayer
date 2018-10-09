@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="t6p-XF-zv8">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="t6p-XF-zv8">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="u2x-Qd-Ee6">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="447"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="415"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" textLabel="wwE-Pb-VJh" detailTextLabel="Gy5-63-DWP" imageView="r6M-Eq-gEM" rowHeight="62" style="IBUITableViewCellStyleSubtitle" id="Fpe-3w-hvt">
@@ -61,13 +60,13 @@
                                         </connections>
                                     </tableView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="mdk-VV-03y">
-                                        <rect key="frame" x="0.0" y="447" width="375" height="156"/>
+                                        <rect key="frame" x="0.0" y="415" width="375" height="188"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iBP-qH-yHU">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="76"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="pJk-55-hl4">
-                                                        <rect key="frame" x="84" y="15.5" width="283" height="46.5"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="pJk-55-hl4" userLabel="Labels SV">
+                                                        <rect key="frame" x="84" y="15" width="283" height="46.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rA0-Cs-IGp">
                                                                 <rect key="frame" x="0.0" y="0.0" width="283" height="20.5"/>
@@ -101,8 +100,46 @@
                                                     <constraint firstItem="pJk-55-hl4" firstAttribute="leading" secondItem="q7N-tf-n8N" secondAttribute="trailing" constant="16" id="jxv-eP-UMS"/>
                                                 </constraints>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OfO-q7-Gy2">
-                                                <rect key="frame" x="0.0" y="76" width="375" height="30"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gLh-iJ-tPv" userLabel="Time Container">
+                                                <rect key="frame" x="0.0" y="76" width="375" height="32"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vbJ-By-Jp2" userLabel="Current Time Label">
+                                                        <rect key="frame" x="8" y="8" width="57" height="16"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="57" id="ZuO-dG-0FX"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CRg-ZJ-uS9" userLabel="Total time Label">
+                                                        <rect key="frame" x="310" y="8" width="57" height="16"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="57" id="nha-nZ-SCH"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <slider opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="2gC-ca-VAb">
+                                                        <rect key="frame" x="71" y="1" width="233" height="31"/>
+                                                        <color key="minimumTrackTintColor" red="0.82352941180000006" green="0.039215686270000001" blue="0.08235294118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </slider>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstItem="CRg-ZJ-uS9" firstAttribute="leading" secondItem="2gC-ca-VAb" secondAttribute="trailing" constant="8" id="39D-oE-OPL"/>
+                                                    <constraint firstItem="vbJ-By-Jp2" firstAttribute="leading" secondItem="gLh-iJ-tPv" secondAttribute="leading" constant="8" id="6bx-4w-2Mg"/>
+                                                    <constraint firstAttribute="trailing" secondItem="CRg-ZJ-uS9" secondAttribute="trailing" constant="8" id="7iG-6Z-deM"/>
+                                                    <constraint firstItem="2gC-ca-VAb" firstAttribute="centerY" secondItem="gLh-iJ-tPv" secondAttribute="centerY" id="RQj-0b-Nr8"/>
+                                                    <constraint firstItem="2gC-ca-VAb" firstAttribute="leading" secondItem="vbJ-By-Jp2" secondAttribute="trailing" constant="8" id="cpx-rz-EpQ"/>
+                                                    <constraint firstItem="CRg-ZJ-uS9" firstAttribute="centerY" secondItem="gLh-iJ-tPv" secondAttribute="centerY" id="g1F-y8-jAN"/>
+                                                    <constraint firstAttribute="height" constant="32" id="te9-jv-ajF"/>
+                                                    <constraint firstItem="vbJ-By-Jp2" firstAttribute="centerY" secondItem="gLh-iJ-tPv" secondAttribute="centerY" id="uCA-BA-BKQ"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OfO-q7-Gy2" userLabel="Player State View">
+                                                <rect key="frame" x="0.0" y="108" width="375" height="30"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="mab-Ca-oM3">
                                                         <rect key="frame" x="16" y="0.0" width="343" height="30"/>
@@ -131,8 +168,8 @@
                                                     <constraint firstAttribute="trailing" secondItem="mab-Ca-oM3" secondAttribute="trailing" constant="16" id="jLq-Hv-K23"/>
                                                 </constraints>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Edl-F5-0tt">
-                                                <rect key="frame" x="0.0" y="106" width="375" height="50"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Edl-F5-0tt" userLabel="Controls View">
+                                                <rect key="frame" x="0.0" y="138" width="375" height="50"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="xmg-gj-fZq">
                                                         <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
@@ -212,10 +249,14 @@
                     <connections>
                         <outlet property="artistLabel" destination="vPB-6c-enJ" id="0Tr-eh-j17"/>
                         <outlet property="artworkImageView" destination="q7N-tf-n8N" id="uTX-LH-vq9"/>
+                        <outlet property="currentTimeLabel" destination="vbJ-By-Jp2" id="iha-QT-eyq"/>
                         <outlet property="infoContainer" destination="iBP-qH-yHU" id="nGG-tx-lgM"/>
                         <outlet property="playButton" destination="tc0-4c-7Pk" id="0uh-5Z-fER"/>
                         <outlet property="statusLabel" destination="yV3-VM-lMy" id="Pva-Rx-ElK"/>
                         <outlet property="tableView" destination="u2x-Qd-Ee6" id="Oa7-tE-lQH"/>
+                        <outlet property="timeContainer" destination="gLh-iJ-tPv" id="5nB-E9-ciG"/>
+                        <outlet property="timeSlider" destination="2gC-ca-VAb" id="Z1g-js-rYz"/>
+                        <outlet property="totalTimeLabel" destination="CRg-ZJ-uS9" id="jBp-kK-EHk"/>
                         <outlet property="trackLabel" destination="rA0-Cs-IGp" id="oSd-qk-oOf"/>
                     </connections>
                 </viewController>

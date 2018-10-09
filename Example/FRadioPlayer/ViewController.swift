@@ -18,8 +18,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var trackLabel: UILabel!
     @IBOutlet weak var infoContainer: UIView!
+    @IBOutlet weak var timeContainer: UIView!
     @IBOutlet weak var artworkImageView: UIImageView!
     @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var currentTimeLabel: UILabel!
+    @IBOutlet weak var totalTimeLabel: UILabel!
+    @IBOutlet weak var timeSlider: UISlider!
     
     // Singleton ref to player
     let player: FRadioPlayer = FRadioPlayer.shared
@@ -37,7 +41,7 @@ class ViewController: UIViewController {
                                           
                      Station(name: "The Alt Vault",
                              detail: "Your Lifestyle... Your Music!",
-                             url: URL(string: "http://jupiter.prostreaming.net/altmixxlow")!,
+                             url: URL(string: "https://radionumberone.it/wp-content/uploads/2018/07/gadget_24_07_n14u_2018.mp3")!,
                              image: #imageLiteral(resourceName: "station3"))]
     
     // Selected station index
@@ -75,6 +79,7 @@ class ViewController: UIViewController {
         
         tableView.tableFooterView = UIView()
         infoContainer.isHidden = true
+        timeContainer.isHidden = true
         
         setupRemoteTransportControls()
     }
@@ -107,6 +112,16 @@ class ViewController: UIViewController {
         player.radioURL = stations[selectedIndex].url
         tableView.selectRow(at: IndexPath(item: position, section: 0), animated: true, scrollPosition: .none)
     }
+    
+    func formatSecondsToString(_ secounds: TimeInterval) -> String {
+        guard secounds != 0 else { return "00:00" }
+        
+        let hr = Int(secounds / (60*60))
+        let min = Int(secounds / 60)
+        let sec = Int(secounds.truncatingRemainder(dividingBy: 60))
+        
+        return hr > 0 ? String(format: "%02d:%02d:%02d", hr, min, sec) : String(format: "%02d:%02d", min, sec)
+    }
 }
 
 // MARK: - FRadioPlayerDelegate
@@ -127,6 +142,12 @@ extension ViewController: FRadioPlayerDelegate {
     
     func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?) {
         track = nil
+        
+    }
+    
+    func radioPlayer(_ player: FRadioPlayer, durationDidChange duration: TimeInterval) {
+        timeContainer.isHidden = (duration == 0)
+        totalTimeLabel.text = formatSecondsToString(duration)
     }
     
     func radioPlayer(_ player: FRadioPlayer, metadataDidChange rawValue: String?) {

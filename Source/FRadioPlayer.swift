@@ -98,9 +98,8 @@ import AVFoundation
      
      - parameter player: FRadioPlayer
      - parameter url: Radio URL
-     - parameter totalTime: player item total time, == 0 if not available (live stream)
      */
-    @objc optional func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?, totalTime: TimeInterval)
+    @objc optional func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?)
     
     /**
      Called when player item changes the timed metadata value, it uses (separatedBy: " - ") to get the artist/song name, if you want more control over the raw metadata, consider using `metadataDidChange rawValue` instead
@@ -128,13 +127,21 @@ import AVFoundation
     @objc optional func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?)
     
     /**
+     Called when player item changes the duration value
+     
+     - parameter player: FRadioPlayer
+     - parameter totalTime: player item total time, == 0 if not available (live stream)
+     */
+    @objc optional func radioPlayer(_ player: FRadioPlayer, durationDidChange duration: TimeInterval)
+    
+    /**
      Called when the current playing time gets changed
      
      - parameter player: FRadioPlayer
      - parameter currentTime: current time
      - parameter totalTime: player item total time
      */
-    @objc optional func radioPlayer(_ player: FRadioPlayer, playTimeDidChange currentTime: TimeInterval, totalTime: TimeInterval)
+    @objc optional func radioPlayer(_ player: FRadioPlayer, playTimeDidChange currentTime: TimeInterval, duration: TimeInterval)
 }
 
 // MARK: - FRadioPlayer
@@ -230,6 +237,9 @@ open class FRadioPlayer: NSObject {
     /// Current network connectivity
     private var isConnected = false
     
+    /// Player time observer
+    private var timeObserver: Any?
+    
     // MARK: - Initialization
     
     private override init() {
@@ -317,13 +327,16 @@ open class FRadioPlayer: NSObject {
     private func setupPlayer(with asset: AVAsset) {
         if player == nil {
             player = AVPlayer()
-            
-            player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1.0, preferredTimescale: Int32(NSEC_PER_SEC)), queue: .main, using: { time in
-                self.periodicTimeUpdate(self.player, time)
-            })
         }
         
         playerItem = AVPlayerItem(asset: asset)
+        
+        // TODO: Add this to durationDidChange
+        let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        
+        timeObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
+            self?.periodicTimeUpdate(self?.player, time)
+        })
     }
     
     /** Reset all player item observers and create new ones
@@ -341,29 +354,28 @@ open class FRadioPlayer: NSObject {
             item.removeObserver(self, forKeyPath: "playbackBufferEmpty")
             item.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
             item.removeObserver(self, forKeyPath: "timedMetadata")
+            item.removeObserver(self, forKeyPath: "duration")
         }
         
         lastPlayerItem = playerItem
         timedMetadataDidChange(rawValue: nil)
         
+        // TODO: call durationDidChange instead
+        delegate?.radioPlayer?(self, durationDidChange: 0)
+        
         if let item = playerItem {
             
-            item.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
-            item.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
-            item.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
-            item.addObserver(self, forKeyPath: "timedMetadata", options: NSKeyValueObservingOptions.new, context: nil)
+            item.addObserver(self, forKeyPath: "status", options: .new, context: nil)
+            item.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .new, context: nil)
+            item.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .new, context: nil)
+            item.addObserver(self, forKeyPath: "timedMetadata", options: .new, context: nil)
+            item.addObserver(self, forKeyPath: "duration", options: .new, context: nil)
             
             player?.replaceCurrentItem(with: item)
             if isAutoPlay { play() }
         }
         
-        var totalTime = 0.0
-        
-        if let duration = player?.currentItem?.duration, duration.isNumeric {
-            totalTime = Double(CMTimeGetSeconds(duration))
-        }
-        
-        delegate?.radioPlayer?(self, itemDidChange: radioURL, totalTime: totalTime)
+        delegate?.radioPlayer?(self, itemDidChange: radioURL)
     }
     
     /** Prepare the player from the passed AVAsset
@@ -423,6 +435,11 @@ open class FRadioPlayer: NSObject {
         stop()
         playerItem = nil
         lastPlayerItem = nil
+        
+        if let timeObserver = timeObserver {
+            player?.removeTimeObserver(timeObserver)
+        }
+        
         player = nil
     }
     
@@ -543,6 +560,24 @@ open class FRadioPlayer: NSObject {
             case "timedMetadata":
                 let rawValue = item.timedMetadata?.first?.value as? String
                 timedMetadataDidChange(rawValue: rawValue)
+            
+            case "duration":
+                
+                // TODO: Create durationDidChange func
+                let totalTime: Double
+                
+                if CMTIME_IS_INDEFINITE(item.duration) {
+                    // Radio
+                    // Remove player periodic observer
+                    totalTime = 0
+                } else {
+                    // Audio file
+                    // Add player periodic observer
+                    totalTime = Double(CMTimeGetSeconds(item.duration))
+                }
+                
+                // Call deleagte to duration
+                delegate?.radioPlayer?(self, durationDidChange: totalTime)
                 
             default:
                 break
@@ -565,8 +600,9 @@ extension FRadioPlayer {
             self.itemDidPlayToEnd()
         }
         
+        // TODO: Add duration open property
         self.currentTime = playedTime
-        self.delegate?.radioPlayer?(self, playTimeDidChange: playedTime, totalTime: totalTime)
+        self.delegate?.radioPlayer?(self, playTimeDidChange: playedTime, duration: totalTime)
     }
     
     @objc func itemDidPlayToEnd() {
