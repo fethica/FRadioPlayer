@@ -116,11 +116,10 @@ class ViewController: UIViewController {
     func formatSecondsToString(_ secounds: TimeInterval) -> String {
         guard secounds != 0 else { return "00:00" }
         
-        let hr = Int(secounds / (60*60))
         let min = Int(secounds / 60)
         let sec = Int(secounds.truncatingRemainder(dividingBy: 60))
         
-        return hr > 0 ? String(format: "%02d:%02d:%02d", hr, min, sec) : String(format: "%02d:%02d", min, sec)
+        return String(format: "%02d:%02d", min, sec)
     }
 }
 
@@ -145,11 +144,6 @@ extension ViewController: FRadioPlayerDelegate {
         
     }
     
-    func radioPlayer(_ player: FRadioPlayer, durationDidChange duration: TimeInterval) {
-        timeContainer.isHidden = (duration == 0)
-        totalTimeLabel.text = formatSecondsToString(duration)
-    }
-    
     func radioPlayer(_ player: FRadioPlayer, metadataDidChange rawValue: String?) {
         infoContainer.isHidden = (rawValue == nil)
     }
@@ -164,6 +158,18 @@ extension ViewController: FRadioPlayerDelegate {
         track?.image = UIImage(data: data)
         artworkImageView.image = track?.image
         updateNowPlaying(with: track)
+    }
+    
+    func radioPlayer(_ player: FRadioPlayer, durationDidChange duration: TimeInterval) {
+        timeContainer.isHidden = (duration == 0)
+        timeSlider.isEnabled = (duration != 0)
+        totalTimeLabel.text = formatSecondsToString(duration)
+    }
+    
+    func radioPlayer(_ player: FRadioPlayer, playTimeDidChange currentTime: TimeInterval, duration: TimeInterval) {
+        currentTimeLabel.text = formatSecondsToString(currentTime)
+        timeSlider.value = Float(currentTime / duration)
+        totalTimeLabel.text = formatSecondsToString(duration - currentTime)
     }
 }
 

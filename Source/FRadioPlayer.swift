@@ -210,6 +210,14 @@ open class FRadioPlayer: NSObject {
         }
     }
     
+    /// Store the item duration, == 0 if not available
+    open private(set) var duration: TimeInterval = 0 {
+        didSet {
+            guard oldValue != duration else { return }
+            delegate?.radioPlayer?(self, durationDidChange: duration)
+        }
+    }
+    
     /// Store the current time
     open var currentTime: Double? = nil
     
@@ -330,13 +338,6 @@ open class FRadioPlayer: NSObject {
         }
         
         playerItem = AVPlayerItem(asset: asset)
-        
-        // TODO: Add this to durationDidChange
-        let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
-        
-        timeObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
-            self?.periodicTimeUpdate(self?.player, time)
-        })
     }
     
     /** Reset all player item observers and create new ones
@@ -359,9 +360,7 @@ open class FRadioPlayer: NSObject {
         
         lastPlayerItem = playerItem
         timedMetadataDidChange(rawValue: nil)
-        
-        // TODO: call durationDidChange instead
-        delegate?.radioPlayer?(self, durationDidChange: 0)
+        durationDidChange(.zero)
         
         if let item = playerItem {
             
@@ -562,26 +561,36 @@ open class FRadioPlayer: NSObject {
                 timedMetadataDidChange(rawValue: rawValue)
             
             case "duration":
-                
-                // TODO: Create durationDidChange func
-                let totalTime: Double
-                
-                if CMTIME_IS_INDEFINITE(item.duration) {
-                    // Radio
-                    // Remove player periodic observer
-                    totalTime = 0
-                } else {
-                    // Audio file
-                    // Add player periodic observer
-                    totalTime = Double(CMTimeGetSeconds(item.duration))
-                }
-                
-                // Call deleagte to duration
-                delegate?.radioPlayer?(self, durationDidChange: totalTime)
+                durationDidChange(item.duration)
                 
             default:
                 break
             }
+        }
+    }
+    
+    private func durationDidChange(_ duration: CMTime) {
+        
+        if CMTIME_IS_INDEFINITE(duration) || duration == .zero {
+            
+            // Radio
+            self.duration = 0
+            
+            if let timeObserver = self.timeObserver {
+                player?.removeTimeObserver(timeObserver)
+                self.timeObserver = nil
+            }
+            
+        } else {
+            
+            // Audio file
+            self.duration = Double(CMTimeGetSeconds(duration))
+            
+            let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+            
+            timeObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
+                self?.periodicTimeUpdate(self?.player, time)
+            })
         }
     }
 }
