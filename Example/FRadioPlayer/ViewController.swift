@@ -67,6 +67,8 @@ class ViewController: UIViewController {
         }
     }
     
+    var isSliderSliding = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "FRadioPlayer"
@@ -82,7 +84,13 @@ class ViewController: UIViewController {
         timeContainer.isHidden = true
         
         setupRemoteTransportControls()
+        
+        timeSlider.addTarget(self, action: #selector(timeSliderTouchBegan(sender:)), for: .touchDown)
+        timeSlider.addTarget(self, action: #selector(timeSliderValueChanged(sender:)), for: .valueChanged)
+        timeSlider.addTarget(self, action: #selector(timeSliderTouchEnded(sender:)), for: [.touchUpInside, .touchCancel, .touchUpOutside])
     }
+    
+    // MARK: - Actions
     
     @IBAction func playTap(_ sender: Any) {
         player.togglePlaying()
@@ -100,6 +108,45 @@ class ViewController: UIViewController {
         next()
     }
     
+    @objc func timeSliderTouchBegan(sender: UISlider) {
+        handleTimeSlider(slider: sender, event: .touchDown)
+    }
+    
+    @objc func timeSliderValueChanged(sender: UISlider) {
+        handleTimeSlider(slider: sender, event: .valueChanged)
+    }
+    
+    @objc func timeSliderTouchEnded(sender: UISlider) {
+        handleTimeSlider(slider: sender, event: .touchUpInside)
+    }
+    
+    // MARK: - Methods
+    
+    func handleTimeSlider(slider: UISlider, event: UIControl.Event) {
+        
+        guard player.duration != 0 else { return }
+        
+        let seekTime =  TimeInterval(slider.value) * player.duration
+        
+        switch event {
+        case .valueChanged:
+            currentTimeLabel.text = formatSecondsToString(seekTime)
+            totalTimeLabel.text = formatSecondsToString(player.duration - seekTime)
+            
+        case .touchDown:
+            isSliderSliding = true
+            
+        case .touchUpInside:
+            player.seek(to: seekTime, completion: {
+                self.isSliderSliding = false
+            })
+            
+        default:
+            break
+        }
+        
+    }
+    
     func next() {
         selectedIndex += 1
     }
@@ -112,6 +159,8 @@ class ViewController: UIViewController {
         player.radioURL = stations[selectedIndex].url
         tableView.selectRow(at: IndexPath(item: position, section: 0), animated: true, scrollPosition: .none)
     }
+    
+    // MARK: - Helpers
     
     func formatSecondsToString(_ secounds: TimeInterval) -> String {
         guard secounds != 0 else { return "00:00" }
@@ -167,6 +216,8 @@ extension ViewController: FRadioPlayerDelegate {
     }
     
     func radioPlayer(_ player: FRadioPlayer, playTimeDidChange currentTime: TimeInterval, duration: TimeInterval) {
+        guard !isSliderSliding else { return }
+        
         currentTimeLabel.text = formatSecondsToString(currentTime)
         timeSlider.value = Float(currentTime / duration)
         totalTimeLabel.text = formatSecondsToString(duration - currentTime)

@@ -194,6 +194,11 @@ open class FRadioPlayer: NSObject {
         }
     }
     
+    /// Check if the item is live stream or audio file
+    open var isLiveStream: Bool {
+        return duration == 0
+    }
+    
     /// Player current state of type `FRadioPlayerState`
     open private(set) var state = FRadioPlayerState.urlNotSet {
         didSet {
@@ -218,8 +223,13 @@ open class FRadioPlayer: NSObject {
         }
     }
     
-    /// Store the current time
-    open var currentTime: Double? = nil
+    /// Store the current time, == 0 if not available
+    open private(set) var currentTime: Double = 0 {
+        didSet {
+            guard oldValue != currentTime else { return }
+            delegate?.radioPlayer?(self, playTimeDidChange: currentTime, duration: duration)
+        }
+    }
     
     // MARK: - Private properties
     
@@ -248,6 +258,9 @@ open class FRadioPlayer: NSObject {
     /// Player time observer
     private var timeObserver: Any?
     
+    /// Item played to the end
+    private var isPlayedToEndTime = false
+    
     // MARK: - Initialization
     
     private override init() {
@@ -272,7 +285,7 @@ open class FRadioPlayer: NSObject {
     // MARK: - Control Methods
     
     /**
-     Trigger the play function of the radio player
+     Triggers the play function of the radio player
      
      */
     open func play() {
@@ -286,7 +299,7 @@ open class FRadioPlayer: NSObject {
     }
     
     /**
-     Trigger the pause function of the radio player
+     Triggers the pause function of the radio player
      
      */
     open func pause() {
@@ -296,18 +309,42 @@ open class FRadioPlayer: NSObject {
     }
     
     /**
-     Trigger the stop function of the radio player
+     Triggers the stop function of the radio player
      
      */
     open func stop() {
         guard let player = player else { return }
-        player.replaceCurrentItem(with: nil)
-        timedMetadataDidChange(rawValue: nil)
+        if duration != 0 {
+            currentTime = 0
+            player.pause()
+            player.seek(to: .zero)
+        } else {
+            player.replaceCurrentItem(with: nil)
+            timedMetadataDidChange(rawValue: nil)
+        }
+        
         playbackState = .stopped
     }
     
     /**
-     Toggle isPlaying state
+     Triggers the seek to a given time
+     
+     - parameter seconds: time in seconds to seek to
+     - parameter completion: optional completion
+     */
+    open func seek(to seconds: TimeInterval, completion: (()->())?) {
+        guard duration != 0 else { return }
+        
+        let seekTime = CMTime(seconds: seconds, preferredTimescale: 1)
+        
+        player?.seek(to: seekTime, toleranceBefore: .zero, toleranceAfter: .positiveInfinity, completionHandler: { _ in
+            self.play()
+            completion?()
+        })
+    }
+    
+    /**
+     Toggles isPlaying state
      
      */
     open func togglePlaying() {
@@ -350,7 +387,7 @@ open class FRadioPlayer: NSObject {
         if let item = lastPlayerItem {
             pause()
             
-            NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item)
+            NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: item)
             item.removeObserver(self, forKeyPath: "status")
             item.removeObserver(self, forKeyPath: "playbackBufferEmpty")
             item.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
@@ -363,7 +400,7 @@ open class FRadioPlayer: NSObject {
         durationDidChange(.zero)
         
         if let item = playerItem {
-            
+            NotificationCenter.default.addObserver(self, selector: #selector(itemDidPlayToEnd), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
             item.addObserver(self, forKeyPath: "status", options: .new, context: nil)
             item.addObserver(self, forKeyPath: "playbackBufferEmpty", options: .new, context: nil)
             item.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .new, context: nil)
@@ -434,6 +471,8 @@ open class FRadioPlayer: NSObject {
         stop()
         playerItem = nil
         lastPlayerItem = nil
+        duration = 0
+        currentTime = 0
         
         if let timeObserver = timeObserver {
             player?.removeTimeObserver(timeObserver)
@@ -474,7 +513,7 @@ open class FRadioPlayer: NSObject {
         }
     }
     
-    @objc func reachabilityChanged(note: Notification) {
+    @objc private func reachabilityChanged(note: Notification) {
         
         guard let reachability = note.object as? Reachability else { return }
         
@@ -568,12 +607,32 @@ open class FRadioPlayer: NSObject {
             }
         }
     }
+}
+
+// MARK: - Audio file support
+
+extension FRadioPlayer {
+    
+    private func periodicTimeUpdate(_ time: CMTime) {
+        guard !isPlayedToEndTime else { return }
+        let playedTime = CMTimeGetSeconds(time)
+        currentTime = playedTime
+    }
+    
+    @objc private func itemDidPlayToEnd() {
+        guard let player = player else { return }
+        pause()
+        isPlayedToEndTime = true
+        
+        player.seek(to: .zero) { [weak self] _ in
+            self?.isPlayedToEndTime = false
+        }
+    }
     
     private func durationDidChange(_ duration: CMTime) {
         
         if CMTIME_IS_INDEFINITE(duration) || duration == .zero {
-            
-            // Radio
+            // Live stream
             self.duration = 0
             
             if let timeObserver = self.timeObserver {
@@ -582,54 +641,13 @@ open class FRadioPlayer: NSObject {
             }
             
         } else {
-            
             // Audio file
             self.duration = Double(CMTimeGetSeconds(duration))
-            
             let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
             
             timeObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
-                self?.periodicTimeUpdate(self?.player, time)
+                self?.periodicTimeUpdate(time)
             })
         }
     }
-}
-
-// MARK: - WIP: Add time track
-
-extension FRadioPlayer {
-    
-    private func periodicTimeUpdate(_ player: AVPlayer?, _ time: CMTime) {
-        guard let player = player, let duration = player.currentItem?.duration, duration.isNumeric else { return }
-        
-        let playedTime = CMTimeGetSeconds(time)
-        let totalTime = CMTimeGetSeconds(duration)
-        
-        if playedTime == totalTime {
-            self.itemDidPlayToEnd()
-        }
-        
-        // TODO: Add duration open property
-        self.currentTime = playedTime
-        self.delegate?.radioPlayer?(self, playTimeDidChange: playedTime, duration: totalTime)
-    }
-    
-    @objc func itemDidPlayToEnd() {
-        guard let player = player else { return }
-        player.pause()
-        player.seek(to: .zero)
-        
-    }
-    
-    func seek(to seconds: Int64, completion:(()->Void)?) {
-        let seekTime = CMTime(seconds: Double(seconds), preferredTimescale: 1)
-        
-        player?.seek(to: seekTime, toleranceBefore: .zero, toleranceAfter: .positiveInfinity, completionHandler: { _ in
-            self.play()
-            // self.state = .playing
-            
-            completion?()
-        })
-    }
-    
 }
