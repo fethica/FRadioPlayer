@@ -35,14 +35,14 @@ class ViewController: UIViewController {
                             image: #imageLiteral(resourceName: "station2")),
                     
                     Station(name: "Absolute Country Hits Radio",
-                             detail: "The Music Starts Here",
-                             url: URL(string: "http://strm112.1.fm/acountry_mobile_mp3")!,
-                             image: #imageLiteral(resourceName: "station1")),
-                                          
-                     Station(name: "The Alt Vault",
-                             detail: "Your Lifestyle... Your Music!",
-                             url: URL(string: "https://radionumberone.it/wp-content/uploads/2018/07/gadget_24_07_n14u_2018.mp3")!,
-                             image: #imageLiteral(resourceName: "station3"))]
+                            detail: "The Music Starts Here",
+                            url: URL(string: "http://strm112.1.fm/acountry_mobile_mp3")!,
+                            image: #imageLiteral(resourceName: "station1")),
+                    
+                    Station(name: "Sample Audio File",
+                            detail: "mp3, 45 seconds",
+                            url: URL(string: "https://www.sample-videos.com/audio/mp3/wave.mp3")!,
+                            image: #imageLiteral(resourceName: "audiofile"))]
     
     // Selected station index
     var selectedIndex = 0 {
@@ -85,6 +85,7 @@ class ViewController: UIViewController {
         
         setupRemoteTransportControls()
         
+        // Could be added using IB
         timeSlider.addTarget(self, action: #selector(timeSliderTouchBegan(sender:)), for: .touchDown)
         timeSlider.addTarget(self, action: #selector(timeSliderValueChanged(sender:)), for: .valueChanged)
         timeSlider.addTarget(self, action: #selector(timeSliderTouchEnded(sender:)), for: [.touchUpInside, .touchCancel, .touchUpOutside])
@@ -124,7 +125,7 @@ class ViewController: UIViewController {
     
     func handleTimeSlider(slider: UISlider, event: UIControl.Event) {
         
-        guard player.duration != 0 else { return }
+        guard !player.isLiveStream else { return }
         
         let seekTime =  TimeInterval(slider.value) * player.duration
         
@@ -162,6 +163,12 @@ class ViewController: UIViewController {
     
     // MARK: - Helpers
     
+    func resetTimeContainer() {
+        timeSlider.value = 0
+        currentTimeLabel.text = "00:00"
+        totalTimeLabel.text = "00:00"
+    }
+    
     func formatSecondsToString(_ secounds: TimeInterval) -> String {
         guard secounds != 0 else { return "00:00" }
         
@@ -175,7 +182,7 @@ class ViewController: UIViewController {
 // MARK: - FRadioPlayerDelegate
 
 extension ViewController: FRadioPlayerDelegate {
-
+    
     func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayerState) {
         statusLabel.text = state.description
     }
@@ -210,9 +217,15 @@ extension ViewController: FRadioPlayerDelegate {
     }
     
     func radioPlayer(_ player: FRadioPlayer, durationDidChange duration: TimeInterval) {
-        timeContainer.isHidden = (duration == 0)
-        timeSlider.isEnabled = (duration != 0)
-        totalTimeLabel.text = formatSecondsToString(duration)
+        if player.isLiveStream {
+            resetTimeContainer()
+            timeContainer.isHidden = true
+            timeSlider.isEnabled = false
+        } else {
+            timeContainer.isHidden = false
+            timeSlider.isEnabled = true
+            totalTimeLabel.text = formatSecondsToString(duration)
+        }
     }
     
     func radioPlayer(_ player: FRadioPlayer, playTimeDidChange currentTime: TimeInterval, duration: TimeInterval) {
@@ -313,6 +326,3 @@ extension UINavigationController {
         return .lightContent
     }
 }
-
-
-
