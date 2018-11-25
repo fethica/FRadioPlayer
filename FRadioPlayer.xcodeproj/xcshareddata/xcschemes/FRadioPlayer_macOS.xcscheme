@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0930"
+   LastUpgradeVersion = "1010"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "NT_320434253380"
-               BuildableName = "FRadioPlayer.framework"
-               BlueprintName = "FRadioPlayer_iOS"
+               BlueprintIdentifier = "FAC8FD8E21AAB156002B47E5"
+               BuildableName = "FRadioPlayer_macOS.framework"
+               BlueprintName = "FRadioPlayer_macOS"
                ReferencedContainer = "container:FRadioPlayer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,15 +29,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "NT_320434253380"
-            BuildableName = "FRadioPlayer.framework"
-            BlueprintName = "FRadioPlayer_iOS"
-            ReferencedContainer = "container:FRadioPlayer.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -54,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "NT_320434253380"
-            BuildableName = "FRadioPlayer.framework"
-            BlueprintName = "FRadioPlayer_iOS"
+            BlueprintIdentifier = "FAC8FD8E21AAB156002B47E5"
+            BuildableName = "FRadioPlayer_macOS.framework"
+            BlueprintName = "FRadioPlayer_macOS"
             ReferencedContainer = "container:FRadioPlayer.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -69,16 +60,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "NT_320434253380"
-            BuildableName = "FRadioPlayer.framework"
-            BlueprintName = "FRadioPlayer_iOS"
+            BlueprintIdentifier = "FAC8FD8E21AAB156002B47E5"
+            BuildableName = "FRadioPlayer_macOS.framework"
+            BlueprintName = "FRadioPlayer_macOS"
             ReferencedContainer = "container:FRadioPlayer.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
