@@ -17,7 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		FAC8FD8F21AAB156002B47E5 /* FRadioPlayer_macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FRadioPlayer_macOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAC8FD8F21AAB156002B47E5 /* FRadioPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FRadioPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAC8FD9121AAB156002B47E5 /* FRadioPlayer_macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FRadioPlayer_macOS.h; sourceTree = "<group>"; };
 		FAC8FD9221AAB156002B47E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FR_320434253380 /* FRadioPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FRadioPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,7 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				FR_320434253380 /* FRadioPlayer.framework */,
-				FAC8FD8F21AAB156002B47E5 /* FRadioPlayer_macOS.framework */,
+				FAC8FD8F21AAB156002B47E5 /* FRadioPlayer.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -103,7 +103,7 @@
 			);
 			name = FRadioPlayer_macOS;
 			productName = FRadioPlayer_macOS;
-			productReference = FAC8FD8F21AAB156002B47E5 /* FRadioPlayer_macOS.framework */;
+			productReference = FAC8FD8F21AAB156002B47E5 /* FRadioPlayer.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		NT_320434253380 /* FRadioPlayer_iOS */ = {
@@ -366,7 +366,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "co.itbeaver.FRadioPlayer-macOS";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = FRadioPlayer;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
@@ -395,7 +395,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "co.itbeaver.FRadioPlayer-macOS";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = FRadioPlayer;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.2;
