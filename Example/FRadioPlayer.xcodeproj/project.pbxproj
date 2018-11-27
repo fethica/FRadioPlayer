@@ -22,6 +22,8 @@
 		FAE5E44321AC6CD3003F96DB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE5E44221AC6CD3003F96DB /* ViewController.swift */; };
 		FAE5E44521AC6CD4003F96DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAE5E44421AC6CD4003F96DB /* Assets.xcassets */; };
 		FAE5E44821AC6CD4003F96DB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE5E44621AC6CD4003F96DB /* Main.storyboard */; };
+		FAE5E45421AC76AA003F96DB /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE63D541FD4915300281653 /* Track.swift */; };
+		FAE5E45521AC76AE003F96DB /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE63D531FD4915300281653 /* Station.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,8 +104,9 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				FAE5E45021AC74A3003F96DB /* Shared */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
-				607FACD21AFB9204008FA782 /* Example for FRadioPlayer */,
+				607FACD21AFB9204008FA782 /* FRadioPlayer_ios */,
 				607FACE81AFB9204008FA782 /* Tests */,
 				FAE5E43F21AC6CD3003F96DB /* FRadioPlayer_mac */,
 				607FACD11AFB9204008FA782 /* Products */,
@@ -122,11 +125,9 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		607FACD21AFB9204008FA782 /* Example for FRadioPlayer */ = {
+		607FACD21AFB9204008FA782 /* FRadioPlayer_ios */ = {
 			isa = PBXGroup;
 			children = (
-				CAE63D531FD4915300281653 /* Station.swift */,
-				CAE63D541FD4915300281653 /* Track.swift */,
 				CAE63D4F1FD4910000281653 /* ViewController.swift */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				CAE63D511FD4912000281653 /* Main.storyboard */,
@@ -134,7 +135,7 @@
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 			);
-			name = "Example for FRadioPlayer";
+			name = FRadioPlayer_ios;
 			path = FRadioPlayer;
 			sourceTree = "<group>";
 		};
@@ -210,6 +211,15 @@
 				FAE5E44A21AC6CD4003F96DB /* FRadioPlayer_mac.entitlements */,
 			);
 			path = FRadioPlayer_mac;
+			sourceTree = "<group>";
+		};
+		FAE5E45021AC74A3003F96DB /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				CAE63D531FD4915300281653 /* Station.swift */,
+				CAE63D541FD4915300281653 /* Track.swift */,
+			);
+			path = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -301,6 +311,11 @@
 					FAE5E43D21AC6CD3003F96DB = {
 						CreatedOnToolsVersion = 10.1;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -479,7 +494,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAE5E44321AC6CD3003F96DB /* ViewController.swift in Sources */,
+				FAE5E45521AC76AE003F96DB /* Station.swift in Sources */,
 				FAE5E44121AC6CD3003F96DB /* AppDelegate.swift in Sources */,
+				FAE5E45421AC76AA003F96DB /* Track.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

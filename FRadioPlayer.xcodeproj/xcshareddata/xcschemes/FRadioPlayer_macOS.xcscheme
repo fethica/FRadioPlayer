@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "FAC8FD8E21AAB156002B47E5"
-               BuildableName = "FRadioPlayer_macOS.framework"
+               BuildableName = "FRadioPlayer.framework"
                BlueprintName = "FRadioPlayer_macOS"
                ReferencedContainer = "container:FRadioPlayer.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FAC8FD8E21AAB156002B47E5"
-            BuildableName = "FRadioPlayer_macOS.framework"
+            BuildableName = "FRadioPlayer.framework"
             BlueprintName = "FRadioPlayer_macOS"
             ReferencedContainer = "container:FRadioPlayer.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FAC8FD8E21AAB156002B47E5"
-            BuildableName = "FRadioPlayer_macOS.framework"
+            BuildableName = "FRadioPlayer.framework"
             BlueprintName = "FRadioPlayer_macOS"
             ReferencedContainer = "container:FRadioPlayer.xcodeproj">
          </BuildableReference>
