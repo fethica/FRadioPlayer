@@ -3,10 +3,11 @@ options:
   bundleIdPrefix: com.fethica
   deploymentTarget:
     iOS: 10.0
+    macOS: 10.12
 targets:
   FRadioPlayer:
     type: framework
-    platform: [iOS]
+    platform: [iOS, macOS]
     sources: Source
     scheme: {}
     settings:
