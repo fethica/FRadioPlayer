@@ -354,7 +354,6 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = 6G96AERJ7Q;
 						LastSwiftMigration = 1000;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -364,7 +363,6 @@
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = 6G96AERJ7Q;
 						LastSwiftMigration = 1000;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -775,7 +773,7 @@
 			baseConfigurationReference = 412A9F8B5D5E4B4705AE9F0E /* Pods-FRadioPlayer_ios.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 6G96AERJ7Q;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = FRadioPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -791,7 +789,7 @@
 			baseConfigurationReference = 612EF1D0B96E8B922E04963F /* Pods-FRadioPlayer_ios.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 6G96AERJ7Q;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = FRadioPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -806,7 +804,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = ADC0D107E336293D60827BCD /* Pods-FRadioPlayer_Tests.debug.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 6G96AERJ7Q;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -827,7 +825,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 733A31C2D8DBB7FB9D433453 /* Pods-FRadioPlayer_Tests.release.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 6G96AERJ7Q;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
