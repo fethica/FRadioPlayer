@@ -4,6 +4,7 @@ options:
   deploymentTarget:
     iOS: 10.0
     macOS: 10.12
+    tvOS: 10.0
 targets:
   FRadioPlayer:
     type: framework
@@ -15,6 +16,13 @@ targets:
   FRadioPlayer_mac:
     type: framework
     platform: [macOS]
+    sources: Source
+    scheme: {}
+    settings:
+      INFOPLIST_FILE: CarthageInfo.plist
+  FRadioPlayer_tvOS:
+    type: framework
+    platform: [tvOS]
     sources: Source
     scheme: {}
     settings:

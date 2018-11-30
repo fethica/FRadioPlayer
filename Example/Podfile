@@ -14,3 +14,8 @@ target 'FRadioPlayer_mac' do
   platform :osx, '10.12'
   pod 'FRadioPlayer', :path => '../'
 end
+
+target 'FRadioPlayer_tvOS' do
+  platform :tvos, '10.0'
+  pod 'FRadioPlayer', :path => '../'
+end
