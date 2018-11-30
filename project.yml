@@ -7,7 +7,14 @@ options:
 targets:
   FRadioPlayer:
     type: framework
-    platform: [iOS, macOS]
+    platform: [iOS]
+    sources: Source
+    scheme: {}
+    settings:
+      INFOPLIST_FILE: CarthageInfo.plist
+  FRadioPlayer_mac:
+    type: framework
+    platform: [macOS]
     sources: Source
     scheme: {}
     settings:

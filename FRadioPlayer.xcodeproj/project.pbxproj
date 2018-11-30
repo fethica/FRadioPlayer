@@ -7,48 +7,46 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BF_298019247190 = {isa = PBXBuildFile; fileRef = FR_153235550208 /* FRadioPlayer.framework */; };
-		BF_313350872011 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_739226866251 /* Reachability.swift */; };
-		BF_443907150977 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_739226866251 /* Reachability.swift */; };
-		BF_597992476421 /* FRadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_120374781036 /* FRadioPlayer.swift */; };
-		BF_722143889613 = {isa = PBXBuildFile; fileRef = FR_588870322965 /* FRadioPlayer.framework */; };
-		BF_852485877506 /* FRadioAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_402159914028 /* FRadioAPI.swift */; };
-		BF_873055517145 /* FRadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_120374781036 /* FRadioPlayer.swift */; };
-		BF_899079922278 /* FRadioAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_402159914028 /* FRadioAPI.swift */; };
+		BF_35BBF2646E1B1078387AF42F72CAF46E /* FRadioAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_1DDA7080A9B5D37D5BFB7807EF18D07D /* FRadioAPI.swift */; };
+		BF_3AFF3FC262BA27DDA0535083CCC69975 /* FRadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_8E44F9537F7C32B333197CACA3426299 /* FRadioPlayer.swift */; };
+		BF_5858A6D4C81F2479E595E68F01A0029E /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_520E208E082305F9A138A52CA21ED2B6 /* Reachability.swift */; };
+		BF_8F1DE3B4351096601D49604877D83A14 /* FRadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_8E44F9537F7C32B333197CACA3426299 /* FRadioPlayer.swift */; };
+		BF_BD1FEBD3BADB0B0C20AAC6B72698BD98 /* FRadioAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_1DDA7080A9B5D37D5BFB7807EF18D07D /* FRadioAPI.swift */; };
+		BF_DD0CC7F65EFB50F4765B7C19173AC449 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_520E208E082305F9A138A52CA21ED2B6 /* Reachability.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		FR_120374781036 /* FRadioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRadioPlayer.swift; sourceTree = "<group>"; };
-		FR_153235550208 /* FRadioPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FRadioPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FR_402159914028 /* FRadioAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRadioAPI.swift; sourceTree = "<group>"; };
-		FR_588870322965 /* FRadioPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FRadioPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FR_739226866251 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		FR_06D745D3137D8209E1B9BE9591637F7C /* FRadioPlayer_mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FRadioPlayer_mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FR_1DDA7080A9B5D37D5BFB7807EF18D07D /* FRadioAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRadioAPI.swift; sourceTree = "<group>"; };
+		FR_520E208E082305F9A138A52CA21ED2B6 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		FR_8E44F9537F7C32B333197CACA3426299 /* FRadioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRadioPlayer.swift; sourceTree = "<group>"; };
+		FR_B603D79AFF92B9ED618A738CD7DF017B /* FRadioPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FRadioPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
-		G_2947528260455 = {
+		G_32EA884347EA57C8A245500F097176E7 = {
 			isa = PBXGroup;
 			children = (
-				G_6345222537326 /* Source */,
-				G_8655865298489 /* Products */,
+				G_7C8D58CB739797ECB2581BC8AED1C7FB /* Source */,
+				G_F1AEC4C7A43EB46ECA98DFEE2E610062 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		G_6345222537326 /* Source */ = {
+		G_7C8D58CB739797ECB2581BC8AED1C7FB /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				FR_402159914028 /* FRadioAPI.swift */,
-				FR_120374781036 /* FRadioPlayer.swift */,
-				FR_739226866251 /* Reachability.swift */,
+				FR_1DDA7080A9B5D37D5BFB7807EF18D07D /* FRadioAPI.swift */,
+				FR_8E44F9537F7C32B333197CACA3426299 /* FRadioPlayer.swift */,
+				FR_520E208E082305F9A138A52CA21ED2B6 /* Reachability.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
 		};
-		G_8655865298489 /* Products */ = {
+		G_F1AEC4C7A43EB46ECA98DFEE2E610062 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				FR_153235550208 /* FRadioPlayer.framework */,
-				FR_588870322965 /* FRadioPlayer.framework */,
+				FR_06D745D3137D8209E1B9BE9591637F7C /* FRadioPlayer_mac.framework */,
+				FR_B603D79AFF92B9ED618A738CD7DF017B /* FRadioPlayer.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -56,26 +54,11 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		NT_153235550208 /* FRadioPlayer_macOS */ = {
+		NT_04EFDD8FA278B7516882098CA783217D /* FRadioPlayer_iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CL_153235550208 /* Build configuration list for PBXNativeTarget "FRadioPlayer_macOS" */;
+			buildConfigurationList = CL_1F43FAB06A098A0251A60A2CD860C5F5 /* Build configuration list for PBXNativeTarget "FRadioPlayer_iOS" */;
 			buildPhases = (
-				SBP_15323555020 /* Sources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = FRadioPlayer_macOS;
-			productName = FRadioPlayer_macOS;
-			productReference = FR_153235550208 /* FRadioPlayer.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		NT_588870322965 /* FRadioPlayer_iOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CL_588870322965 /* Build configuration list for PBXNativeTarget "FRadioPlayer_iOS" */;
-			buildPhases = (
-				SBP_58887032296 /* Sources */,
+				SBP_2A4FA0685908BEB718746389E0ABE47A /* Sources */,
 			);
 			buildRules = (
 			);
@@ -83,59 +66,116 @@
 			);
 			name = FRadioPlayer_iOS;
 			productName = FRadioPlayer_iOS;
-			productReference = FR_588870322965 /* FRadioPlayer.framework */;
+			productReference = FR_B603D79AFF92B9ED618A738CD7DF017B /* FRadioPlayer.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		NT_1908C7D8900D869F84A0A953727A403B /* FRadioPlayer_mac_macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CL_A54CF787A0FB8E54A44834C26C187BCD /* Build configuration list for PBXNativeTarget "FRadioPlayer_mac_macOS" */;
+			buildPhases = (
+				SBP_7ADB7DA585021B375A7A9D228A24C213 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FRadioPlayer_mac_macOS;
+			productName = FRadioPlayer_mac_macOS;
+			productReference = FR_06D745D3137D8209E1B9BE9591637F7C /* FRadioPlayer_mac.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		P_7352027899378 /* Project object */ = {
+		P_58E6884B44283F74642007B2D3A698CD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1000;
 			};
-			buildConfigurationList = CL_735202789937 /* Build configuration list for PBXProject "FRadioPlayer" */;
+			buildConfigurationList = CL_24F29DB993234810FFB6DFC57560E152 /* Build configuration list for PBXProject "FRadioPlayer" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = G_2947528260455;
+			mainGroup = G_32EA884347EA57C8A245500F097176E7;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				NT_588870322965 /* FRadioPlayer_iOS */,
-				NT_153235550208 /* FRadioPlayer_macOS */,
+				NT_04EFDD8FA278B7516882098CA783217D /* FRadioPlayer_iOS */,
+				NT_1908C7D8900D869F84A0A953727A403B /* FRadioPlayer_mac_macOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		SBP_15323555020 /* Sources */ = {
+		SBP_2A4FA0685908BEB718746389E0ABE47A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF_899079922278 /* FRadioAPI.swift in Sources */,
-				BF_597992476421 /* FRadioPlayer.swift in Sources */,
-				BF_443907150977 /* Reachability.swift in Sources */,
+				BF_BD1FEBD3BADB0B0C20AAC6B72698BD98 /* FRadioAPI.swift in Sources */,
+				BF_3AFF3FC262BA27DDA0535083CCC69975 /* FRadioPlayer.swift in Sources */,
+				BF_5858A6D4C81F2479E595E68F01A0029E /* Reachability.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		SBP_58887032296 /* Sources */ = {
+		SBP_7ADB7DA585021B375A7A9D228A24C213 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF_852485877506 /* FRadioAPI.swift in Sources */,
-				BF_873055517145 /* FRadioPlayer.swift in Sources */,
-				BF_313350872011 /* Reachability.swift in Sources */,
+				BF_35BBF2646E1B1078387AF42F72CAF46E /* FRadioAPI.swift in Sources */,
+				BF_8F1DE3B4351096601D49604877D83A14 /* FRadioPlayer.swift in Sources */,
+				BF_DD0CC7F65EFB50F4765B7C19173AC449 /* Reachability.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		BC_192845816519 /* Debug */ = {
+		BC_33BB37E560F8FFEB9D9E5ED8D3DD477D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CarthageInfo.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.fethica.FRadioPlayer-iOS";
+				PRODUCT_NAME = FRadioPlayer;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		BC_343CE00EE84200DB9867C128C8AC50C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CarthageInfo.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.fethica.FRadioPlayer-iOS";
+				PRODUCT_NAME = FRadioPlayer;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		BC_3FAF65E24BFC779847E5DCEA5B867DA8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
@@ -148,67 +188,15 @@
 				INFOPLIST_FILE = CarthageInfo.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.fethica.FRadioPlayer-macOS";
-				PRODUCT_NAME = FRadioPlayer;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.fethica.FRadioPlayer-mac-macOS";
+				PRODUCT_NAME = FRadioPlayer_mac;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = Debug;
-		};
-		BC_199126925631 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
-				VALIDATE_PRODUCT = YES;
-			};
 			name = Release;
 		};
-		BC_358977901544 /* Debug */ = {
+		BC_57EC434449235955BB02531E3243D065 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -264,11 +252,63 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
-		BC_390869532269 /* Release */ = {
+		BC_6CE20B575A2BCB4F4D5EB19D4E738F2C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BC_EBB6C879B93FB3585C785515AD810443 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
@@ -281,52 +321,10 @@
 				INFOPLIST_FILE = CarthageInfo.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.fethica.FRadioPlayer-macOS";
-				PRODUCT_NAME = FRadioPlayer;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.fethica.FRadioPlayer-mac-macOS";
+				PRODUCT_NAME = FRadioPlayer_mac;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Release;
-		};
-		BC_523822458461 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = CarthageInfo.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.fethica.FRadioPlayer-iOS";
-				PRODUCT_NAME = FRadioPlayer;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Release;
-		};
-		BC_530289612921 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = CarthageInfo.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.fethica.FRadioPlayer-iOS";
-				PRODUCT_NAME = FRadioPlayer;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -334,34 +332,34 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CL_153235550208 /* Build configuration list for PBXNativeTarget "FRadioPlayer_macOS" */ = {
+		CL_1F43FAB06A098A0251A60A2CD860C5F5 /* Build configuration list for PBXNativeTarget "FRadioPlayer_iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BC_192845816519 /* Debug */,
-				BC_390869532269 /* Release */,
+				BC_33BB37E560F8FFEB9D9E5ED8D3DD477D /* Debug */,
+				BC_343CE00EE84200DB9867C128C8AC50C5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "";
 		};
-		CL_588870322965 /* Build configuration list for PBXNativeTarget "FRadioPlayer_iOS" */ = {
+		CL_24F29DB993234810FFB6DFC57560E152 /* Build configuration list for PBXProject "FRadioPlayer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BC_530289612921 /* Debug */,
-				BC_523822458461 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "";
-		};
-		CL_735202789937 /* Build configuration list for PBXProject "FRadioPlayer" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BC_358977901544 /* Debug */,
-				BC_199126925631 /* Release */,
+				BC_57EC434449235955BB02531E3243D065 /* Debug */,
+				BC_6CE20B575A2BCB4F4D5EB19D4E738F2C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		CL_A54CF787A0FB8E54A44834C26C187BCD /* Build configuration list for PBXNativeTarget "FRadioPlayer_mac_macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BC_EBB6C879B93FB3585C785515AD810443 /* Debug */,
+				BC_3FAF65E24BFC779847E5DCEA5B867DA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "";
+		};
 /* End XCConfigurationList section */
 	};
-	rootObject = P_7352027899378 /* Project object */;
+	rootObject = P_58E6884B44283F74642007B2D3A698CD /* Project object */;
 }

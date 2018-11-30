@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "NT_04EFDD8FA278B7516882098CA783217D"
-               BuildableName = "FRadioPlayer.framework"
-               BlueprintName = "FRadioPlayer_iOS"
+               BlueprintIdentifier = "NT_1908C7D8900D869F84A0A953727A403B"
+               BuildableName = "FRadioPlayer_mac.framework"
+               BlueprintName = "FRadioPlayer_mac_macOS"
                ReferencedContainer = "container:FRadioPlayer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "NT_04EFDD8FA278B7516882098CA783217D"
-            BuildableName = "FRadioPlayer.framework"
-            BlueprintName = "FRadioPlayer_iOS"
+            BlueprintIdentifier = "NT_1908C7D8900D869F84A0A953727A403B"
+            BuildableName = "FRadioPlayer_mac.framework"
+            BlueprintName = "FRadioPlayer_mac_macOS"
             ReferencedContainer = "container:FRadioPlayer.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -56,9 +56,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "NT_04EFDD8FA278B7516882098CA783217D"
-            BuildableName = "FRadioPlayer.framework"
-            BlueprintName = "FRadioPlayer_iOS"
+            BlueprintIdentifier = "NT_1908C7D8900D869F84A0A953727A403B"
+            BuildableName = "FRadioPlayer_mac.framework"
+            BlueprintName = "FRadioPlayer_mac_macOS"
             ReferencedContainer = "container:FRadioPlayer.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -77,9 +77,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "NT_04EFDD8FA278B7516882098CA783217D"
-            BuildableName = "FRadioPlayer.framework"
-            BlueprintName = "FRadioPlayer_iOS"
+            BlueprintIdentifier = "NT_1908C7D8900D869F84A0A953727A403B"
+            BuildableName = "FRadioPlayer_mac.framework"
+            BlueprintName = "FRadioPlayer_mac_macOS"
             ReferencedContainer = "container:FRadioPlayer.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
