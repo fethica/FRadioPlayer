@@ -10,30 +10,20 @@ sudo: required
 env:
   global:
     - WORKSPACE=Example/FRadioPlayer.xcworkspace
-
-    # iOS
-    - SCHEME=FRadioPlayer-Example
-    - SDK=iphonesimulator12.1
-
-    # macOS
-    - SCHEME_MACOS=FRadioPlayer_mac
-    - SDK_MACOS=macosx10.14
-
-    # tvOS
-    - SCHEME_TVOS=FRadioPlayer_tvOS
-    - SDK_TVOS=appletvsimulator12.1
-
   matrix:
-    - DESTINATION_IOS="platform=iOS Simulator,name=iPhone 8,OS=12.1"
-    - DESTINATION_MACOS="platform=OS X,arch=x86_64"
-    - DESTINATION_TVOS="platform=tvOS Simulator,name=Apple TV,OS=12.1"
-
+    - DESTINATION="platform=iOS Simulator,name=iPhone 8,OS=12.1"
+      SCHEME=FRadioPlayer-Example
+      SDK=iphonesimulator12.1
+    - DESTINATION="platform=OS X,arch=x86_64"
+      SCHEME=FRadioPlayer_mac
+      SDK=macosx10.14
+    - DESTINATION="platform=tvOS Simulator,name=Apple TV,OS=12.1"
+      SCHEME=FRadioPlayer_tvOS
+      SDK=appletvsimulator12.1
 podfile: Example/Podfile
 before_install:
 - gem install cocoapods --pre # Since Travis is not always on latest version
 - pod install --project-directory=Example
 script:
 - set -o pipefail && xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c
-- set -o pipefail && xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME_MACOS" -sdk "$SDK_MACOS" -destination "$DESTINATION_MACOS" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c
-- set -o pipefail && xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME_TVOS" -sdk "$SDK_TVOS" -destination "$DESTINATION_TVOS" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c
 - pod lib lint
