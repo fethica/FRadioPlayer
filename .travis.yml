@@ -29,4 +29,4 @@ before_install:
 - pod install --project-directory=Example
 script:
 - set -o pipefail && xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c
-- pod spec lint --platforms=$PLATFORM --allow-warnings
+- pod spec lint
