@@ -22,7 +22,7 @@ env:
       SDK=appletvsimulator12.1
 podfile: Example/Podfile
 before_install:
-- gem install cocoapods --pre # Since Travis is not always on latest version
+- gem install cocoapods # Since Travis is not always on latest version
 - pod install --project-directory=Example
 script:
 - set -o pipefail && xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c
