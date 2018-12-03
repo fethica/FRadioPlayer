@@ -6,7 +6,7 @@
 //  Copyright © 2017 Fethi El Hassasna. All rights reserved.
 //
 
-#if os(iOS)
+#if os(iOS) || os(tvOS)
 import UIKit
 #elseif os(OSX)
 import Cocoa
@@ -17,13 +17,13 @@ struct Track {
     var artist: String?
     var name: String?
     
-    #if os(iOS)
+    #if os(iOS) || os(tvOS)
     var image: UIImage?
     #elseif os(OSX)
     var image: NSImage?
     #endif
     
-    #if os(iOS)
+    #if os(iOS) || os(tvOS)
     init(artist: String? = nil, name: String? = nil, image: UIImage? = nil) {
         self.name = name
         self.artist = artist

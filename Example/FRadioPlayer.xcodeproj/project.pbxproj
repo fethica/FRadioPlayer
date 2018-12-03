@@ -13,6 +13,13 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		9BF856856EA4557B0A5C5D6D /* Pods_FRadioPlayer_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8AEAE2D18ED2C5F12FD1EF /* Pods_FRadioPlayer_Tests.framework */; };
+		9DE1D4542B8F51889191A76C /* Pods_FRadioPlayer_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5988E8C2E73F5A5DD5D873 /* Pods_FRadioPlayer_tvOS.framework */; };
+		B8D0FE5121B17D47005B64DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D0FE5021B17D47005B64DF /* AppDelegate.swift */; };
+		B8D0FE5321B17D47005B64DF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D0FE5221B17D47005B64DF /* ViewController.swift */; };
+		B8D0FE5621B17D47005B64DF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B8D0FE5421B17D47005B64DF /* Main.storyboard */; };
+		B8D0FE5821B17D49005B64DF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B8D0FE5721B17D49005B64DF /* Assets.xcassets */; };
+		B8D0FE5D21B17DD6005B64DF /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE63D541FD4915300281653 /* Track.swift */; };
+		B8D0FE5E21B17DD9005B64DF /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE63D531FD4915300281653 /* Station.swift */; };
 		CAE63D501FD4910000281653 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE63D4F1FD4910000281653 /* ViewController.swift */; };
 		CAE63D521FD4912000281653 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CAE63D511FD4912000281653 /* Main.storyboard */; };
 		CAE63D551FD4915300281653 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE63D531FD4915300281653 /* Station.swift */; };
@@ -38,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		10B578434A03FE51AE221D8A /* Pods-FRadioPlayer_mac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_mac.release.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_mac/Pods-FRadioPlayer_mac.release.xcconfig"; sourceTree = "<group>"; };
+		257B5148ADFF316304B18077 /* Pods-FRadioPlayer_tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_tvOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_tvOS/Pods-FRadioPlayer_tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		412A9F8B5D5E4B4705AE9F0E /* Pods-FRadioPlayer_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_ios/Pods-FRadioPlayer_ios.debug.xcconfig"; sourceTree = "<group>"; };
 		5E0C0BD81D65DF86F8BE706C /* Pods_FRadioPlayer_mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FRadioPlayer_mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD01AFB9204008FA782 /* FRadioPlayer_ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FRadioPlayer_ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,9 +58,16 @@
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		612EF1D0B96E8B922E04963F /* Pods-FRadioPlayer_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_ios/Pods-FRadioPlayer_ios.release.xcconfig"; sourceTree = "<group>"; };
 		733A31C2D8DBB7FB9D433453 /* Pods-FRadioPlayer_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_Tests/Pods-FRadioPlayer_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		7A5988E8C2E73F5A5DD5D873 /* Pods_FRadioPlayer_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FRadioPlayer_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59F870E46427A37B5A6185 /* FRadioPlayer.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = FRadioPlayer.podspec; path = ../FRadioPlayer.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		93384C18F68BA278DC1055A8 /* Pods_FRadioPlayer_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FRadioPlayer_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADC0D107E336293D60827BCD /* Pods-FRadioPlayer_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_Tests/Pods-FRadioPlayer_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		B8D0FE4E21B17D47005B64DF /* FRadioPlayer_tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FRadioPlayer_tvOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B8D0FE5021B17D47005B64DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B8D0FE5221B17D47005B64DF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B8D0FE5521B17D47005B64DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B8D0FE5721B17D49005B64DF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B8D0FE5921B17D49005B64DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B9443D8603AB2AE7F9D587B2 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		BC2AE6470A4C0BE46711D9AF /* Pods-FRadioPlayer_mac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_mac.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_mac/Pods-FRadioPlayer_mac.debug.xcconfig"; sourceTree = "<group>"; };
 		CAE63D4F1FD4910000281653 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -61,6 +76,7 @@
 		CAE63D541FD4915300281653 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		CBB7FF2C424962201E0CE53E /* Pods-FRadioPlayer_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_Example/Pods-FRadioPlayer_Example.release.xcconfig"; sourceTree = "<group>"; };
 		CF8AEAE2D18ED2C5F12FD1EF /* Pods_FRadioPlayer_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FRadioPlayer_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC11A056E5D4F1B69F9ABE88 /* Pods-FRadioPlayer_tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_tvOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_tvOS/Pods-FRadioPlayer_tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		E3AF3BE5D28A2EC29DE30915 /* Pods-FRadioPlayer_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_Example/Pods-FRadioPlayer_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		EBF1979AC9525CAB6AC3701A /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		EFC9F9BC32350C69D791241A /* Pods_FRadioPlayer_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FRadioPlayer_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,6 +106,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B8D0FE4B21B17D47005B64DF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9DE1D4542B8F51889191A76C /* Pods_FRadioPlayer_tvOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FAE5E43B21AC6CD3003F96DB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -109,6 +133,7 @@
 				607FACD21AFB9204008FA782 /* FRadioPlayer_ios */,
 				607FACE81AFB9204008FA782 /* Tests */,
 				FAE5E43F21AC6CD3003F96DB /* FRadioPlayer_mac */,
+				B8D0FE4F21B17D47005B64DF /* FRadioPlayer_tvOS */,
 				607FACD11AFB9204008FA782 /* Products */,
 				C9185C99D475B3E726EF3DE3 /* Pods */,
 				9C8AF1F1615EA645852C39CC /* Frameworks */,
@@ -121,6 +146,7 @@
 				607FACD01AFB9204008FA782 /* FRadioPlayer_ios.app */,
 				607FACE51AFB9204008FA782 /* FRadioPlayer_Tests.xctest */,
 				FAE5E43E21AC6CD3003F96DB /* FRadioPlayer_mac.app */,
+				B8D0FE4E21B17D47005B64DF /* FRadioPlayer_tvOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -181,8 +207,21 @@
 				CF8AEAE2D18ED2C5F12FD1EF /* Pods_FRadioPlayer_Tests.framework */,
 				EFC9F9BC32350C69D791241A /* Pods_FRadioPlayer_ios.framework */,
 				5E0C0BD81D65DF86F8BE706C /* Pods_FRadioPlayer_mac.framework */,
+				7A5988E8C2E73F5A5DD5D873 /* Pods_FRadioPlayer_tvOS.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B8D0FE4F21B17D47005B64DF /* FRadioPlayer_tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				B8D0FE5021B17D47005B64DF /* AppDelegate.swift */,
+				B8D0FE5221B17D47005B64DF /* ViewController.swift */,
+				B8D0FE5421B17D47005B64DF /* Main.storyboard */,
+				B8D0FE5721B17D49005B64DF /* Assets.xcassets */,
+				B8D0FE5921B17D49005B64DF /* Info.plist */,
+			);
+			path = FRadioPlayer_tvOS;
 			sourceTree = "<group>";
 		};
 		C9185C99D475B3E726EF3DE3 /* Pods */ = {
@@ -196,6 +235,8 @@
 				612EF1D0B96E8B922E04963F /* Pods-FRadioPlayer_ios.release.xcconfig */,
 				BC2AE6470A4C0BE46711D9AF /* Pods-FRadioPlayer_mac.debug.xcconfig */,
 				10B578434A03FE51AE221D8A /* Pods-FRadioPlayer_mac.release.xcconfig */,
+				DC11A056E5D4F1B69F9ABE88 /* Pods-FRadioPlayer_tvOS.debug.xcconfig */,
+				257B5148ADFF316304B18077 /* Pods-FRadioPlayer_tvOS.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -263,6 +304,25 @@
 			productReference = 607FACE51AFB9204008FA782 /* FRadioPlayer_Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		B8D0FE4D21B17D47005B64DF /* FRadioPlayer_tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B8D0FE5C21B17D49005B64DF /* Build configuration list for PBXNativeTarget "FRadioPlayer_tvOS" */;
+			buildPhases = (
+				42FDF28C21693133EA45EFFB /* [CP] Check Pods Manifest.lock */,
+				B8D0FE4A21B17D47005B64DF /* Sources */,
+				B8D0FE4B21B17D47005B64DF /* Frameworks */,
+				B8D0FE4C21B17D47005B64DF /* Resources */,
+				B766E47C38969BA58700C14C /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FRadioPlayer_tvOS;
+			productName = FRadioPlayer_tvOS;
+			productReference = B8D0FE4E21B17D47005B64DF /* FRadioPlayer_tvOS.app */;
+			productType = "com.apple.product-type.application";
+		};
 		FAE5E43D21AC6CD3003F96DB /* FRadioPlayer_mac */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FAE5E44D21AC6CD4003F96DB /* Build configuration list for PBXNativeTarget "FRadioPlayer_mac" */;
@@ -294,7 +354,6 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = 6G96AERJ7Q;
 						LastSwiftMigration = 1000;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -304,9 +363,12 @@
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = 6G96AERJ7Q;
 						LastSwiftMigration = 1000;
 						TestTargetID = 607FACCF1AFB9204008FA782;
+					};
+					B8D0FE4D21B17D47005B64DF = {
+						CreatedOnToolsVersion = 10.1;
+						ProvisioningStyle = Automatic;
 					};
 					FAE5E43D21AC6CD3003F96DB = {
 						CreatedOnToolsVersion = 10.1;
@@ -335,6 +397,7 @@
 				607FACCF1AFB9204008FA782 /* FRadioPlayer_ios */,
 				607FACE41AFB9204008FA782 /* FRadioPlayer_Tests */,
 				FAE5E43D21AC6CD3003F96DB /* FRadioPlayer_mac */,
+				B8D0FE4D21B17D47005B64DF /* FRadioPlayer_tvOS */,
 			);
 		};
 /* End PBXProject section */
@@ -357,6 +420,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B8D0FE4C21B17D47005B64DF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B8D0FE5821B17D49005B64DF /* Assets.xcassets in Resources */,
+				B8D0FE5621B17D47005B64DF /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FAE5E43C21AC6CD3003F96DB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -375,7 +447,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FRadioPlayer_ios/Pods-FRadioPlayer_ios-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-FRadioPlayer_ios/Pods-FRadioPlayer_ios-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/FRadioPlayer-iOS/FRadioPlayer.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -384,7 +456,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FRadioPlayer_ios/Pods-FRadioPlayer_ios-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FRadioPlayer_ios/Pods-FRadioPlayer_ios-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		41D126F2EA5D97B25A017638 /* [CP] Check Pods Manifest.lock */ = {
@@ -399,6 +471,28 @@
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-FRadioPlayer_Tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		42FDF28C21693133EA45EFFB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FRadioPlayer_tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -453,7 +547,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FRadioPlayer_mac/Pods-FRadioPlayer_mac-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-FRadioPlayer_mac/Pods-FRadioPlayer_mac-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/FRadioPlayer-macOS/FRadioPlayer.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -464,7 +558,29 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FRadioPlayer_mac/Pods-FRadioPlayer_mac-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FRadioPlayer_mac/Pods-FRadioPlayer_mac-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B766E47C38969BA58700C14C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-FRadioPlayer_tvOS/Pods-FRadioPlayer_tvOS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FRadioPlayer-tvOS/FRadioPlayer.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FRadioPlayer.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FRadioPlayer_tvOS/Pods-FRadioPlayer_tvOS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -486,6 +602,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B8D0FE4A21B17D47005B64DF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B8D0FE5321B17D47005B64DF /* ViewController.swift in Sources */,
+				B8D0FE5121B17D47005B64DF /* AppDelegate.swift in Sources */,
+				B8D0FE5E21B17DD9005B64DF /* Station.swift in Sources */,
+				B8D0FE5D21B17DD6005B64DF /* Track.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -517,6 +644,14 @@
 				607FACDF1AFB9204008FA782 /* Base */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		B8D0FE5421B17D47005B64DF /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B8D0FE5521B17D47005B64DF /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 		FAE5E44621AC6CD4003F96DB /* Main.storyboard */ = {
@@ -638,7 +773,7 @@
 			baseConfigurationReference = 412A9F8B5D5E4B4705AE9F0E /* Pods-FRadioPlayer_ios.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 6G96AERJ7Q;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = FRadioPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -654,7 +789,7 @@
 			baseConfigurationReference = 612EF1D0B96E8B922E04963F /* Pods-FRadioPlayer_ios.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 6G96AERJ7Q;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = FRadioPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -669,7 +804,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = ADC0D107E336293D60827BCD /* Pods-FRadioPlayer_Tests.debug.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 6G96AERJ7Q;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -690,7 +825,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 733A31C2D8DBB7FB9D433453 /* Pods-FRadioPlayer_Tests.release.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 6G96AERJ7Q;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -700,6 +835,61 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
+		B8D0FE5A21B17D49005B64DF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DC11A056E5D4F1B69F9ABE88 /* Pods-FRadioPlayer_tvOS.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = FRadioPlayer_tvOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.fethica.FRadioPlayer-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+			};
+			name = Debug;
+		};
+		B8D0FE5B21B17D49005B64DF /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 257B5148ADFF316304B18077 /* Pods-FRadioPlayer_tvOS.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = FRadioPlayer_tvOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.fethica.FRadioPlayer-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
 			};
 			name = Release;
 		};
@@ -786,6 +976,15 @@
 			buildConfigurations = (
 				607FACF31AFB9204008FA782 /* Debug */,
 				607FACF41AFB9204008FA782 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B8D0FE5C21B17D49005B64DF /* Build configuration list for PBXNativeTarget "FRadioPlayer_tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B8D0FE5A21B17D49005B64DF /* Debug */,
+				B8D0FE5B21B17D49005B64DF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
