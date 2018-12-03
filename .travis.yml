@@ -14,16 +14,19 @@ env:
     - DESTINATION="platform=iOS Simulator,name=iPhone 8,OS=12.1"
       SCHEME=FRadioPlayer-Example
       SDK=iphonesimulator12.1
+      PLATFORM=ios
     - DESTINATION="platform=OS X,arch=x86_64"
       SCHEME=FRadioPlayer_mac
       SDK=macosx10.14
+      PLATFORM=macos
     - DESTINATION="platform=tvOS Simulator,name=Apple TV,OS=12.1"
       SCHEME=FRadioPlayer_tvOS
       SDK=appletvsimulator12.1
+      PLATFORM=tvos
 podfile: Example/Podfile
 before_install:
 - gem install cocoapods # Since Travis is not always on latest version
 - pod install --project-directory=Example
 script:
 - set -o pipefail && xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -sdk "$SDK" -destination "$DESTINATION" -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c
-- pod lib lint
+- pod lib lint --platforms=$PLATFORM --allow-warnings
