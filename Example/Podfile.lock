@@ -1,5 +1,5 @@
 PODS:
-  - FRadioPlayer (0.1.14)
+  - FRadioPlayer (0.1.15)
 
 DEPENDENCIES:
   - FRadioPlayer (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  FRadioPlayer: 6eab8dd7c746f0e1bd8461edd9235308b3e634c4
+  FRadioPlayer: c3b0f304dd9bfb57a8bada434727141219977989
 
 PODFILE CHECKSUM: d35cb5b0785f6689f4b15e985b6f0f528648efd2
 
