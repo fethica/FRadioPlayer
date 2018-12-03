@@ -7,35 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B8D0FE4721B177C3005B64DF /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_520E208E082305F9A138A52CA21ED2B6 /* Reachability.swift */; };
-		B8D0FE4821B177C5005B64DF /* FRadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_8E44F9537F7C32B333197CACA3426299 /* FRadioPlayer.swift */; };
-		B8D0FE4921B177CC005B64DF /* FRadioAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_1DDA7080A9B5D37D5BFB7807EF18D07D /* FRadioAPI.swift */; };
 		BF_35BBF2646E1B1078387AF42F72CAF46E /* FRadioAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_1DDA7080A9B5D37D5BFB7807EF18D07D /* FRadioAPI.swift */; };
 		BF_3AFF3FC262BA27DDA0535083CCC69975 /* FRadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_8E44F9537F7C32B333197CACA3426299 /* FRadioPlayer.swift */; };
 		BF_5858A6D4C81F2479E595E68F01A0029E /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_520E208E082305F9A138A52CA21ED2B6 /* Reachability.swift */; };
 		BF_8F1DE3B4351096601D49604877D83A14 /* FRadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_8E44F9537F7C32B333197CACA3426299 /* FRadioPlayer.swift */; };
+		BF_BC2031718A233384F640C4859AD96508 /* FRadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_8E44F9537F7C32B333197CACA3426299 /* FRadioPlayer.swift */; };
 		BF_BD1FEBD3BADB0B0C20AAC6B72698BD98 /* FRadioAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_1DDA7080A9B5D37D5BFB7807EF18D07D /* FRadioAPI.swift */; };
+		BF_DC5C9940DEB4B05E53426EB05A56CE08 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_520E208E082305F9A138A52CA21ED2B6 /* Reachability.swift */; };
 		BF_DD0CC7F65EFB50F4765B7C19173AC449 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_520E208E082305F9A138A52CA21ED2B6 /* Reachability.swift */; };
+		BF_FECEB1A50587B508D8884A09331F7618 /* FRadioAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FR_1DDA7080A9B5D37D5BFB7807EF18D07D /* FRadioAPI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B8D0FE3F21B17693005B64DF /* FRadioPlayer_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FRadioPlayer_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FR_06D745D3137D8209E1B9BE9591637F7C /* FRadioPlayer_mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FRadioPlayer_mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FR_1DDA7080A9B5D37D5BFB7807EF18D07D /* FRadioAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRadioAPI.swift; sourceTree = "<group>"; };
 		FR_520E208E082305F9A138A52CA21ED2B6 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		FR_6C06630DBA366FAFF4C58AD747AC19BF /* FRadioPlayer_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FRadioPlayer_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FR_8E44F9537F7C32B333197CACA3426299 /* FRadioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRadioPlayer.swift; sourceTree = "<group>"; };
 		FR_B603D79AFF92B9ED618A738CD7DF017B /* FRadioPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FRadioPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		B8D0FE3C21B17693005B64DF /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		G_32EA884347EA57C8A245500F097176E7 = {
@@ -60,43 +50,15 @@
 			isa = PBXGroup;
 			children = (
 				FR_06D745D3137D8209E1B9BE9591637F7C /* FRadioPlayer_mac.framework */,
+				FR_6C06630DBA366FAFF4C58AD747AC19BF /* FRadioPlayer_tvOS.framework */,
 				FR_B603D79AFF92B9ED618A738CD7DF017B /* FRadioPlayer.framework */,
-				B8D0FE3F21B17693005B64DF /* FRadioPlayer_tvOS.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		B8D0FE3A21B17693005B64DF /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
-		B8D0FE3E21B17693005B64DF /* FRadioPlayer_tvOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B8D0FE4421B17693005B64DF /* Build configuration list for PBXNativeTarget "FRadioPlayer_tvOS" */;
-			buildPhases = (
-				B8D0FE3A21B17693005B64DF /* Headers */,
-				B8D0FE3B21B17693005B64DF /* Sources */,
-				B8D0FE3C21B17693005B64DF /* Frameworks */,
-				B8D0FE3D21B17693005B64DF /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = FRadioPlayer_tvOS;
-			productName = "FRadioPlayer tvOS";
-			productReference = B8D0FE3F21B17693005B64DF /* FRadioPlayer_tvOS.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 		NT_04EFDD8FA278B7516882098CA783217D /* FRadioPlayer_iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CL_1F43FAB06A098A0251A60A2CD860C5F5 /* Build configuration list for PBXNativeTarget "FRadioPlayer_iOS" */;
@@ -110,6 +72,21 @@
 			name = FRadioPlayer_iOS;
 			productName = FRadioPlayer_iOS;
 			productReference = FR_B603D79AFF92B9ED618A738CD7DF017B /* FRadioPlayer.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		NT_1299151B374F63EE85FC13C6080FEF8E /* FRadioPlayer_tvOS_tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CL_E211D53174C01D10C39055D258C17D9F /* Build configuration list for PBXNativeTarget "FRadioPlayer_tvOS_tvOS" */;
+			buildPhases = (
+				SBP_DA8B294B09BAFA24C907466809E5D5A7 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FRadioPlayer_tvOS_tvOS;
+			productName = FRadioPlayer_tvOS_tvOS;
+			productReference = FR_6C06630DBA366FAFF4C58AD747AC19BF /* FRadioPlayer_tvOS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		NT_1908C7D8900D869F84A0A953727A403B /* FRadioPlayer_mac_macOS */ = {
@@ -134,11 +111,6 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 1000;
-				TargetAttributes = {
-					B8D0FE3E21B17693005B64DF = {
-						CreatedOnToolsVersion = 10.1;
-					};
-				};
 			};
 			buildConfigurationList = CL_24F29DB993234810FFB6DFC57560E152 /* Build configuration list for PBXProject "FRadioPlayer" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -153,32 +125,12 @@
 			targets = (
 				NT_04EFDD8FA278B7516882098CA783217D /* FRadioPlayer_iOS */,
 				NT_1908C7D8900D869F84A0A953727A403B /* FRadioPlayer_mac_macOS */,
-				B8D0FE3E21B17693005B64DF /* FRadioPlayer_tvOS */,
+				NT_1299151B374F63EE85FC13C6080FEF8E /* FRadioPlayer_tvOS_tvOS */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		B8D0FE3D21B17693005B64DF /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
-		B8D0FE3B21B17693005B64DF /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B8D0FE4721B177C3005B64DF /* Reachability.swift in Sources */,
-				B8D0FE4821B177C5005B64DF /* FRadioPlayer.swift in Sources */,
-				B8D0FE4921B177CC005B64DF /* FRadioAPI.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		SBP_2A4FA0685908BEB718746389E0ABE47A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -199,57 +151,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		SBP_DA8B294B09BAFA24C907466809E5D5A7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF_FECEB1A50587B508D8884A09331F7618 /* FRadioAPI.swift in Sources */,
+				BF_BC2031718A233384F640C4859AD96508 /* FRadioPlayer.swift in Sources */,
+				BF_DC5C9940DEB4B05E53426EB05A56CE08 /* Reachability.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		B8D0FE4521B17693005B64DF /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = CarthageInfo.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.fethica.FRadioPlayer-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 10.0;
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Debug;
-		};
-		B8D0FE4621B17693005B64DF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = CarthageInfo.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.fethica.FRadioPlayer-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 10.0;
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Release;
-		};
 		BC_33BB37E560F8FFEB9D9E5ED8D3DD477D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -313,6 +227,27 @@
 			};
 			name = Release;
 		};
+		BC_42D70F8D25301DA1CABFE12FF0B47F4D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CarthageInfo.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.fethica.FRadioPlayer-tvOS-tvOS";
+				PRODUCT_NAME = FRadioPlayer_tvOS;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
 		BC_57EC434449235955BB02531E3243D065 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -370,6 +305,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Debug;
 		};
@@ -421,9 +357,31 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.2;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
+		};
+		BC_D261172AD7FE5C44C8159DFA3F719F55 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CarthageInfo.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.fethica.FRadioPlayer-tvOS-tvOS";
+				PRODUCT_NAME = FRadioPlayer_tvOS;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
 		};
 		BC_EBB6C879B93FB3585C785515AD810443 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -449,15 +407,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B8D0FE4421B17693005B64DF /* Build configuration list for PBXNativeTarget "FRadioPlayer_tvOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B8D0FE4521B17693005B64DF /* Debug */,
-				B8D0FE4621B17693005B64DF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 		CL_1F43FAB06A098A0251A60A2CD860C5F5 /* Build configuration list for PBXNativeTarget "FRadioPlayer_iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -481,6 +430,15 @@
 			buildConfigurations = (
 				BC_EBB6C879B93FB3585C785515AD810443 /* Debug */,
 				BC_3FAF65E24BFC779847E5DCEA5B867DA8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "";
+		};
+		CL_E211D53174C01D10C39055D258C17D9F /* Build configuration list for PBXNativeTarget "FRadioPlayer_tvOS_tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BC_D261172AD7FE5C44C8159DFA3F719F55 /* Debug */,
+				BC_42D70F8D25301DA1CABFE12FF0B47F4D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = "";
