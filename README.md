@@ -1,5 +1,5 @@
 <p align="center">
-<img alt="FRadioPlayer" src="https://fethica.com/img/web/repo-hero.png" width="749">
+<img alt="FRadioPlayer" src="https://fethica.com/assets/img/web/repo-hero.png" width="749">
 </p>
 
 # FRadioPlayer
@@ -16,7 +16,7 @@ FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 <p align="center">
-    <img alt="FRadioPlayer" src="https://fethica.com/img/web/fradioplayer-example.png" width="485">
+    <img alt="FRadioPlayer" src="https://fethica.com/assets/img/web/fradioplayer-example.png" width="485">
 </p>
 
 ## Features
@@ -167,7 +167,7 @@ func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?)
 For more complete app features, check out [Swift Radio App](https://github.com/analogcode/Swift-Radio-Pro) based on **FRadioPlayer**
 
 <p align="center">
-    <img alt="Swift Radio" src="https://fethica.com/img/web/swift-radio.jpg">
+    <img alt="Swift Radio" src="https://fethica.com/assets/img/web/swift-radio.jpg">
 </p>
 
 ## Hacking
