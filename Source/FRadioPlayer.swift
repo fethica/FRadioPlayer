@@ -268,7 +268,7 @@ open class FRadioPlayer: NSObject {
         
         // Enable bluetooth playback
         let audioSession = AVAudioSession.sharedInstance()
-        try? audioSession.setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default, options: [.defaultToSpeaker, .allowBluetooth])
+        try? audioSession.setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default, options: [.defaultToSpeaker, .allowBluetooth, .allowAirPlay])
         
         // Notifications
         setupNotifications()
@@ -372,6 +372,8 @@ open class FRadioPlayer: NSObject {
     private func setupPlayer(with asset: AVAsset) {
         if player == nil {
             player = AVPlayer()
+            //Removes black screen when connecting to appleTV
+	           player?.allowsExternalPlayback = false
         }
         
         playerItem = AVPlayerItem(asset: asset)
