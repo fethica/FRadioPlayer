@@ -22,7 +22,7 @@ FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
                        DESC
 
   s.homepage         = 'https://github.com/fethica/FRadioPlayer'
-  s.screenshots     = 'https://fethica.com/img/web/fradioplayer-example.png'
+  s.screenshots     = 'https://fethica.com/assets/img/web/fradioplayer-example.png'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Fethi El Hassasna' => 'e.fethi.c@gmail.com' }
   s.source           = { :git => 'https://github.com/fethica/FRadioPlayer.git', :tag => s.version.to_s }
