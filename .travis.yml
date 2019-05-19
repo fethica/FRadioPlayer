@@ -2,7 +2,7 @@
 # * http://www.objc.io/issue-6/travis-ci.html
 # * https://github.com/supermarin/xcpretty#usage
 
-osx_image: xcode10.1
+osx_image: xcode10.2
 language: swift
 
 sudo: required
@@ -11,17 +11,17 @@ env:
   global:
     - WORKSPACE=Example/FRadioPlayer.xcworkspace
   matrix:
-    - DESTINATION="platform=iOS Simulator,name=iPhone 8,OS=12.1"
+    - DESTINATION="platform=iOS Simulator,name=iPhone 8,OS=12.2"
       SCHEME=FRadioPlayer-Example
-      SDK=iphonesimulator12.1
+      SDK=iphonesimulator12.2
       PLATFORM=ios
     - DESTINATION="platform=OS X,arch=x86_64"
       SCHEME=FRadioPlayer_mac
       SDK=macosx10.14
       PLATFORM=macos
-    - DESTINATION="platform=tvOS Simulator,name=Apple TV,OS=12.1"
+    - DESTINATION="platform=tvOS Simulator,name=Apple TV,OS=12.2"
       SCHEME=FRadioPlayer_tvOS
-      SDK=appletvsimulator12.1
+      SDK=appletvsimulator12.2
       PLATFORM=tvos
 podfile: Example/Podfile
 before_install:
