@@ -227,7 +227,7 @@ open class FRadioPlayer: NSObject {
 
         // Enable bluetooth playback
         #if os(iOS)
-        options = [.defaultToSpeaker, .allowBluetooth]
+        options = [.defaultToSpeaker, .allowBluetooth, .allowAirPlay]
         #else
         options = []
         #endif
@@ -317,6 +317,8 @@ open class FRadioPlayer: NSObject {
     private func setupPlayer(with asset: AVAsset) {
         if player == nil {
             player = AVPlayer()
+            // Removes black screen when connecting to appleTV
+            player?.allowsExternalPlayback = false
         }
         
         playerItem = AVPlayerItem(asset: asset)
@@ -447,6 +449,8 @@ open class FRadioPlayer: NSObject {
             guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { break }
             let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
             DispatchQueue.main.async { options.contains(.shouldResume) ? self.play() : self.pause() }
+        @unknown default:
+            break
         }
         #endif
     }
