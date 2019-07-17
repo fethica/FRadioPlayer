@@ -399,7 +399,14 @@ open class FRadioPlayer: NSObject {
             return
         }
         
-        FRadioAPI.getArtwork(for: rawValue, size: artworkSize, completionHandler: { [unowned self] artworlURL in
+        // Strip off trailing '[???]' characters left there by ShoutCast and Centova Streams
+        // It will leave the string alone if the pattern is not there
+        let rawCleaned = NSMutableString(string: rawValue)
+        let pattern = "(\\[.*?\\]\\w*$)"
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        regex.replaceMatches(in: rawCleaned , options: .reportProgress, range: NSRange(location: 0, length: rawCleaned.length), withTemplate: "")
+        
+        FRadioAPI.getArtwork(for: rawCleaned as String, size: artworkSize, completionHandler: { [unowned self] artworlURL in
             DispatchQueue.main.async {
                 self.delegate?.radioPlayer?(self, artworkDidChange: artworlURL)
             }
