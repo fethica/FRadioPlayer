@@ -283,9 +283,9 @@ open class FRadioPlayer: NSObject {
      */
     open func stop() {
         guard let player = player else { return }
+        playbackState = .stopped
         player.replaceCurrentItem(with: nil)
         timedMetadataDidChange(rawValue: nil)
-        playbackState = .stopped
     }
     
     /**
