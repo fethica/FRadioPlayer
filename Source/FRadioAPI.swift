@@ -15,7 +15,9 @@ internal struct FRadioAPI {
     
     static func getArtwork(for metadata: String, size: Int, completionHandler: @escaping (_ artworkURL: URL?) -> ()) {
         
-        guard !metadata.isEmpty, metadata !=  " - ", let url = getURL(with: metadata) else {
+        let cleanMetadata = cleanRawMetadataIfNeeded(metadata)
+        
+        guard !cleanMetadata.isEmpty, cleanMetadata !=  " - ", let url = getURL(with: cleanMetadata) else {
             completionHandler(nil)
             return
         }
@@ -54,6 +56,19 @@ internal struct FRadioAPI {
         components.queryItems?.append(URLQueryItem(name: Keys.term, value: term))
         components.queryItems?.append(URLQueryItem(name: Keys.entity, value: Values.entity))
         return components.url
+    }
+    
+    private static func cleanRawMetadataIfNeeded(_ rawValue: String) -> String {
+        // Strip off trailing '[???]' characters left there by ShoutCast and Centova Streams
+        // It will leave the string alone if the pattern is not there
+        
+        let pattern = "(\\[.*?\\]\\w*$)"
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else { return rawValue }
+        
+        let rawCleaned = NSMutableString(string: rawValue)
+        regex.replaceMatches(in: rawCleaned , options: .reportProgress, range: NSRange(location: 0, length: rawCleaned.length), withTemplate: "")
+        
+        return rawCleaned as String
     }
     
     // MARK: - Constants
