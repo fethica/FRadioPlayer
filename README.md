@@ -32,6 +32,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 - [x] Support for Carthage
 - [x] Support for macOS
 - [x] Support for tvOS
+- [x] Support for Swift Package Manager SPM
 - [ ] Support for Audio Taps
 - [ ] Support for Audio Recording
 
@@ -39,7 +40,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 - macOS 10.12+
 - iOS 10.0+
 - tvOS 10.0+
-- Xcode 10.2
+- Xcode 10.2+
 - Swift 5
 
 ## Installation
@@ -59,6 +60,14 @@ FRadioPlayer is available through [Carthage](https://github.com/Carthage/Carthag
 
 ```text
 github "fethica/FRadioPlayer" ~> 0.1.10
+```
+
+### Swift Package Manager
+
+FRadioPlayer is available through [SPM](https://github.com/apple/swift-package-manager). To install it, simply add the following dependency to your `Package.swift` file:
+
+```text
+.package(url: "https://github.com/fethica/FRadioPlayer.git", from: "0.1.18")
 ```
 
 ### Manual

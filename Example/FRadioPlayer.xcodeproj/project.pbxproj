@@ -59,7 +59,7 @@
 		612EF1D0B96E8B922E04963F /* Pods-FRadioPlayer_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_ios/Pods-FRadioPlayer_ios.release.xcconfig"; sourceTree = "<group>"; };
 		733A31C2D8DBB7FB9D433453 /* Pods-FRadioPlayer_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_Tests/Pods-FRadioPlayer_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		7A5988E8C2E73F5A5DD5D873 /* Pods_FRadioPlayer_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FRadioPlayer_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7B59F870E46427A37B5A6185 /* FRadioPlayer.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = FRadioPlayer.podspec; path = ../FRadioPlayer.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		7B59F870E46427A37B5A6185 /* FRadioPlayer.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = FRadioPlayer.podspec; path = ../FRadioPlayer.podspec; sourceTree = "<group>"; };
 		93384C18F68BA278DC1055A8 /* Pods_FRadioPlayer_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FRadioPlayer_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADC0D107E336293D60827BCD /* Pods-FRadioPlayer_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_Tests/Pods-FRadioPlayer_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		B8D0FE4E21B17D47005B64DF /* FRadioPlayer_tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FRadioPlayer_tvOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -447,7 +447,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FRadioPlayer_ios/Pods-FRadioPlayer_ios-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-FRadioPlayer_ios/Pods-FRadioPlayer_ios-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/FRadioPlayer-iOS/FRadioPlayer.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -456,7 +456,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FRadioPlayer_ios/Pods-FRadioPlayer_ios-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FRadioPlayer_ios/Pods-FRadioPlayer_ios-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		41D126F2EA5D97B25A017638 /* [CP] Check Pods Manifest.lock */ = {
@@ -547,7 +547,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FRadioPlayer_mac/Pods-FRadioPlayer_mac-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-FRadioPlayer_mac/Pods-FRadioPlayer_mac-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/FRadioPlayer-macOS/FRadioPlayer.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -558,7 +558,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FRadioPlayer_mac/Pods-FRadioPlayer_mac-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FRadioPlayer_mac/Pods-FRadioPlayer_mac-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		B766E47C38969BA58700C14C /* [CP] Embed Pods Frameworks */ = {
@@ -569,7 +569,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FRadioPlayer_tvOS/Pods-FRadioPlayer_tvOS-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-FRadioPlayer_tvOS/Pods-FRadioPlayer_tvOS-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/FRadioPlayer-tvOS/FRadioPlayer.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -580,7 +580,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FRadioPlayer_tvOS/Pods-FRadioPlayer_tvOS-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FRadioPlayer_tvOS/Pods-FRadioPlayer_tvOS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

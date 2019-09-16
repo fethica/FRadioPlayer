@@ -9,21 +9,21 @@ targets:
   FRadioPlayer:
     type: framework
     platform: [iOS]
-    sources: Source
+    sources: Sources/FRadioPlayer
     scheme: {}
     settings:
       INFOPLIST_FILE: CarthageInfo.plist
   FRadioPlayer_mac:
     type: framework
     platform: [macOS]
-    sources: Source
+    sources: Sources/FRadioPlayer
     scheme: {}
     settings:
       INFOPLIST_FILE: CarthageInfo.plist
   FRadioPlayer_tvOS:
     type: framework
     platform: [tvOS]
-    sources: Source
+    sources: Sources/FRadioPlayer
     scheme: {}
     settings:
       INFOPLIST_FILE: CarthageInfo.plist
