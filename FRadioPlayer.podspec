@@ -31,6 +31,7 @@ FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
   s.ios.deployment_target = '10.0'
   s.osx.deployment_target = '10.12'
   s.tvos.deployment_target = '10.0'
+  s.swift_version = '5.0'
   s.source = { :git => 'https://github.com/fethica/FRadioPlayer.git', :tag => s.version.to_s }
   s.source_files = 'Sources/**/*.swift'
 
