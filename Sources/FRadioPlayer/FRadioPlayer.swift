@@ -177,6 +177,16 @@ open class FRadioPlayer: NSObject {
         }
     }
     
+    /// Read and set the current AVPlayer volume.
+    open var volume: Float? {
+        get {
+            return player?.volume
+        }
+        set {
+            player?.volume = newValue ?? 1.0
+        }
+    }
+    
     /// Player current state of type `FRadioPlayerState`
     open private(set) var state = FRadioPlayerState.urlNotSet {
         didSet {
