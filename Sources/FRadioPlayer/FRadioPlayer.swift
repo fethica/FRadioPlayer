@@ -177,13 +177,16 @@ open class FRadioPlayer: NSObject {
         }
     }
     
-    /// Read and set the current AVPlayer volume.
+    /// Read and set the current AVPlayer volume, a value of 0.0 indicates silence; a value of 1.0 indicates full audio volume for the player instance.
     open var volume: Float? {
         get {
             return player?.volume
         }
         set {
-            player?.volume = newValue ?? 1.0
+            guard
+                let newValue = newValue,
+                0.0...1.0 ~= newValue else { return }
+            player?.volume = newValue
         }
     }
     
