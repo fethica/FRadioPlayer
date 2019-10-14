@@ -15,10 +15,10 @@ env:
       SCHEME=FRadioPlayer-Example
       SDK=iphonesimulator13.0
       PLATFORM=ios
-    - DESTINATION="platform=OS X,arch=x86_64"
-      SCHEME=FRadioPlayer_mac
-      SDK=macosx10.15
-      PLATFORM=macos
+#    - DESTINATION="platform=OS X,arch=x86_64"
+#      SCHEME=FRadioPlayer_mac
+#      SDK=macosx10.15
+#      PLATFORM=macos
     - DESTINATION="platform=tvOS Simulator,name=Apple TV,OS=13.0"
       SCHEME=FRadioPlayer_tvOS
       SDK=appletvsimulator13.0
