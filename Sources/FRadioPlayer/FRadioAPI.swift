@@ -62,7 +62,7 @@ internal struct FRadioAPI {
         // Strip off trailing '[???]' characters left there by ShoutCast and Centova Streams
         // It will leave the string alone if the pattern is not there
         
-        let pattern = "(\\[.*?\\]\\w*$)"
+        let pattern = #"(\(.*?\)\w*)|(\[.*?\]\w*)"#
         guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else { return rawValue }
         
         let rawCleaned = NSMutableString(string: rawValue)
