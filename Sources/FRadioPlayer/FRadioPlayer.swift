@@ -399,7 +399,8 @@ open class FRadioPlayer: NSObject {
     }
     
     private func timedMetadataDidChange(rawValue: String?) {
-        let parts = rawValue?.components(separatedBy: " - ")
+        let metadataCleaned = cleanMetadata(rawValue)
+        let parts = metadataCleaned?.components(separatedBy: " - ")
         delegate?.radioPlayer?(self, metadataDidChange: parts?.first, trackName: parts?.last)
         delegate?.radioPlayer?(self, metadataDidChange: rawValue)
         shouldGetArtwork(for: rawValue, enableArtwork)
@@ -418,7 +419,16 @@ open class FRadioPlayer: NSObject {
             }
         })
     }
-
+    
+    private func cleanMetadata(_ rawValue: String?) -> String? {
+        guard let rawValue = rawValue else { return nil }
+        return rawValue.replacingOccurrences(
+            of: #"(\(.*?\)\w*)|(\[.*?\]\w*)"#,
+            with: "",
+            options: .regularExpression
+        )
+    }
+    
     private func reloadItem() {
         player?.replaceCurrentItem(with: nil)
         player?.replaceCurrentItem(with: playerItem)
