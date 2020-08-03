@@ -45,6 +45,9 @@ import AVFoundation
     
     /// URL not set
     case urlNotSet
+
+    /// URL set but not loaded yet
+    case urlNotLoaded
     
     /// Player is ready to play
     case readyToPlay
@@ -62,6 +65,7 @@ import AVFoundation
     public var description: String {
         switch self {
         case .urlNotSet: return "URL is not set"
+        case .urlNotLoaded: return "URL is set but not loaded yet"
         case .readyToPlay: return "Ready to play"
         case .loading: return "Loading"
         case .loadingFinished: return "Loading finished"
@@ -181,7 +185,7 @@ open class FRadioPlayer: NSObject {
     
     /// Read only property to get the current AVPlayer rate.
     open var rate: Float? {
-        return player?.rate
+        return player.rate
     }
     
     /// Check if the player is playing
@@ -234,7 +238,7 @@ open class FRadioPlayer: NSObject {
     // MARK: - Private properties
     
     /// AVPlayer
-    private var player: AVPlayer?
+    private var player: AVPlayer
     
     /// Last player item
     private var lastPlayerItem: AVPlayerItem?
@@ -263,7 +267,8 @@ open class FRadioPlayer: NSObject {
     
     // MARK: - Initialization
     
-    private override init() {
+    private init(player: AVPlayer = AVPlayer()) {
+        self.player = player
         super.init()
         
         // Enable bluetooth playback
@@ -280,6 +285,8 @@ open class FRadioPlayer: NSObject {
         try? reachability.startNotifier()
         NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: .reachabilityChanged, object: reachability)
         isConnected = reachability.connection != .none
+
+        self.player.allowsExternalPlayback = false
     }
     
     // MARK: - Control Methods
@@ -289,8 +296,13 @@ open class FRadioPlayer: NSObject {
      
      */
     open func play() {
-        guard let player = player else { return }
-        if player.currentItem == nil, playerItem != nil {
+
+        guard playerItem != nil else {
+            setupPlayer()
+            return
+        }
+
+        if player.currentItem == nil {
             player.replaceCurrentItem(with: playerItem)
         }
         
@@ -303,7 +315,7 @@ open class FRadioPlayer: NSObject {
      
      */
     open func pause() {
-        guard let player = player else { return }
+        // TODO: Check for playability
         player.pause()
         playbackState = .paused
     }
@@ -313,7 +325,8 @@ open class FRadioPlayer: NSObject {
      
      */
     open func stop() {
-        guard let player = player else { return }
+        // TODO: Check for playability
+
         if duration != 0 {
             currentTime = 0
             player.pause()
@@ -337,7 +350,7 @@ open class FRadioPlayer: NSObject {
         
         let seekTime = CMTime(seconds: seconds, preferredTimescale: 1)
         
-        player?.seek(to: seekTime, toleranceBefore: .zero, toleranceAfter: .positiveInfinity, completionHandler: { _ in
+        player.seek(to: seekTime, toleranceBefore: .zero, toleranceAfter: .positiveInfinity, completionHandler: { _ in
             self.play()
             completion?()
         })
@@ -350,32 +363,28 @@ open class FRadioPlayer: NSObject {
     open func togglePlaying() {
         isPlaying ? pause() : play()
     }
+
+    private var asset: AVAsset? = nil
     
     // MARK: - Private helpers
     
     private func radioURLDidChange(with url: URL?) {
         resetPlayer()
+        delegate?.radioPlayer?(self, itemDidChange: radioURL)
+
         guard let url = url else { state = .urlNotSet; return }
+
+        state = .urlNotLoaded
+        asset = AVAsset(url: url)
+
+        guard isAutoPlay else { return }
         
-        state = .loading
-        
-        preparePlayer(with: AVAsset(url: url)) { (success, asset) in
-            guard success, let asset = asset else {
-                self.resetPlayer()
-                self.state = .error
-                return
-            }
-            self.setupPlayer(with: asset)
-        }
+        setupPlayer()
     }
     
-    private func setupPlayer(with asset: AVAsset) {
-        if player == nil {
-            player = AVPlayer()
-            //Removes black screen when connecting to appleTV
-	           player?.allowsExternalPlayback = false
-        }
-        
+    private func setupPlayer() {
+        guard let asset = asset else { return }
+        state = .loading
         playerItem = AVPlayerItem(asset: asset)
     }
     
@@ -408,38 +417,8 @@ open class FRadioPlayer: NSObject {
             item.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .new, context: nil)
             item.addObserver(self, forKeyPath: "timedMetadata", options: .new, context: nil)
             item.addObserver(self, forKeyPath: "duration", options: .new, context: nil)
-            
-            player?.replaceCurrentItem(with: item)
-            if isAutoPlay { play() }
-        }
-        
-        delegate?.radioPlayer?(self, itemDidChange: radioURL)
-    }
-    
-    /** Prepare the player from the passed AVAsset
-     
-     */
-    private func preparePlayer(with asset: AVAsset?, completionHandler: @escaping (_ isPlayable: Bool, _ asset: AVAsset?)->()) {
-        guard let asset = asset else {
-            completionHandler(false, nil)
-            return
-        }
-        
-        let requestedKey = ["playable"]
-        
-        asset.loadValuesAsynchronously(forKeys: requestedKey) {
-            
-            DispatchQueue.main.async {
-                var error: NSError?
-                
-                let keyStatus = asset.statusOfValue(forKey: "playable", error: &error)
-                if keyStatus == AVKeyValueStatus.failed || !asset.isPlayable {
-                    completionHandler(false, nil)
-                    return
-                }
-                
-                completionHandler(true, asset)
-            }
+
+            play()
         }
     }
     
@@ -465,22 +444,25 @@ open class FRadioPlayer: NSObject {
     }
 
     private func reloadItem() {
-        player?.replaceCurrentItem(with: nil)
-        player?.replaceCurrentItem(with: playerItem)
+        player.replaceCurrentItem(with: nil)
+        player.replaceCurrentItem(with: playerItem)
     }
     
     private func resetPlayer() {
         stop()
+        asset?.cancelLoading()
+        asset = nil
+        player.replaceCurrentItem(with: nil)
         playerItem = nil
         lastPlayerItem = nil
         duration = 0
         currentTime = 0
         
         if let timeObserver = timeObserver {
-            player?.removeTimeObserver(timeObserver)
+            player.removeTimeObserver(timeObserver)
         }
         
-        player = nil
+
     }
     
     deinit {
@@ -534,12 +516,12 @@ open class FRadioPlayer: NSObject {
             !item.isPlaybackLikelyToKeepUp,
             reachability.connection != .none else { return }
         
-        player?.pause()
+        player.pause()
         
         // Wait 1 sec to recheck and make sure the reload is needed
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             if !item.isPlaybackLikelyToKeepUp { self.reloadItem() }
-            self.isPlaying ? self.player?.play() : self.player?.pause()
+            self.isPlaying ? self.player.play() : self.player.pause()
         }
     }
     
@@ -580,9 +562,9 @@ open class FRadioPlayer: NSObject {
                 
             case "status":
                 
-                if player?.status == AVPlayer.Status.readyToPlay {
+                if player.status == AVPlayer.Status.readyToPlay {
                     self.state = .readyToPlay
-                } else if player?.status == AVPlayer.Status.failed {
+                } else if player.status == AVPlayer.Status.failed {
                     self.state = .error
                 }
                 
@@ -622,7 +604,7 @@ extension FRadioPlayer {
     }
     
     @objc private func itemDidPlayToEnd() {
-        guard let player = player else { return }
+        // tODO:
         pause()
         isPlayedToEndTime = true
         
@@ -638,7 +620,7 @@ extension FRadioPlayer {
             self.duration = 0
             
             if let timeObserver = self.timeObserver {
-                player?.removeTimeObserver(timeObserver)
+                player.removeTimeObserver(timeObserver)
                 self.timeObserver = nil
             }
             
@@ -647,7 +629,7 @@ extension FRadioPlayer {
             self.duration = Double(CMTimeGetSeconds(duration))
             let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
             
-            timeObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
+            timeObserver = player.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
                 self?.periodicTimeUpdate(time)
             })
         }

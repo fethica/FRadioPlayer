@@ -41,7 +41,7 @@ class ViewController: UIViewController {
                     
                     Station(name: "Sample Audio File",
                             detail: "mp3, 45 seconds",
-                            url: URL(string: "https://www.sample-videos.com/audio/mp3/wave.mp3")!,
+                            url: URL(string: "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3")!,
                             image: #imageLiteral(resourceName: "audiofile"))]
     
     // Selected station index
