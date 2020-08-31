@@ -247,11 +247,7 @@ open class FRadioPlayer: NSObject {
     private var headphonesConnected: Bool = false
     
     /// Default player item
-    private var playerItem: AVPlayerItem? {
-        didSet {
-            playerItemDidChange()
-        }
-    }
+    private var playerItem: AVPlayerItem?
     
     /// Reachability for network interruption handling
     private let reachability = Reachability()!
@@ -386,6 +382,7 @@ open class FRadioPlayer: NSObject {
         guard let asset = asset else { return }
         state = .loading
         playerItem = AVPlayerItem(asset: asset)
+        playerItemDidChange()
     }
     
     /** Reset all player item observers and create new ones
@@ -444,6 +441,10 @@ open class FRadioPlayer: NSObject {
     }
 
     private func reloadItem() {
+        guard let url = radioURL else { return }
+        asset = AVAsset(url: url)
+        guard let asset = asset else { return }
+        playerItem = AVPlayerItem(asset: asset)
         player.replaceCurrentItem(with: nil)
         player.replaceCurrentItem(with: playerItem)
     }
@@ -515,13 +516,22 @@ open class FRadioPlayer: NSObject {
             let item = playerItem,
             !item.isPlaybackLikelyToKeepUp,
             reachability.connection != .none else { return }
-        
-        player.pause()
+
+        if isLiveStream {
+            player.replaceCurrentItem(with: nil)
+        } else {
+            player.pause()
+        }
         
         // Wait 1 sec to recheck and make sure the reload is needed
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            if !item.isPlaybackLikelyToKeepUp { self.reloadItem() }
-            self.isPlaying ? self.player.play() : self.player.pause()
+            if !item.isPlaybackLikelyToKeepUp, self.player.currentItem == nil { self.reloadItem() }
+            
+            if self.isPlaying {
+                self.play()
+            } else {
+                self.isLiveStream ? self.stop() : self.pause()
+            }
         }
     }
     
