@@ -461,9 +461,8 @@ open class FRadioPlayer: NSObject {
         
         if let timeObserver = timeObserver {
             player.removeTimeObserver(timeObserver)
+            self.timeObserver = nil
         }
-        
-
     }
     
     deinit {
