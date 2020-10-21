@@ -42,7 +42,11 @@ class ViewController: UIViewController {
                     Station(name: "Sample Audio File",
                             detail: "mp3, 45 seconds",
                             url: URL(string: "https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3")!,
-                            image: #imageLiteral(resourceName: "audiofile"))]
+                            image: #imageLiteral(resourceName: "audiofile")),
+                    
+                    Station(name: "Sample Audio Streaming", detail: ".flac", url: URL(string: "https://www.eclassical.com/custom/eclassical/files/BIS1447-002-flac_24.flac")!, image: #imageLiteral(resourceName: "audiofile"))
+    
+    ]
     
     // Selected station index
     var selectedIndex = 0 {
