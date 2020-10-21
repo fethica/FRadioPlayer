@@ -167,6 +167,9 @@ open class FRadioPlayer: NSObject {
      */
     open weak var delegate: FRadioPlayerDelegate?
     
+    /// enable and disable playImmediately when start a new song. set this variable value befor set radioURL value
+    open var isPlayImmediately: Bool = false
+    
     /// The player current radio URL
     open var radioURL: URL? {
         didSet {
@@ -441,7 +444,11 @@ open class FRadioPlayer: NSObject {
             item.addObserver(self, forKeyPath: "timedMetadata", options: .new, context: nil)
             item.addObserver(self, forKeyPath: "duration", options: .new, context: nil)
 
-            play()
+            if isPlayImmediately == true {
+                playImmediately()
+            } else {
+                play()
+            }
         }
     }
     
