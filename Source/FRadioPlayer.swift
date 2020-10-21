@@ -307,6 +307,23 @@ open class FRadioPlayer: NSObject {
     }
     
     /**
+    Triggers the play immediately function of the radio player
+    
+    */
+    open func playImmediately() {
+        guard playerItem != nil else {
+            setupPlayer()
+            return
+        }
+
+        if player.currentItem == nil {
+            player.replaceCurrentItem(with: playerItem)
+        }
+        player.playImmediately(atRate: self.rate ?? 1.0)
+        playbackState = .playing
+    }
+    
+    /**
      Triggers the pause function of the radio player
      
      */
@@ -359,6 +376,15 @@ open class FRadioPlayer: NSObject {
     open func togglePlaying() {
         isPlaying ? pause() : play()
     }
+    
+    /**
+    Toggles isPlaying state (play immediately)
+    
+    */
+    open func togglePlayingImmediately() {
+        isPlaying ? pause() : playImmediately()
+    }
+    
 
     private var asset: AVAsset? = nil
     
