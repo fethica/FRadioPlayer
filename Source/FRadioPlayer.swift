@@ -400,7 +400,7 @@ open class FRadioPlayer: NSObject {
         guard let url = url else { state = .urlNotSet; return }
 
         state = .urlNotLoaded
-        asset = AVAsset(url: url)
+        asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey : true])
 
         guard isAutoPlay else { return }
         
@@ -475,7 +475,7 @@ open class FRadioPlayer: NSObject {
 
     private func reloadItem() {
         guard let url = radioURL else { return }
-        asset = AVAsset(url: url)
+        asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey : true])
         guard let asset = asset else { return }
         playerItem = AVPlayerItem(asset: asset)
         player.replaceCurrentItem(with: nil)
