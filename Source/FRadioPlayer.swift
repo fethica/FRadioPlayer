@@ -167,6 +167,9 @@ open class FRadioPlayer: NSObject {
      */
     open weak var delegate: FRadioPlayerDelegate?
     
+    /// enable and disable playImmediately when start a new song. set this variable value befor set radioURL value
+    open var isPlayImmediately: Bool = false
+    
     /// The player current radio URL
     open var radioURL: URL? {
         didSet {
@@ -307,6 +310,23 @@ open class FRadioPlayer: NSObject {
     }
     
     /**
+    Triggers the play immediately function of the radio player
+    
+    */
+    open func playImmediately() {
+        guard playerItem != nil else {
+            setupPlayer()
+            return
+        }
+
+        if player.currentItem == nil {
+            player.replaceCurrentItem(with: playerItem)
+        }
+        player.playImmediately(atRate: self.rate ?? 1.0)
+        playbackState = .playing
+    }
+    
+    /**
      Triggers the pause function of the radio player
      
      */
@@ -359,6 +379,15 @@ open class FRadioPlayer: NSObject {
     open func togglePlaying() {
         isPlaying ? pause() : play()
     }
+    
+    /**
+    Toggles isPlaying state (play immediately)
+    
+    */
+    open func togglePlayingImmediately() {
+        isPlaying ? pause() : playImmediately()
+    }
+    
 
     private var asset: AVAsset? = nil
     
@@ -415,7 +444,11 @@ open class FRadioPlayer: NSObject {
             item.addObserver(self, forKeyPath: "timedMetadata", options: .new, context: nil)
             item.addObserver(self, forKeyPath: "duration", options: .new, context: nil)
 
-            play()
+            if isPlayImmediately == true {
+                playImmediately()
+            } else {
+                play()
+            }
         }
     }
     
