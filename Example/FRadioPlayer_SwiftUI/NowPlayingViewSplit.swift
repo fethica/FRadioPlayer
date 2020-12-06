@@ -38,8 +38,8 @@ struct NowPlayingViewSplit: View {
             
             Spacer()
             
-            //AirPlayView()
-            //    .frame(width: 50, height: 50)
+            AirPlayView()
+                .frame(width: 50, height: 50)
         }
     }
 }
