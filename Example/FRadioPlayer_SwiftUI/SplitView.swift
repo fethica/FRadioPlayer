@@ -1,16 +1,14 @@
 //
-//  ContentView.swift
+//  SplitView.swift
 //  FRadioPlayer_SwiftUI
 //
-//  Created by Urayoan Miranda on 12/3/20.
+//  Created by Urayoan Miranda on 12/6/20.
 //  Copyright © 2020 CocoaPods. All rights reserved.
 //
 
 import SwiftUI
-import Combine
-import FRadioPlayer
 
-struct StationsList: View {
+struct SplitView: View {
     
     @EnvironmentObject var state: RadioDelegateClass
     
@@ -32,7 +30,6 @@ struct StationsList: View {
                         Spacer()
                     }
             }.navigationBarTitle("FRadio Player", displayMode: .automatic)
-            
             #if targetEnvironment(macCatalyst)
                 NowPlayingViewSplit()
             #endif
@@ -40,12 +37,11 @@ struct StationsList: View {
     }
 }
 
-
-struct StationsList_Previews: PreviewProvider {
+struct SplitView_Previews: PreviewProvider {
     static var previews: some View {
         let state = RadioDelegateClass()
-
-        StationsList()
+        
+        SplitView()
             .environmentObject(state)
             .preferredColorScheme(.light)
     }
