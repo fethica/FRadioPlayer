@@ -10,6 +10,11 @@ target 'FRadioPlayer_ios' do
   end
 end
 
+target 'FRadioPlayer_SwiftUI' do
+  platform :ios, '14.0'
+  pod 'FRadioPlayer', :path => '../'
+end
+
 target 'FRadioPlayer_mac' do
   platform :osx, '10.12'
   pod 'FRadioPlayer', :path => '../'

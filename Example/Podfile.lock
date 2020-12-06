@@ -1,0 +1,16 @@
+PODS:
+  - FRadioPlayer (0.1.20)
+
+DEPENDENCIES:
+  - FRadioPlayer (from `../`)
+
+EXTERNAL SOURCES:
+  FRadioPlayer:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  FRadioPlayer: 5c35ba963b69663a4f7d34405c09847d7aebbfcc
+
+PODFILE CHECKSUM: e4d042ff902dcec988294204a080f9b1b1e64c1b
+
+COCOAPODS: 1.10.0
