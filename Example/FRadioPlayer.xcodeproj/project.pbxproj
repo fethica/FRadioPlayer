@@ -23,8 +23,8 @@
 		6521C8B3257D4ED000E80317 /* AirPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6521C8B2257D4ED000E80317 /* AirPlayView.swift */; };
 		6521C8CC257D506B00E80317 /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE63D531FD4915300281653 /* Station.swift */; };
 		6521C8D2257D506E00E80317 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE63D541FD4915300281653 /* Track.swift */; };
-		65347D27257D6D0200DDE1C9 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65347D26257D6D0200DDE1C9 /* SplitView.swift */; };
 		65347D38257D6DEC00DDE1C9 /* NowPlayingViewSplit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65347D37257D6DEC00DDE1C9 /* NowPlayingViewSplit.swift */; };
+		65347D3E257D71FC00DDE1C9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		9BF856856EA4557B0A5C5D6D /* Pods_FRadioPlayer_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8AEAE2D18ED2C5F12FD1EF /* Pods_FRadioPlayer_Tests.framework */; };
 		9DE1D4542B8F51889191A76C /* Pods_FRadioPlayer_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5988E8C2E73F5A5DD5D873 /* Pods_FRadioPlayer_tvOS.framework */; };
 		B8D0FE5121B17D47005B64DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D0FE5021B17D47005B64DF /* AppDelegate.swift */; };
@@ -82,7 +82,6 @@
 		6521C8A4257D4E8C00E80317 /* NowPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingView.swift; sourceTree = "<group>"; };
 		6521C8AB257D4EA900E80317 /* TabIconsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabIconsView.swift; sourceTree = "<group>"; };
 		6521C8B2257D4ED000E80317 /* AirPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPlayView.swift; sourceTree = "<group>"; };
-		65347D26257D6D0200DDE1C9 /* SplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitView.swift; sourceTree = "<group>"; };
 		65347D37257D6DEC00DDE1C9 /* NowPlayingViewSplit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingViewSplit.swift; sourceTree = "<group>"; };
 		655FC62D257D59A900867676 /* FRadioPlayer_SwiftUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FRadioPlayer_SwiftUI.entitlements; sourceTree = "<group>"; };
 		733A31C2D8DBB7FB9D433453 /* Pods-FRadioPlayer_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_Tests/Pods-FRadioPlayer_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -246,7 +245,6 @@
 				6521C886257D4CB800E80317 /* FRadioPlayer_SwiftUIApp.swift */,
 				6521C888257D4CB800E80317 /* ContentView.swift */,
 				6521C89D257D4E5D00E80317 /* StationsList.swift */,
-				65347D26257D6D0200DDE1C9 /* SplitView.swift */,
 				6521C8A4257D4E8C00E80317 /* NowPlayingView.swift */,
 				65347D37257D6DEC00DDE1C9 /* NowPlayingViewSplit.swift */,
 				6521C8AB257D4EA900E80317 /* TabIconsView.swift */,
@@ -519,6 +517,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6521C88E257D4CBA00E80317 /* Preview Assets.xcassets in Resources */,
+				65347D3E257D71FC00DDE1C9 /* LaunchScreen.xib in Resources */,
 				6521C88B257D4CBA00E80317 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -749,7 +748,6 @@
 				6521C89E257D4E5D00E80317 /* StationsList.swift in Sources */,
 				6521C8D2257D506E00E80317 /* Track.swift in Sources */,
 				6521C8B3257D4ED000E80317 /* AirPlayView.swift in Sources */,
-				65347D27257D6D0200DDE1C9 /* SplitView.swift in Sources */,
 				6521C8A5257D4E8C00E80317 /* NowPlayingView.swift in Sources */,
 				65347D38257D6DEC00DDE1C9 /* NowPlayingViewSplit.swift in Sources */,
 				6521C887257D4CB800E80317 /* FRadioPlayer_SwiftUIApp.swift in Sources */,
