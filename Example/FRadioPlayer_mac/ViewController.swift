@@ -14,20 +14,25 @@ class ViewController: NSViewController {
 
     let player: FRadioPlayer = FRadioPlayer.shared
     // List of stations
-    let stations = [Station(name: "Newport Folk Radio",
-                            detail: "Are you ready to Folk?",
-                            url: URL(string: "http://rfcmedia.streamguys1.com/Newport.mp3")!
-                            ),
-
-                    Station(name: "Absolute Country Hits Radio",
-                            detail: "The Music Starts Here",
-                            url: URL(string: "http://strm112.1.fm/acountry_mobile_mp3")!
-                            ),
-
-                    Station(name: "Chillout",
-                            detail: "Your Lifestyle... Your Music!",
-                            url: URL(string: "http://ic7.101.ru:8000/c15_3")!
-                            )]
+    let stations = [Station(name: "AZ Rock Radio",
+                                       detail: "We Know Music from A to Z",
+                                       url: URL(string: "http://cassini.shoutca.st:9300/stream")!,
+                                       image: #imageLiteral(resourceName: "station4")),
+                               
+                               Station(name: "Newport Folk Radio",
+                                       detail: "Are you ready to Folk?",
+                                       url: URL(string: "http:rfcmedia.streamguys1.com/Newport.mp3")!,
+                                       image: #imageLiteral(resourceName: "station2")),
+                               
+                               Station(name: "Absolute Country Hits Radio",
+                                       detail: "The Music Starts Here",
+                                       url: URL(string: "http:strm112.1.fm/acountry_mobile_mp3")!,
+                                       image: #imageLiteral(resourceName: "station1")),
+                               
+                               Station(name: "The Alt Vault",
+                                       detail: "Your Lifestyle... Your Music!",
+                                       url: URL(string: "http:jupiter.prostreaming.net/altmixxlow")!,
+                                       image: #imageLiteral(resourceName: "station3"))]
     
     @IBOutlet weak var stationLabel: NSTextField!
     @IBOutlet weak var artistLabel: NSTextField!
