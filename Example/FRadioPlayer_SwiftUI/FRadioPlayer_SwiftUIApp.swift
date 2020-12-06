@@ -47,6 +47,16 @@ class RadioDelegateClass: FRadioPlayerDelegate, ObservableObject {
                                        url: URL(string: "http://cassini.shoutca.st:9300/stream")!,
                                        image: #imageLiteral(resourceName: "station4")),
                                
+                               Station(name: "Metal PR",
+                                       detail: "El Lechón Atómico",
+                                       url: URL(string: "http://199.195.194.140:8026/live")!,
+                                       image: #imageLiteral(resourceName: "station5")),
+                               
+                               Station(name: "Chillout",
+                                       detail: "Your Lifestyle... Your Music!",
+                                       url: URL(string: "http://ic7.101.ru:8000/c15_3")!,
+                                       image:#imageLiteral(resourceName: "albumArt")),
+                               
                                Station(name: "Newport Folk Radio",
                                        detail: "Are you ready to Folk?",
                                        url: URL(string: "http:rfcmedia.streamguys1.com/Newport.mp3")!,
