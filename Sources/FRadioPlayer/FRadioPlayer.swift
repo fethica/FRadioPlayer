@@ -133,12 +133,15 @@ import AVFoundation
  FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
  */
 
-open class FRadioPlayer: NSObject {
+open class FRadioPlayer: NSObject, AVPlayerItemMetadataOutputPushDelegate {
     
     // MARK: - Properties
     
     /// Returns the singleton `FRadioPlayer` instance.
     public static let shared = FRadioPlayer()
+    
+    /// Get metadata
+    public var metadataCollector: AVPlayerItemMetadataCollector!
     
     /**
      The delegate object for the `FRadioPlayer`.
@@ -328,6 +331,8 @@ open class FRadioPlayer: NSObject {
     }
     
     private func setupPlayer(with asset: AVAsset) {
+        metadataCollector = AVPlayerItemMetadataCollector()
+
         if player == nil {
             player = AVPlayer()
             // Removes black screen when connecting to appleTV
@@ -335,6 +340,21 @@ open class FRadioPlayer: NSObject {
         }
         
         playerItem = AVPlayerItem(asset: asset)
+        let metadataOutput = AVPlayerItemMetadataOutput(identifiers: nil)
+        metadataOutput.setDelegate(self, queue: DispatchQueue.main)
+        playerItem!.add(metadataOutput)
+    }
+    
+    public func metadataOutput(_ output: AVPlayerItemMetadataOutput, didOutputTimedMetadataGroups groups: [AVTimedMetadataGroup], from track: AVPlayerItemTrack?) {
+        let item = groups.first?.items.first // make this an AVMetadata item
+        //item?.value(forKeyPath: "value") // looking for that key bro
+        if (item != nil) {
+            print("Item Value \(String(describing: item!.value))") // print the results
+            timedMetadataDidChange(rawValue: item!.value as? String)
+        } else {
+            let temp = "No Metadata"
+            timedMetadataDidChange(rawValue: temp)
+        }
     }
     
     /** Reset all player item observers and create new ones
@@ -351,7 +371,6 @@ open class FRadioPlayer: NSObject {
             item.removeObserver(self, forKeyPath: "status")
             item.removeObserver(self, forKeyPath: "playbackBufferEmpty")
             item.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
-            item.removeObserver(self, forKeyPath: "timedMetadata")
         }
         
         lastPlayerItem = playerItem
@@ -362,7 +381,6 @@ open class FRadioPlayer: NSObject {
             item.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
             item.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
             item.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
-            item.addObserver(self, forKeyPath: "timedMetadata", options: NSKeyValueObservingOptions.new, context: nil)
             
             player?.replaceCurrentItem(with: item)
             if isAutoPlay { play() }
@@ -560,10 +578,6 @@ open class FRadioPlayer: NSObject {
             case "playbackLikelyToKeepUp":
                 
                 self.state = item.isPlaybackLikelyToKeepUp ? .loadingFinished : .loading
-
-            case "timedMetadata":
-                let rawValue = item.timedMetadata?.first?.value as? String
-                timedMetadataDidChange(rawValue: rawValue)
                 
             default:
                 break
