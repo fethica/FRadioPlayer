@@ -133,16 +133,13 @@ import AVFoundation
  FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
  */
 
-open class FRadioPlayer: NSObject, AVPlayerItemMetadataOutputPushDelegate {
+open class FRadioPlayer: NSObject {
     
     // MARK: - Properties
     
     /// Returns the singleton `FRadioPlayer` instance.
     public static let shared = FRadioPlayer()
-    
-    /// Get metadata
-    public var metadataCollector: AVPlayerItemMetadataCollector!
-    
+
     /**
      The delegate object for the `FRadioPlayer`.
      Implement the methods declared by the `FRadioPlayerDelegate` object to respond to user interactions and the player output.
@@ -331,7 +328,6 @@ open class FRadioPlayer: NSObject, AVPlayerItemMetadataOutputPushDelegate {
     }
     
     private func setupPlayer(with asset: AVAsset) {
-        metadataCollector = AVPlayerItemMetadataCollector()
 
         if player == nil {
             player = AVPlayer()
@@ -342,21 +338,9 @@ open class FRadioPlayer: NSObject, AVPlayerItemMetadataOutputPushDelegate {
         playerItem = AVPlayerItem(asset: asset)
         let metadataOutput = AVPlayerItemMetadataOutput(identifiers: nil)
         metadataOutput.setDelegate(self, queue: DispatchQueue.main)
-        playerItem!.add(metadataOutput)
+        playerItem?.add(metadataOutput)
     }
-    
-    public func metadataOutput(_ output: AVPlayerItemMetadataOutput, didOutputTimedMetadataGroups groups: [AVTimedMetadataGroup], from track: AVPlayerItemTrack?) {
-        let item = groups.first?.items.first // make this an AVMetadata item
-        //item?.value(forKeyPath: "value") // looking for that key bro
-        if (item != nil) {
-            print("Item Value \(String(describing: item!.value))") // print the results
-            timedMetadataDidChange(rawValue: item!.value as? String)
-        } else {
-            let temp = "No Metadata"
-            timedMetadataDidChange(rawValue: temp)
-        }
-    }
-    
+        
     /** Reset all player item observers and create new ones
      
      */
@@ -583,5 +567,19 @@ open class FRadioPlayer: NSObject, AVPlayerItemMetadataOutputPushDelegate {
                 break
             }
         }
+    }
+}
+
+extension FRadioPlayer: AVPlayerItemMetadataOutputPushDelegate {
+    
+    public func metadataOutput(_ output: AVPlayerItemMetadataOutput, didOutputTimedMetadataGroups groups: [AVTimedMetadataGroup], from track: AVPlayerItemTrack?) {
+        
+        // make this an AVMetadata item
+        guard let item = groups.first?.items.first else {
+            timedMetadataDidChange(rawValue: nil)
+            return
+        }
+        
+        timedMetadataDidChange(rawValue: item.value as? String)
     }
 }
