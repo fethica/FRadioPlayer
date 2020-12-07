@@ -12,13 +12,29 @@ import FRadioPlayer
 @main
 struct FRadioPlayer_SwiftUIApp: App {
     var state = RadioDelegateClass()
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView().environmentObject(state)
         }
     }
 }
+
+//@main
+//struct FRadioPlayer_SwiftUIApp: App {
+//    var state = RadioDelegateClass()
+//    
+//    @SceneBuilder var body: some Scene {
+//        WindowGroup {
+//            ContentView().environmentObject(state)
+//        }
+//        #if os(macOS)
+//        Settings {
+//            ContentView().environmentObject(state)
+//        }
+//        #endif
+//    }
+//}
 
 class RadioDelegateClass: FRadioPlayerDelegate, ObservableObject {
     
@@ -93,7 +109,7 @@ class RadioDelegateClass: FRadioPlayerDelegate, ObservableObject {
     
     init() {
         player.delegate     = self
-        player.artworkSize  = 100
+        player.artworkSize  = 500
     }
     
     func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayerState) {

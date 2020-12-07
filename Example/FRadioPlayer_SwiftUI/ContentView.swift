@@ -12,15 +12,17 @@ import FRadioPlayer
 struct ContentView: View {
     
     @EnvironmentObject var state: RadioDelegateClass
-
+    
     var body: some View {
         VStack(alignment: .trailing, spacing: 0.0) {
             StationsList().environmentObject(state)
             Spacer()
             ZStack {
                 VStack {
-                    NowPlayingView().environmentObject(state)
-                    Divider()
+                    #if !targetEnvironment(macCatalyst)
+                        NowPlayingView().environmentObject(state)
+                        Divider()
+                    #endif
                     TabIconsView().environmentObject(state)
                 }
             }.frame(height: 160)
@@ -32,7 +34,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let state = RadioDelegateClass()
-
+        
         ContentView()
             .environmentObject(state)
             .preferredColorScheme(.light)

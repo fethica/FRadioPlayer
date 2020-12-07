@@ -32,6 +32,10 @@ struct StationsList: View {
                         Spacer()
                     }
             }.navigationBarTitle("FRadio Player", displayMode: .automatic)
+            
+            #if targetEnvironment(macCatalyst)
+                NowPlayingViewSplit()
+            #endif
         }
     }
 }
