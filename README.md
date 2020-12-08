@@ -4,6 +4,7 @@
 
 # FRadioPlayer
 
+[![CI Status](https://github.com/fethica/FRadioPlayer/workflows/Swift/badge.svg)](https://github.com/fethica/FRadioPlayer/actions?query=workflow%3ASwift)
 [![CI Status](http://img.shields.io/travis/fethica/FRadioPlayer.svg?style=flat)](https://travis-ci.org/fethica/FRadioPlayer)
 [![Version](https://img.shields.io/cocoapods/v/FRadioPlayer.svg?style=flat)](http://cocoapods.org/pods/FRadioPlayer)
 [![License](https://img.shields.io/cocoapods/l/FRadioPlayer.svg?style=flat)](http://cocoapods.org/pods/FRadioPlayer)
