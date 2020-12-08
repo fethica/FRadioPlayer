@@ -11,19 +11,19 @@ env:
   global:
     - WORKSPACE=Example/FRadioPlayer.xcworkspace
   matrix:
-    - DESTINATION="platform=iOS Simulator,name=iPhone 12 Pro,OS=14.0"
+    - DESTINATION="platform=iOS Simulator,name=iPhone 12 Pro,OS=14.2"
       SCHEME=FRadioPlayer-Example
       SDK=iphonesimulator14.2
       PLATFORM=ios
-    - DESTINATION="platform=macOS,arch=x86_64"
-      SCHEME=FRadioPlayer_mac
-      SDK=macosx11.0
-      PLATFORM=macos
-    - DESTINATION="platform=tvOS Simulator,name=Apple TV,OS=14.0"
+    #- DESTINATION="platform=macOS,arch=x86_64"
+    #  SCHEME=FRadioPlayer_mac
+    #  SDK=macosx11.0
+    #  PLATFORM=macos
+    - DESTINATION="platform=tvOS Simulator,name=Apple TV,OS=14.2"
       SCHEME=FRadioPlayer_tvOS
       SDK=appletvsimulator14.2
       PLATFORM=tvos
-    - DESTINATION="platform=iOS Simulator,name=iPhone 12 Pro,OS=14.0"
+    - DESTINATION="platform=iOS Simulator,name=iPhone 12 Pro,OS=14.2"
       SCHEME=FRadioPlayer_SwiftUI
       SDK=iphonesimulator14.2
       PLATFORM=ios
