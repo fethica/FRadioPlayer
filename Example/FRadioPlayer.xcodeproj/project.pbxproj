@@ -25,7 +25,7 @@
 		6521C8D2257D506E00E80317 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE63D541FD4915300281653 /* Track.swift */; };
 		65347D38257D6DEC00DDE1C9 /* NowPlayingViewSplit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65347D37257D6DEC00DDE1C9 /* NowPlayingViewSplit.swift */; };
 		65347D3E257D71FC00DDE1C9 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
-		9BF856856EA4557B0A5C5D6D /* Pods_FRadioPlayer_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF8AEAE2D18ED2C5F12FD1EF /* Pods_FRadioPlayer_Tests.framework */; };
+		7EF0C0F4FF113BB6A81B4614 /* Pods_FRadioPlayer_ios_FRadioPlayer_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB5F3480523C15D4AEEB2742 /* Pods_FRadioPlayer_ios_FRadioPlayer_Tests.framework */; };
 		9DE1D4542B8F51889191A76C /* Pods_FRadioPlayer_tvOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A5988E8C2E73F5A5DD5D873 /* Pods_FRadioPlayer_tvOS.framework */; };
 		B8D0FE5121B17D47005B64DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D0FE5021B17D47005B64DF /* AppDelegate.swift */; };
 		B8D0FE5321B17D47005B64DF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8D0FE5221B17D47005B64DF /* ViewController.swift */; };
@@ -84,11 +84,13 @@
 		6521C8B2257D4ED000E80317 /* AirPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AirPlayView.swift; sourceTree = "<group>"; };
 		65347D37257D6DEC00DDE1C9 /* NowPlayingViewSplit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingViewSplit.swift; sourceTree = "<group>"; };
 		655FC62D257D59A900867676 /* FRadioPlayer_SwiftUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FRadioPlayer_SwiftUI.entitlements; sourceTree = "<group>"; };
+		6FD964ADEBDFA118738E9D9B /* Pods-FRadioPlayer_ios-FRadioPlayer_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_ios-FRadioPlayer_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_ios-FRadioPlayer_Tests/Pods-FRadioPlayer_ios-FRadioPlayer_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		733A31C2D8DBB7FB9D433453 /* Pods-FRadioPlayer_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_Tests/Pods-FRadioPlayer_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		741614D8D15537554278BF0D /* Pods-FRadioPlayer_SwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_SwiftUI.release.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_SwiftUI/Pods-FRadioPlayer_SwiftUI.release.xcconfig"; sourceTree = "<group>"; };
 		7A5988E8C2E73F5A5DD5D873 /* Pods_FRadioPlayer_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FRadioPlayer_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B59F870E46427A37B5A6185 /* FRadioPlayer.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = FRadioPlayer.podspec; path = ../FRadioPlayer.podspec; sourceTree = "<group>"; };
 		93384C18F68BA278DC1055A8 /* Pods_FRadioPlayer_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FRadioPlayer_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB5F3480523C15D4AEEB2742 /* Pods_FRadioPlayer_ios_FRadioPlayer_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FRadioPlayer_ios_FRadioPlayer_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADC0D107E336293D60827BCD /* Pods-FRadioPlayer_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_Tests/Pods-FRadioPlayer_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		B8D0FE4E21B17D47005B64DF /* FRadioPlayer_tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FRadioPlayer_tvOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B8D0FE5021B17D47005B64DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -98,12 +100,12 @@
 		B8D0FE5921B17D49005B64DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B9443D8603AB2AE7F9D587B2 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		BC2AE6470A4C0BE46711D9AF /* Pods-FRadioPlayer_mac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_mac.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_mac/Pods-FRadioPlayer_mac.debug.xcconfig"; sourceTree = "<group>"; };
+		C4CDACDB88A2BE0BBCA28002 /* Pods-FRadioPlayer_ios-FRadioPlayer_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_ios-FRadioPlayer_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_ios-FRadioPlayer_Tests/Pods-FRadioPlayer_ios-FRadioPlayer_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		CAE63D4F1FD4910000281653 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CAE63D511FD4912000281653 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		CAE63D531FD4915300281653 /* Station.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
 		CAE63D541FD4915300281653 /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		CBB7FF2C424962201E0CE53E /* Pods-FRadioPlayer_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_Example/Pods-FRadioPlayer_Example.release.xcconfig"; sourceTree = "<group>"; };
-		CF8AEAE2D18ED2C5F12FD1EF /* Pods_FRadioPlayer_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FRadioPlayer_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC11A056E5D4F1B69F9ABE88 /* Pods-FRadioPlayer_tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_tvOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_tvOS/Pods-FRadioPlayer_tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		E3AF3BE5D28A2EC29DE30915 /* Pods-FRadioPlayer_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FRadioPlayer_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FRadioPlayer_Example/Pods-FRadioPlayer_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		EBF1979AC9525CAB6AC3701A /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -130,7 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9BF856856EA4557B0A5C5D6D /* Pods_FRadioPlayer_Tests.framework in Frameworks */,
+				7EF0C0F4FF113BB6A81B4614 /* Pods_FRadioPlayer_ios_FRadioPlayer_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,11 +270,11 @@
 			isa = PBXGroup;
 			children = (
 				93384C18F68BA278DC1055A8 /* Pods_FRadioPlayer_Example.framework */,
-				CF8AEAE2D18ED2C5F12FD1EF /* Pods_FRadioPlayer_Tests.framework */,
 				EFC9F9BC32350C69D791241A /* Pods_FRadioPlayer_ios.framework */,
 				5E0C0BD81D65DF86F8BE706C /* Pods_FRadioPlayer_mac.framework */,
 				7A5988E8C2E73F5A5DD5D873 /* Pods_FRadioPlayer_tvOS.framework */,
 				2CC9F409D9222F0F9356B488 /* Pods_FRadioPlayer_SwiftUI.framework */,
+				AB5F3480523C15D4AEEB2742 /* Pods_FRadioPlayer_ios_FRadioPlayer_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -304,6 +306,8 @@
 				257B5148ADFF316304B18077 /* Pods-FRadioPlayer_tvOS.release.xcconfig */,
 				2A8F19185E3807164EC6516A /* Pods-FRadioPlayer_SwiftUI.debug.xcconfig */,
 				741614D8D15537554278BF0D /* Pods-FRadioPlayer_SwiftUI.release.xcconfig */,
+				6FD964ADEBDFA118738E9D9B /* Pods-FRadioPlayer_ios-FRadioPlayer_Tests.debug.xcconfig */,
+				C4CDACDB88A2BE0BBCA28002 /* Pods-FRadioPlayer_ios-FRadioPlayer_Tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -360,6 +364,7 @@
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
+				EA96CFF37C3E01844275F24E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -554,7 +559,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FRadioPlayer_ios/Pods-FRadioPlayer_ios-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/FRadioPlayer-iOS12.0/FRadioPlayer.framework",
+				"${BUILT_PRODUCTS_DIR}/FRadioPlayer-iOS10.0/FRadioPlayer.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -576,7 +581,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-FRadioPlayer_Tests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-FRadioPlayer_ios-FRadioPlayer_Tests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -719,6 +724,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FRadioPlayer_SwiftUI/Pods-FRadioPlayer_SwiftUI-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EA96CFF37C3E01844275F24E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FRadioPlayer_ios-FRadioPlayer_Tests/Pods-FRadioPlayer_ios-FRadioPlayer_Tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FRadioPlayer-iOS10.0/FRadioPlayer.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FRadioPlayer.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FRadioPlayer_ios-FRadioPlayer_Tests/Pods-FRadioPlayer_ios-FRadioPlayer_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -964,7 +987,7 @@
 		};
 		607FACF31AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ADC0D107E336293D60827BCD /* Pods-FRadioPlayer_Tests.debug.xcconfig */;
+			baseConfigurationReference = 6FD964ADEBDFA118738E9D9B /* Pods-FRadioPlayer_ios-FRadioPlayer_Tests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 6G96AERJ7Q;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -985,7 +1008,7 @@
 		};
 		607FACF41AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 733A31C2D8DBB7FB9D433453 /* Pods-FRadioPlayer_Tests.release.xcconfig */;
+			baseConfigurationReference = C4CDACDB88A2BE0BBCA28002 /* Pods-FRadioPlayer_ios-FRadioPlayer_Tests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 6G96AERJ7Q;
 				FRAMEWORK_SEARCH_PATHS = (
