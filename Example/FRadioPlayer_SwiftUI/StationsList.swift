@@ -12,26 +12,29 @@ import FRadioPlayer
 
 struct StationsList: View {
     
-    @EnvironmentObject var state: RadioDelegateClass
+    @EnvironmentObject var radioPlayer: RadioPlayer
     
     var body: some View {
         NavigationView {
-            List(state.stations.indices, id: \.self) { index in
+            List(radioPlayer.stations.indices) { index in
                     HStack {
                         Button(action: {
-                            // your action here
-                            print("\(state.stations[index].url)")
-                            state.stationDidChange(station: state.stations[index])
+                            radioPlayer.currentIndex = index
                         }) {
-                            Image(uiImage: state.stations[index].image!)
+                            Image(uiImage: radioPlayer.stations[index].image ?? #imageLiteral(resourceName: "albumArt"))
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 100, height: 100)
+                                .frame(width: 50, height: 50)
                         }
-                        Text("\(state.stations[index].name)")
-                        Spacer()
+                        
+                        VStack(alignment: .leading) {
+                            Text(radioPlayer.stations[index].name).font(.title3)
+                            Text(radioPlayer.stations[index].detail).font(.footnote)
+                        }
+                        .padding(.all, 8)
                     }
-            }.navigationBarTitle("FRadio Player", displayMode: .automatic)
+            }
+            .navigationBarTitle("FRadioPlayer", displayMode: .automatic)
             
             #if targetEnvironment(macCatalyst)
                 NowPlayingViewSplit()
@@ -43,7 +46,7 @@ struct StationsList: View {
 
 struct StationsList_Previews: PreviewProvider {
     static var previews: some View {
-        let state = RadioDelegateClass()
+        let state = RadioPlayer()
 
         StationsList()
             .environmentObject(state)

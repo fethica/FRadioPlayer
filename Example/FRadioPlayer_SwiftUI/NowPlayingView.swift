@@ -11,42 +11,43 @@ import FRadioPlayer
 
 struct NowPlayingView: View {
     
-    @EnvironmentObject var state: RadioDelegateClass
+    @EnvironmentObject var radioPlayer: RadioPlayer
     
     var body: some View {
-        Divider()
-        HStack(spacing: 16) {
-            ZStack {
-                Rectangle()
-                    .fill(Color.primary)
-                    .frame(width: 50, height: 50)
-                    .cornerRadius(5)
-                    .shadow(radius: 5)
-                
-                Image(uiImage: (state.metadata.image ?? UIImage(named: "albumArt"))!)
-                    .resizable()
-                    .foregroundColor(Color.secondary)
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
-                
-            }.padding(.leading, 10)
+        HStack {
+            Image(uiImage: radioPlayer.radio.track.image ?? #imageLiteral(resourceName: "albumArt"))
+                .resizable()
+                .foregroundColor(Color.secondary)
+                .scaledToFit()
+                .frame(width: 50, height: 50)
             
-            Text("\(state.artist) \(state.name)")
-                .lineLimit(1)
-                .allowsTightening(true)
-                .padding(.trailing, 0)
-            
+            VStack(alignment: .leading, spacing: 8, content: {
+                
+                Text(radioPlayer.radio.track.name ?? "")
+                    .font(.body)
+                    .bold()
+                    .lineLimit(1)
+                    .allowsTightening(true)
+                    
+                Text(radioPlayer.radio.track.artist ?? "")
+                    .font(.footnote)
+                    .lineLimit(1)
+                    .allowsTightening(true)
+            })
+                        
             Spacer()
             
             AirPlayView()
                 .frame(width: 50, height: 50)
         }
+        .padding(.all, 8)
+        .background(Color(UIColor.secondarySystemBackground))
     }
 }
 
 struct NowPlayingView_Previews: PreviewProvider {
     static var previews: some View {
-        let state = RadioDelegateClass()
+        let state = RadioPlayer()
         NowPlayingView()
             .environmentObject(state)
             .preferredColorScheme(.dark)

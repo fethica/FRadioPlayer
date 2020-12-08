@@ -11,16 +11,14 @@ import FRadioPlayer
 
 struct TabIconsView: View {
     
-    @EnvironmentObject var state: RadioDelegateClass
+    @EnvironmentObject var radioPlayer: RadioPlayer
     
     var body: some View {
         HStack {
             Spacer()
             
             Button(action: {
-                // your action here
-                print("Backward")
-                state.currentIndex -= 1
+                radioPlayer.currentIndex -= 1
             }) {
                 Image(systemName: "backward.fill")
                     .resizable()
@@ -31,11 +29,9 @@ struct TabIconsView: View {
             Spacer()
             
             Button(action: {
-                // your action here
-                print("Play Pause From Tab Icons")
-                tooglePlayback()
+                radioPlayer.player.togglePlaying()
             }) {
-                Image(systemName: state.playbackImage)
+                Image(systemName: radioPlayer.radio.playbackState == .playing ? "pause.fill" : "play.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 25, height: 25)
@@ -44,9 +40,7 @@ struct TabIconsView: View {
             Spacer()
             
             Button(action: {
-                // your action here
-                print("Stop From Tab Icons")
-                stopPlayback()
+                radioPlayer.player.stop()
             }) {
                 Image(systemName:"stop.fill")
                     .resizable()
@@ -57,9 +51,7 @@ struct TabIconsView: View {
             Spacer()
             
             Button(action: {
-                // your action here
-                print("Forward")
-                state.currentIndex += 1
+                radioPlayer.currentIndex += 1
             }) {
                 Image(systemName: "forward.fill")
                     .resizable()
@@ -72,24 +64,11 @@ struct TabIconsView: View {
         }.padding(16)
         .foregroundColor(.primary)
     }
-    
-    func tooglePlayback() {
-        print("IS PLAYING?: \(state.radioPlayerShared.isPlaying)")
-        if state.radioPlayerShared.isPlaying {
-            state.radioPlayerShared.pause()
-        } else {
-            state.radioPlayerShared.play()
-        }
-    }
-    
-    func stopPlayback() {
-        state.radioPlayerShared.stop()
-    }
 }
 
 struct TabIconsView_Previews: PreviewProvider {
     static var previews: some View {
-        let state = RadioDelegateClass()
+        let state = RadioPlayer()
 
         TabIconsView()
             .environmentObject(state)

@@ -13,26 +13,27 @@ import FRadioPlayer
 class ViewController: NSViewController {
 
     let player: FRadioPlayer = FRadioPlayer.shared
+    
     // List of stations
     let stations = [Station(name: "AZ Rock Radio",
-                                       detail: "We Know Music from A to Z",
-                                       url: URL(string: "http://cassini.shoutca.st:9300/stream")!,
-                                       image: #imageLiteral(resourceName: "station4")),
-                               
-                               Station(name: "Newport Folk Radio",
-                                       detail: "Are you ready to Folk?",
-                                       url: URL(string: "http:rfcmedia.streamguys1.com/Newport.mp3")!,
-                                       image: #imageLiteral(resourceName: "station2")),
-                               
-                               Station(name: "Absolute Country Hits Radio",
-                                       detail: "The Music Starts Here",
-                                       url: URL(string: "http:strm112.1.fm/acountry_mobile_mp3")!,
-                                       image: #imageLiteral(resourceName: "station1")),
-                               
-                               Station(name: "The Alt Vault",
-                                       detail: "Your Lifestyle... Your Music!",
-                                       url: URL(string: "http:jupiter.prostreaming.net/altmixxlow")!,
-                                       image: #imageLiteral(resourceName: "station3"))]
+                            detail: "We Know Music from A to Z",
+                            url: URL(string: "http://cassini.shoutca.st:9300/stream")!,
+                            image: NSImage(named: "station4")),
+                    
+                    Station(name: "Newport Folk Radio",
+                            detail: "Are you ready to Folk?",
+                            url: URL(string: "http:rfcmedia.streamguys1.com/Newport.mp3")!,
+                            image: NSImage(named: "station2")),
+                    
+                    Station(name: "Absolute Country Hits Radio",
+                            detail: "The Music Starts Here",
+                            url: URL(string: "http:strm112.1.fm/acountry_mobile_mp3")!,
+                            image: NSImage(named: "station1")),
+                    
+                    Station(name: "The Alt Vault",
+                            detail: "Your Lifestyle... Your Music!",
+                            url: URL(string: "http:jupiter.prostreaming.net/altmixxlow")!,
+                            image: NSImage(named: "station3"))]
     
     @IBOutlet weak var stationLabel: NSTextField!
     @IBOutlet weak var artistLabel: NSTextField!
@@ -43,15 +44,19 @@ class ViewController: NSViewController {
     @IBAction func previous(_ sender: Any) {
         selectedIndex -= 1
     }
+    
     @IBAction func pause(_ sender: Any) {
         player.togglePlaying()
     }
+    
     @IBAction func stop(_ sender: Any) {
         player.stop()
     }
+    
     @IBAction func next(_ sender: Any) {
         selectedIndex += 1
     }
+    
     // Selected station index
     var selectedIndex = 0 {
         didSet {

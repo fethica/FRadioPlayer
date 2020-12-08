@@ -11,29 +11,28 @@ import FRadioPlayer
 
 struct ContentView: View {
     
-    @EnvironmentObject var state: RadioDelegateClass
+    @EnvironmentObject var radioPlayer: RadioPlayer
     
     var body: some View {
-        VStack(alignment: .trailing, spacing: 0.0) {
-            StationsList().environmentObject(state)
+        VStack {
+            StationsList().environmentObject(radioPlayer)
             Spacer()
-            ZStack {
-                VStack {
-                    #if !targetEnvironment(macCatalyst)
-                        NowPlayingView().environmentObject(state)
-                        Divider()
-                    #endif
-                    TabIconsView().environmentObject(state)
+            VStack {
+                #if !targetEnvironment(macCatalyst)
+                if radioPlayer.radio.playerState != FRadioPlayerState.urlNotSet {
+                    NowPlayingView().environmentObject(radioPlayer)
                 }
-            }.frame(height: 160)
+                #endif
+                
+                TabIconsView().environmentObject(radioPlayer)
+            }
         }
-        .edgesIgnoringSafeArea(.top)
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let state = RadioDelegateClass()
+        let state = RadioPlayer()
         
         ContentView()
             .environmentObject(state)

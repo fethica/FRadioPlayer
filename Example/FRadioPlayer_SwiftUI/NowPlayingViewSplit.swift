@@ -10,12 +10,12 @@ import SwiftUI
 
 struct NowPlayingViewSplit: View {
     
-    @EnvironmentObject var state: RadioDelegateClass
+    @EnvironmentObject var radioPlayer: RadioPlayer
     
     var body: some View {
         VStack(spacing: 16) {
             VStack {
-                Image(uiImage: (state.metadata.image ?? UIImage(named: "albumArt"))!)
+                Image(uiImage: radioPlayer.radio.track.image ?? #imageLiteral(resourceName: "albumArt"))
                     .resizable()
                     .foregroundColor(Color.secondary)
                     .scaledToFit()
@@ -23,14 +23,14 @@ struct NowPlayingViewSplit: View {
                 
             }.padding(.leading, 10)
             
-            Text("\(state.name)")
+            Text(radioPlayer.radio.track.name ?? "")
                 .font(.title)
                 .lineLimit(1)
                 .allowsTightening(true)
                 .padding(.trailing, 0)
             
             
-            Text("\(state.artist)")
+            Text(radioPlayer.radio.track.artist ?? "")
                 .font(.title2)
                 .lineLimit(1)
                 .allowsTightening(true)
@@ -46,10 +46,10 @@ struct NowPlayingViewSplit: View {
 
 struct NowPlayingViewSplit_Previews: PreviewProvider {
     static var previews: some View {
-        let state = RadioDelegateClass()
+        let radioPlayer = RadioPlayer()
 
         NowPlayingViewSplit()
-            .environmentObject(state)
+            .environmentObject(radioPlayer)
             .preferredColorScheme(.dark)
     }
 }
