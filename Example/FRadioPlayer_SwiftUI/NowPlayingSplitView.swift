@@ -1,5 +1,5 @@
 //
-//  NowPlayingViewSplit.swift
+//  NowPlayingSplitView.swift
 //  FRadioPlayer_SwiftUI
 //
 //  Created by Urayoan Miranda on 12/6/20.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct NowPlayingViewSplit: View {
+struct NowPlayingSplitView: View {
     
     @EnvironmentObject var radioPlayer: RadioPlayer
     
@@ -48,7 +48,7 @@ struct NowPlayingViewSplit_Previews: PreviewProvider {
     static var previews: some View {
         let radioPlayer = RadioPlayer()
 
-        NowPlayingViewSplit()
+        NowPlayingSplitView()
             .environmentObject(radioPlayer)
             .preferredColorScheme(.dark)
     }

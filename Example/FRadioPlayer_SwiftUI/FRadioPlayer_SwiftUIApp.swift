@@ -49,7 +49,7 @@ class RadioPlayer: FRadioPlayerDelegate, ObservableObject {
                     Station(name: "Chillout",
                             detail: "Your Lifestyle... Your Music!",
                             url: URL(string: "http://ic7.101.ru:8000/c15_3")!,
-                            image:#imageLiteral(resourceName: "albumArt")),
+                            image: #imageLiteral(resourceName: "albumArt")),
                     
                     Station(name: "Absolute Country Hits Radio",
                             detail: "The Music Starts Here",

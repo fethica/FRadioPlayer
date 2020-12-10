@@ -15,15 +15,15 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            StationsList().environmentObject(radioPlayer)
+            StationsListView().environmentObject(radioPlayer)
             Spacer()
-            VStack {
+            VStack(spacing: 0) {
                 #if !targetEnvironment(macCatalyst)
                 if radioPlayer.radio.playerState != FRadioPlayerState.urlNotSet {
                     NowPlayingView().environmentObject(radioPlayer)
                 }
                 #endif
-                
+                StateView().environmentObject(radioPlayer)
                 TabIconsView().environmentObject(radioPlayer)
             }
         }

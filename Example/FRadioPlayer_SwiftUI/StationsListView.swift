@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 import FRadioPlayer
 
-struct StationsList: View {
+struct StationsListView: View {
     
     @EnvironmentObject var radioPlayer: RadioPlayer
     
@@ -48,7 +48,7 @@ struct StationsList_Previews: PreviewProvider {
     static var previews: some View {
         let state = RadioPlayer()
 
-        StationsList()
+        StationsListView()
             .environmentObject(state)
             .preferredColorScheme(.light)
     }
