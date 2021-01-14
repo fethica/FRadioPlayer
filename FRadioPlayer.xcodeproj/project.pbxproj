@@ -7,23 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		054660858E739FEFE7B7E41D /* FRadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F51E204F028293A95D21B9 /* FRadioPlayer.swift */; };
-		ADC378E57A515A38B88FA597 /* FRadioAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA81723B427A30962D03CEB /* FRadioAPI.swift */; };
-		EF1D0B12A6EFD8A454898EAE /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57BC0EC91B7FE27D5D5D39E /* Reachability.swift */; };
+		623EEEBFFACA597ABC6CDACF /* FRadioAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CCD9D30117EB5CBF8A3DE7 /* FRadioAPI.swift */; };
+		7C967FB99590C0CDBE08AFDA /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B1744E47A47C9726F1FAED /* Reachability.swift */; };
+		908E7F30C5ABF203E058B5C3 /* FRadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D193F2D467CBE8D656C9F4 /* FRadioPlayer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2FA81723B427A30962D03CEB /* FRadioAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRadioAPI.swift; sourceTree = "<group>"; };
+		43CCD9D30117EB5CBF8A3DE7 /* FRadioAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRadioAPI.swift; sourceTree = "<group>"; };
 		7AD9BEE8E55E4463E4AEC956 /* FRadioPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FRadioPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		92F51E204F028293A95D21B9 /* FRadioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRadioPlayer.swift; sourceTree = "<group>"; };
-		D57BC0EC91B7FE27D5D5D39E /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		C6D193F2D467CBE8D656C9F4 /* FRadioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRadioPlayer.swift; sourceTree = "<group>"; };
+		F6B1744E47A47C9726F1FAED /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		2D39EC0C092E54AB7073A51B = {
 			isa = PBXGroup;
 			children = (
-				5038DF2E95ECE6AF1C254F8B /* Source */,
+				F7C2866E2FBD001E44A93AF5 /* FRadioPlayer */,
 				2FFA2E19A98BEDDB34F7C1A5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -36,14 +36,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		5038DF2E95ECE6AF1C254F8B /* Source */ = {
+		F7C2866E2FBD001E44A93AF5 /* FRadioPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				2FA81723B427A30962D03CEB /* FRadioAPI.swift */,
-				92F51E204F028293A95D21B9 /* FRadioPlayer.swift */,
-				D57BC0EC91B7FE27D5D5D39E /* Reachability.swift */,
+				43CCD9D30117EB5CBF8A3DE7 /* FRadioAPI.swift */,
+				C6D193F2D467CBE8D656C9F4 /* FRadioPlayer.swift */,
+				F6B1744E47A47C9726F1FAED /* Reachability.swift */,
 			);
-			path = Source;
+			name = FRadioPlayer;
+			path = Sources/FRadioPlayer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -95,9 +96,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADC378E57A515A38B88FA597 /* FRadioAPI.swift in Sources */,
-				054660858E739FEFE7B7E41D /* FRadioPlayer.swift in Sources */,
-				EF1D0B12A6EFD8A454898EAE /* Reachability.swift in Sources */,
+				623EEEBFFACA597ABC6CDACF /* FRadioAPI.swift in Sources */,
+				908E7F30C5ABF203E058B5C3 /* FRadioPlayer.swift in Sources */,
+				7C967FB99590C0CDBE08AFDA /* Reachability.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
