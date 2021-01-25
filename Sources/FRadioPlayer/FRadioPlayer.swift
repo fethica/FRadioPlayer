@@ -162,6 +162,9 @@ open class FRadioPlayer: NSObject {
     /// Artwork image size. (default == 100 | 100x100)
     open var artworkSize = 100
     
+    /// HTTP headers for AVURLAsset (Ex: `["user-agent": "FRadioPlayer"]`).
+    open var httpHeaderFields: [String: String]? = nil
+    
     /// Read only property to get the current AVPlayer rate.
     open var rate: Float? {
         return player?.rate
@@ -317,7 +320,13 @@ open class FRadioPlayer: NSObject {
         
         state = .loading
         
-        preparePlayer(with: AVAsset(url: url)) { (success, asset) in
+        var options: [String : Any]? = nil
+        
+        if let httpHeaderFields = httpHeaderFields {
+            options = ["AVURLAssetHTTPHeaderFieldsKey": httpHeaderFields]
+        }
+        
+        preparePlayer(with: AVURLAsset(url: url, options: options)) { (success, asset) in
             guard success, let asset = asset else {
                 self.resetPlayer()
                 self.state = .error
@@ -327,7 +336,7 @@ open class FRadioPlayer: NSObject {
         }
     }
     
-    private func setupPlayer(with asset: AVAsset) {
+    private func setupPlayer(with asset: AVURLAsset) {
 
         if player == nil {
             player = AVPlayer()
@@ -373,10 +382,10 @@ open class FRadioPlayer: NSObject {
         delegate?.radioPlayer?(self, itemDidChange: radioURL)
     }
     
-    /** Prepare the player from the passed AVAsset
+    /** Prepare the player from the passed AVURLAsset
      
      */
-    private func preparePlayer(with asset: AVAsset?, completionHandler: @escaping (_ isPlayable: Bool, _ asset: AVAsset?)->()) {
+    private func preparePlayer(with asset: AVURLAsset?, completionHandler: @escaping (_ isPlayable: Bool, _ asset: AVURLAsset?)->()) {
         guard let asset = asset else {
             completionHandler(false, nil)
             return

@@ -74,6 +74,7 @@ class ViewController: UIViewController {
         title = "FRadioPlayer"
         
         // Set the delegate for the radio player
+        player.httpHeaderFields = ["user-agent": "FRadioPlayer"]
         player.delegate = self
         
         // Show current player state
