@@ -22,13 +22,13 @@ struct FRadioPlayer_SwiftUIApp: App {
 
 struct Radio {
     var track = Track()
-    var playerState = FRadioPlayerState.urlNotSet
-    var playbackState = FRadioPlaybackState.stopped
+    var playerState = FRadioPlayer.State.urlNotSet
+    var playbackState = FRadioPlayer.PlaybackState.stopped
     var url: URL? = nil
     var rawMetadata: String? = nil
 }
 
-class RadioPlayer: FRadioPlayerDelegate, ObservableObject {
+class RadioPlayer: FRadioPlayerObserver, ObservableObject {
     
     @Published var radio = Radio()
     
@@ -70,16 +70,16 @@ class RadioPlayer: FRadioPlayerDelegate, ObservableObject {
     }
     
     init() {
-        player.delegate = self
+        player.addObserver(self)
         player.artworkSize = 500
         player.isAutoPlay = true
     }
     
-    func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayerState) {
+    func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayer.State) {
         radio.playerState = state
     }
     
-    func radioPlayer(_ player: FRadioPlayer, playbackStateDidChange state: FRadioPlaybackState) {
+    func radioPlayer(_ player: FRadioPlayer, playbackStateDidChange state: FRadioPlayer.PlaybackState) {
         radio.playbackState = state
     }
     

@@ -47,8 +47,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Set the delegate for the radio player
-        player.delegate = self
+        // Set the observer for the radio player
+        player.addObserver(self)
 
         stationLabel.text = station.name
         player.radioURL = station.url
@@ -90,13 +90,13 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: FRadioPlayerDelegate {
+extension ViewController: FRadioPlayerObserver {
 
-    func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayerState) {
+    func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayer.State) {
         statusLabel.text = state.description
     }
 
-    func radioPlayer(_ player: FRadioPlayer, playbackStateDidChange state: FRadioPlaybackState) {
+    func radioPlayer(_ player: FRadioPlayer, playbackStateDidChange state: FRadioPlayer.PlaybackState) {
         statusLabel.text = state.description
     }
 

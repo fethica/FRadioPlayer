@@ -87,8 +87,8 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set the delegate for the radio player
-        player.delegate = self
+        // Set the observer for the radio player
+        player.addObserver(self)
         
         selectedIndex = 1
         // Show current player state
@@ -127,13 +127,13 @@ class ViewController: NSViewController {
     }
 }
 
-extension ViewController: FRadioPlayerDelegate {
+extension ViewController: FRadioPlayerObserver {
     
-    func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayerState) {
+    func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayer.State) {
         statusLabel.stringValue = state.description
     }
     
-    func radioPlayer(_ player: FRadioPlayer, playbackStateDidChange state: FRadioPlaybackState) {
+    func radioPlayer(_ player: FRadioPlayer, playbackStateDidChange state: FRadioPlayer.PlaybackState) {
 //        playButton.isSelected = player.isPlaying
     }
     

@@ -75,7 +75,7 @@ class ViewController: UIViewController {
         
         // Set the delegate for the radio player
         player.httpHeaderFields = ["user-agent": "FRadioPlayer"]
-        player.delegate = self
+        player.addObserver(self)
         
         // Show current player state
         statusLabel.text = player.state.description
@@ -118,13 +118,13 @@ class ViewController: UIViewController {
 
 // MARK: - FRadioPlayerDelegate
 
-extension ViewController: FRadioPlayerDelegate {
+extension ViewController: FRadioPlayerObserver {
 
-    func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayerState) {
+    func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayer.State) {
         statusLabel.text = state.description
     }
     
-    func radioPlayer(_ player: FRadioPlayer, playbackStateDidChange state: FRadioPlaybackState) {
+    func radioPlayer(_ player: FRadioPlayer, playbackStateDidChange state: FRadioPlayer.PlaybackState) {
         playButton.isSelected = player.isPlaying
     }
     

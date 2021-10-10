@@ -19,7 +19,7 @@ struct ContentView: View {
             Spacer()
             VStack(spacing: 0) {
                 #if !targetEnvironment(macCatalyst)
-                if radioPlayer.radio.playerState != FRadioPlayerState.urlNotSet {
+                if radioPlayer.radio.playerState != .urlNotSet {
                     NowPlayingView().environmentObject(radioPlayer)
                 }
                 #endif

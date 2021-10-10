@@ -8,127 +8,6 @@
 
 import AVFoundation
 
-// MARK: - FRadioPlayingState
-
-/**
- `FRadioPlayingState` is the Player playing state enum
- */
-
-@objc public enum FRadioPlaybackState: Int {
-    
-    /// Player is playing
-    case playing
-    
-    /// Player is paused
-    case paused
-    
-    /// Player is stopped
-    case stopped
-    
-    /// Return a readable description
-    public var description: String {
-        switch self {
-        case .playing: return "Player is playing"
-        case .paused: return "Player is paused"
-        case .stopped: return "Player is stopped"
-        }
-    }
-}
-
-// MARK: - FRadioPlayerState
-
-/**
- `FRadioPlayerState` is the Player status enum
- */
-
-@objc public enum FRadioPlayerState: Int {
-    
-    /// URL not set
-    case urlNotSet
-    
-    /// Player is ready to play
-    case readyToPlay
-    
-    /// Player is loading
-    case loading
-    
-    /// The loading has finished
-    case loadingFinished
-    
-    /// Error with playing
-    case error
-    
-    /// Return a readable description
-    public var description: String {
-        switch self {
-        case .urlNotSet: return "URL is not set"
-        case .readyToPlay: return "Ready to play"
-        case .loading: return "Loading"
-        case .loadingFinished: return "Loading finished"
-        case .error: return "Error"
-        }
-    }
-}
-
-// MARK: - FRadioPlayerDelegate
-
-/**
- The `FRadioPlayerDelegate` protocol defines methods you can implement to respond to playback events associated with an `FRadioPlayer` object.
- */
-
-@objc public protocol FRadioPlayerDelegate: class {
-    /**
-     Called when player changes state
-     
-     - parameter player: FRadioPlayer
-     - parameter state: FRadioPlayerState
-     */
-    func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayerState)
-    
-    /**
-     Called when the player changes the playing state
-     
-     - parameter player: FRadioPlayer
-     - parameter state: FRadioPlaybackState
-     */
-    func radioPlayer(_ player: FRadioPlayer, playbackStateDidChange state: FRadioPlaybackState)
-    
-    /**
-     Called when player changes the current player item
-     
-     - parameter player: FRadioPlayer
-     - parameter url: Radio URL
-     */
-    @objc optional func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?)
-    
-    /**
-     Called when player item changes the timed metadata value, it uses (separatedBy: " - ") to get the artist/song name, if you want more control over the raw metadata, consider using `metadataDidChange rawValue` instead
-     
-     - parameter player: FRadioPlayer
-     - parameter artistName: The artist name
-     - parameter trackName: The track name
-     */
-    @objc optional func radioPlayer(_ player: FRadioPlayer, metadataDidChange artistName: String?, trackName: String?)
-    
-    /**
-     Called when player item changes the timed metadata value
-     
-     - parameter player: FRadioPlayer
-     - parameter rawValue: metadata raw value
-     */
-    @objc optional func radioPlayer(_ player: FRadioPlayer, metadataDidChange rawValue: String?)
-    
-    /**
-     Called when the player gets the artwork for the playing song
-     
-     - parameter player: FRadioPlayer
-     - parameter artworkURL: URL for the artwork from iTunes
-     */
-    @objc optional func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?)
-}
-
-// MARK: - FRadioPlayer
-
 /**
  FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
  */
@@ -139,12 +18,6 @@ open class FRadioPlayer: NSObject {
     
     /// Returns the singleton `FRadioPlayer` instance.
     public static let shared = FRadioPlayer()
-
-    /**
-     The delegate object for the `FRadioPlayer`.
-     Implement the methods declared by the `FRadioPlayerDelegate` object to respond to user interactions and the player output.
-     */
-    open weak var delegate: FRadioPlayerDelegate?
     
     /// The player current radio URL
     open var radioURL: URL? {
@@ -186,30 +59,31 @@ open class FRadioPlayer: NSObject {
             return player?.volume
         }
         set {
-            guard
-                let newValue = newValue,
-                0.0...1.0 ~= newValue else { return }
+            guard let newValue = newValue, 0.0...1.0 ~= newValue else { return }
             player?.volume = newValue
         }
     }
     
-    /// Player current state of type `FRadioPlayerState`
-    open private(set) var state = FRadioPlayerState.urlNotSet {
+    /// Player current state of type `State`
+    open private(set) var state = State.urlNotSet {
         didSet {
             guard oldValue != state else { return }
-            delegate?.radioPlayer(self, playerStateDidChange: state)
+            stateChange(with: state)
         }
     }
     
-    /// Playing state of type `FRadioPlaybackState`
-    open private(set) var playbackState = FRadioPlaybackState.stopped {
+    /// Playing state of type `PlaybackState`
+    open private(set) var playbackState = PlaybackState.stopped {
         didSet {
             guard oldValue != playbackState else { return }
-            delegate?.radioPlayer(self, playbackStateDidChange: playbackState)
+            playbackStateChange(with: playbackState)
         }
     }
     
     // MARK: - Private properties
+    
+    /// Observations
+    private var observations = [ObjectIdentifier : Observation]()
     
     /// AVPlayer
     private var player: AVPlayer?
@@ -379,7 +253,7 @@ open class FRadioPlayer: NSObject {
             if isAutoPlay { play() }
         }
         
-        delegate?.radioPlayer?(self, itemDidChange: radioURL)
+        itemChange(with: radioURL)
     }
     
     /** Prepare the player from the passed AVURLAsset
@@ -412,21 +286,21 @@ open class FRadioPlayer: NSObject {
     private func timedMetadataDidChange(rawValue: String?) {
         let metadataCleaned = cleanMetadata(rawValue)
         let parts = metadataCleaned?.components(separatedBy: " - ")
-        delegate?.radioPlayer?(self, metadataDidChange: parts?.first, trackName: parts?.last)
-        delegate?.radioPlayer?(self, metadataDidChange: rawValue)
+        metadataChange(artistName: parts?.first, trackName: parts?.last)
+        rawMetadataChange(rawValue: rawValue)
         shouldGetArtwork(for: rawValue, enableArtwork)
     }
     
     private func shouldGetArtwork(for rawValue: String?, _ enabled: Bool) {
         guard enabled else { return }
         guard let rawValue = rawValue else {
-            self.delegate?.radioPlayer?(self, artworkDidChange: nil)
+            artworkChange(url: nil)
             return
         }
         
-        FRadioAPI.getArtwork(for: rawValue as String, size: artworkSize, completionHandler: { [unowned self] artworlURL in
+        FRadioAPI.getArtwork(for: rawValue as String, size: artworkSize, completionHandler: { [weak self] artworlURL in
             DispatchQueue.main.async {
-                self.delegate?.radioPlayer?(self, artworkDidChange: artworlURL)
+                self?.artworkChange(url: artworlURL)
             }
         })
     }
@@ -590,5 +464,73 @@ extension FRadioPlayer: AVPlayerItemMetadataOutputPushDelegate {
         }
         
         timedMetadataDidChange(rawValue: item.value as? String)
+    }
+}
+
+private extension FRadioPlayer {
+    
+    private func stateChange(with state: FRadioPlayer.State) {
+        notifiyObservers { observer in
+            observer.radioPlayer(self, playerStateDidChange: state)
+        }
+    }
+    
+    private func playbackStateChange(with playbackState: FRadioPlayer.PlaybackState) {
+        notifiyObservers { observer in
+            observer.radioPlayer(self, playbackStateDidChange: playbackState)
+        }
+    }
+    
+    private func itemChange(with url: URL?) {
+        notifiyObservers { observer in
+            observer.radioPlayer(self, itemDidChange: url)
+        }
+    }
+    
+    private func metadataChange(artistName: String?, trackName: String?) {
+        notifiyObservers { observer in
+            observer.radioPlayer(self, metadataDidChange: artistName, trackName: trackName)
+        }
+    }
+    
+    private func rawMetadataChange(rawValue: String?) {
+        notifiyObservers { observer in
+            observer.radioPlayer(self, metadataDidChange: rawValue)
+        }
+    }
+    
+    private func artworkChange(url: URL?) {
+        notifiyObservers { observer in
+            observer.radioPlayer(self, artworkDidChange: url)
+        }
+    }
+    
+    private func notifiyObservers(with action: (_ observer: FRadioPlayerObserver) -> Void) {
+        for (id, observation) in observations {
+            guard let observer = observation.observer else {
+                observations.removeValue(forKey: id)
+                continue
+            }
+            
+            action(observer)
+        }
+    }
+}
+
+private extension FRadioPlayer {
+    struct Observation {
+        weak var observer: FRadioPlayerObserver?
+    }
+}
+
+public extension FRadioPlayer {
+    func addObserver(_ observer: FRadioPlayerObserver) {
+        let id = ObjectIdentifier(observer)
+        observations[id] = Observation(observer: observer)
+    }
+
+    func removeObserver(_ observer: FRadioPlayerObserver) {
+        let id = ObjectIdentifier(observer)
+        observations.removeValue(forKey: id)
     }
 }
