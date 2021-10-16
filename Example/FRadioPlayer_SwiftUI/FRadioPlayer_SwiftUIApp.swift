@@ -83,8 +83,8 @@ class RadioPlayer: FRadioPlayerObserver, ObservableObject {
         radio.playbackState = state
     }
     
-    func radioPlayer(_ player: FRadioPlayer, metadataDidChange artistName: String?, trackName: String?) {
-        guard let artistName = artistName, let trackName = trackName else {
+    func radioPlayer(_ player: FRadioPlayer, metadataDidChange metadata: FRadioPlayer.Metadata?) {
+        guard let artistName = metadata?.artistName, let trackName = metadata?.trackName else {
             radio.track.name = stations[currentIndex].name
             radio.track.artist = stations[currentIndex].detail
             return

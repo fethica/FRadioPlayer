@@ -41,10 +41,9 @@ public protocol FRadioPlayerObserver: AnyObject {
      Called when player item changes the timed metadata value, it uses (separatedBy: " - ") to get the artist/song name, if you want more control over the raw metadata, consider using `metadataDidChange rawValue` instead
      
      - parameter player: FRadioPlayer
-     - parameter artistName: The artist name
-     - parameter trackName: The track name
+     - parameter metadata: FRadioPlayer.Metadata value
      */
-    func radioPlayer(_ player: FRadioPlayer, metadataDidChange artistName: String?, trackName: String?)
+    func radioPlayer(_ player: FRadioPlayer, metadataDidChange metadata: FRadioPlayer.Metadata?)
     
     /**
      Called when player item changes the timed metadata value
@@ -70,7 +69,7 @@ public extension FRadioPlayerObserver {
     func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayer.State) {}
     func radioPlayer(_ player: FRadioPlayer, playbackStateDidChange state: FRadioPlayer.PlaybackState) {}
     func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?) {}
-    func radioPlayer(_ player: FRadioPlayer, metadataDidChange artistName: String?, trackName: String?) {}
+    func radioPlayer(_ player: FRadioPlayer, metadataDidChange metadata: FRadioPlayer.Metadata?) {}
     func radioPlayer(_ player: FRadioPlayer, metadataDidChange rawValue: String?) {}
     func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?) {}
 }

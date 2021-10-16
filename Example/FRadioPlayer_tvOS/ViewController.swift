@@ -100,8 +100,8 @@ extension ViewController: FRadioPlayerObserver {
         statusLabel.text = state.description
     }
 
-    func radioPlayer(_ player: FRadioPlayer, metadataDidChange artistName: String?, trackName: String?) {
-        track = Track(artist: artistName, name: trackName)
+    func radioPlayer(_ player: FRadioPlayer, metadataDidChange metadata: FRadioPlayer.Metadata?) {
+        track = Track(artist: metadata?.artistName, name: metadata?.trackName)
     }
 
     func radioPlayer(_ player: FRadioPlayer, metadataDidChange rawValue: String?) {

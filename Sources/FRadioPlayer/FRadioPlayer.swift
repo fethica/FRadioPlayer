@@ -80,10 +80,10 @@ open class FRadioPlayer: NSObject {
         }
     }
     
-    // MARK: - Private properties
+    // MARK: - Internal / Private properties
     
     /// Observations
-    private var observations = [ObjectIdentifier : Observation]()
+    var observations = [ObjectIdentifier : Observation]()
     
     /// AVPlayer
     private var player: AVPlayer?
@@ -286,7 +286,9 @@ open class FRadioPlayer: NSObject {
     private func timedMetadataDidChange(rawValue: String?) {
         let metadataCleaned = cleanMetadata(rawValue)
         let parts = metadataCleaned?.components(separatedBy: " - ")
-        metadataChange(artistName: parts?.first, trackName: parts?.last)
+        
+        let metaData = Metadata(artistName: parts?.first, trackName: parts?.last)
+        metadataChange(metaData)
         rawMetadataChange(rawValue: rawValue)
         shouldGetArtwork(for: rawValue, enableArtwork)
     }
@@ -487,9 +489,9 @@ private extension FRadioPlayer {
         }
     }
     
-    private func metadataChange(artistName: String?, trackName: String?) {
+    private func metadataChange(_ metaData: Metadata?) {
         notifiyObservers { observer in
-            observer.radioPlayer(self, metadataDidChange: artistName, trackName: trackName)
+            observer.radioPlayer(self, metadataDidChange: metaData)
         }
     }
     
@@ -514,23 +516,5 @@ private extension FRadioPlayer {
             
             action(observer)
         }
-    }
-}
-
-private extension FRadioPlayer {
-    struct Observation {
-        weak var observer: FRadioPlayerObserver?
-    }
-}
-
-public extension FRadioPlayer {
-    func addObserver(_ observer: FRadioPlayerObserver) {
-        let id = ObjectIdentifier(observer)
-        observations[id] = Observation(observer: observer)
-    }
-
-    func removeObserver(_ observer: FRadioPlayerObserver) {
-        let id = ObjectIdentifier(observer)
-        observations.removeValue(forKey: id)
     }
 }
