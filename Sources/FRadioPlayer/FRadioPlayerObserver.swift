@@ -46,14 +46,6 @@ public protocol FRadioPlayerObserver: AnyObject {
     func radioPlayer(_ player: FRadioPlayer, metadataDidChange metadata: FRadioPlayer.Metadata?)
     
     /**
-     Called when player item changes the timed metadata value
-     
-     - parameter player: FRadioPlayer
-     - parameter rawValue: metadata raw value
-     */
-    func radioPlayer(_ player: FRadioPlayer, metadataDidChange rawValue: String?)
-    
-    /**
      Called when the player gets the artwork for the playing song
      
      - parameter player: FRadioPlayer
@@ -70,6 +62,5 @@ public extension FRadioPlayerObserver {
     func radioPlayer(_ player: FRadioPlayer, playbackStateDidChange state: FRadioPlayer.PlaybackState) {}
     func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?) {}
     func radioPlayer(_ player: FRadioPlayer, metadataDidChange metadata: FRadioPlayer.Metadata?) {}
-    func radioPlayer(_ player: FRadioPlayer, metadataDidChange rawValue: String?) {}
     func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?) {}
 }

@@ -80,10 +80,21 @@ open class FRadioPlayer: NSObject {
         }
     }
     
+    /// Current metadata value of type `FRadioPlayer.Metadata`
+    open private(set) var currentMetadata: Metadata? = nil {
+        didSet {
+            metadataChange(currentMetadata)
+            shouldGetArtwork(for: currentMetadata?.rawValue, enableArtwork)
+        }
+    }
+    
     // MARK: - Internal / Private properties
     
     /// Observations
     var observations = [ObjectIdentifier : Observation]()
+    
+    /// Metadata Output
+    var metadataOutput: AVPlayerItemMetadataOutput
     
     /// AVPlayer
     private var player: AVPlayer?
@@ -110,6 +121,8 @@ open class FRadioPlayer: NSObject {
     // MARK: - Initialization
     
     private override init() {
+        metadataOutput = AVPlayerItemMetadataOutput(identifiers: nil)
+        
         super.init()
 
         #if !os(macOS)
@@ -139,6 +152,9 @@ open class FRadioPlayer: NSObject {
         try? reachability.startNotifier()
         NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: .reachabilityChanged, object: reachability)
         isConnected = reachability.connection != .none
+        
+        // Setup Metadata Output Delegate
+        metadataOutput.setDelegate(self, queue: DispatchQueue.main)
     }
     
     // MARK: - Control Methods
@@ -175,7 +191,7 @@ open class FRadioPlayer: NSObject {
         guard let player = player else { return }
         playbackState = .stopped
         player.replaceCurrentItem(with: nil)
-        timedMetadataDidChange(rawValue: nil)
+        resetMetadata()
     }
     
     /**
@@ -219,9 +235,6 @@ open class FRadioPlayer: NSObject {
         }
         
         playerItem = AVPlayerItem(asset: asset)
-        let metadataOutput = AVPlayerItemMetadataOutput(identifiers: nil)
-        metadataOutput.setDelegate(self, queue: DispatchQueue.main)
-        playerItem?.add(metadataOutput)
     }
         
     /** Reset all player item observers and create new ones
@@ -238,16 +251,18 @@ open class FRadioPlayer: NSObject {
             item.removeObserver(self, forKeyPath: "status")
             item.removeObserver(self, forKeyPath: "playbackBufferEmpty")
             item.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
+            item.remove(metadataOutput)
         }
         
         lastPlayerItem = playerItem
-        timedMetadataDidChange(rawValue: nil)
+        resetMetadata()
         
         if let item = playerItem {
             
             item.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
             item.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
             item.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
+            item.add(metadataOutput)
             
             player?.replaceCurrentItem(with: item)
             if isAutoPlay { play() }
@@ -283,14 +298,9 @@ open class FRadioPlayer: NSObject {
         }
     }
     
-    private func timedMetadataDidChange(rawValue: String?) {
-        let metadataCleaned = cleanMetadata(rawValue)
-        let parts = metadataCleaned?.components(separatedBy: " - ")
-        
-        let metaData = Metadata(artistName: parts?.first, trackName: parts?.last)
-        metadataChange(metaData)
-        rawMetadataChange(rawValue: rawValue)
-        shouldGetArtwork(for: rawValue, enableArtwork)
+    private func resetMetadata() {
+        metadataChange(nil)
+        shouldGetArtwork(for: nil, enableArtwork)
     }
     
     private func shouldGetArtwork(for rawValue: String?, _ enabled: Bool) {
@@ -300,20 +310,25 @@ open class FRadioPlayer: NSObject {
             return
         }
         
-        FRadioAPI.getArtwork(for: rawValue as String, size: artworkSize, completionHandler: { [weak self] artworlURL in
+        FRadioAPI.getArtwork(for: rawValue, size: artworkSize, completionHandler: { [weak self] artworlURL in
             DispatchQueue.main.async {
                 self?.artworkChange(url: artworlURL)
             }
         })
     }
     
-    private func cleanMetadata(_ rawValue: String?) -> String? {
+    private func cleanRawMetadataIfNeeded(_ rawValue: String?) -> String? {
         guard let rawValue = rawValue else { return nil }
-        return rawValue.replacingOccurrences(
-            of: #"(\(.*?\)\w*)|(\[.*?\]\w*)"#,
-            with: "",
-            options: .regularExpression
-        )
+        // Strip off trailing '[???]' characters left there by ShoutCast and Centova Streams
+        // It will leave the string alone if the pattern is not there
+        
+        let pattern = #"(\(.*?\)\w*)|(\[.*?\]\w*)"#
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else { return rawValue }
+        
+        let rawCleaned = NSMutableString(string: rawValue)
+        regex.replaceMatches(in: rawCleaned , options: .reportProgress, range: NSRange(location: 0, length: rawCleaned.length), withTemplate: "")
+        
+        return rawCleaned as String
     }
     
     private func reloadItem() {
@@ -459,13 +474,16 @@ extension FRadioPlayer: AVPlayerItemMetadataOutputPushDelegate {
     
     public func metadataOutput(_ output: AVPlayerItemMetadataOutput, didOutputTimedMetadataGroups groups: [AVTimedMetadataGroup], from track: AVPlayerItemTrack?) {
         
-        // make this an AVMetadata item
-        guard let item = groups.first?.items.first else {
-            timedMetadataDidChange(rawValue: nil)
+        guard !groups.isEmpty else {
+            resetMetadata()
             return
         }
         
-        timedMetadataDidChange(rawValue: item.value as? String)
+        let rawValue = groups.first?.items.first?.value as? String
+        let rawValueCleaned = cleanRawMetadataIfNeeded(rawValue)
+        let parts = rawValueCleaned?.components(separatedBy: " - ")
+        
+        currentMetadata = Metadata(artistName: parts?.first, trackName: parts?.last, rawValue: rawValueCleaned, groups: groups)
     }
 }
 
@@ -492,12 +510,6 @@ private extension FRadioPlayer {
     private func metadataChange(_ metaData: Metadata?) {
         notifiyObservers { observer in
             observer.radioPlayer(self, metadataDidChange: metaData)
-        }
-    }
-    
-    private func rawMetadataChange(rawValue: String?) {
-        notifiyObservers { observer in
-            observer.radioPlayer(self, metadataDidChange: rawValue)
         }
     }
     
