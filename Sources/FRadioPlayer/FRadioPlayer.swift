@@ -118,6 +118,15 @@ open class FRadioPlayer: NSObject {
     /// Current network connectivity
     private var isConnected = false
     
+    /// Key-value observing context
+    private var playerItemContext = 0
+    
+    /// Key-value observing context
+    private let requiredAssetKeys = [
+        "playable",
+        "hasProtectedContent"
+    ]
+    
     // MARK: - Initialization
     
     private override init() {
@@ -234,7 +243,7 @@ open class FRadioPlayer: NSObject {
             player?.allowsExternalPlayback = false
         }
         
-        playerItem = AVPlayerItem(asset: asset)
+        playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: requiredAssetKeys)
     }
         
     /** Reset all player item observers and create new ones
@@ -247,10 +256,10 @@ open class FRadioPlayer: NSObject {
         if let item = lastPlayerItem {
             pause()
             
-            NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item)
-            item.removeObserver(self, forKeyPath: "status")
-            item.removeObserver(self, forKeyPath: "playbackBufferEmpty")
-            item.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
+            NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: item)
+            item.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
+            item.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackBufferEmpty))
+            item.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp))
             item.remove(metadataOutput)
         }
         
@@ -259,9 +268,9 @@ open class FRadioPlayer: NSObject {
         
         if let item = playerItem {
             
-            item.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
-            item.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
-            item.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
+            item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: &playerItemContext)
+            item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackBufferEmpty), options: [.old, .new], context: &playerItemContext)
+            item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp), options: [.old, .new], context: &playerItemContext)
             item.add(metadataOutput)
             
             player?.replaceCurrentItem(with: item)
@@ -440,26 +449,43 @@ open class FRadioPlayer: NSObject {
     /// :nodoc:
     override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
+        // Only handle observations for the playerItemContext
+        guard context == &playerItemContext else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+            return
+        }
+        
         if let item = object as? AVPlayerItem, let keyPath = keyPath, item == self.playerItem {
             
             switch keyPath {
                 
-            case "status":
+            case #keyPath(AVPlayerItem.status):
                 
-                if player?.status == AVPlayer.Status.readyToPlay {
-                    self.state = .readyToPlay
-                } else if player?.status == AVPlayer.Status.failed {
-                    self.state = .error
+                let status: AVPlayerItem.Status
+                
+                if let statusNumber = change?[.newKey] as? NSNumber, let statusValue = AVPlayerItem.Status(rawValue: statusNumber.intValue) {
+                    status = statusValue
+                } else {
+                    status = .unknown
                 }
                 
-            case "playbackBufferEmpty":
+                switch status {
+                case .readyToPlay:
+                    self.state = .readyToPlay
+                case .failed:
+                    self.state = .error
+                default:
+                    break
+                }
+                
+            case #keyPath(AVPlayerItem.isPlaybackBufferEmpty):
                 
                 if item.isPlaybackBufferEmpty {
-                    self.state = .loading
-                    self.checkNetworkInterruption()
+                    state = .loading
+                    checkNetworkInterruption()
                 }
                 
-            case "playbackLikelyToKeepUp":
+            case #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp):
                 
                 self.state = item.isPlaybackLikelyToKeepUp ? .loadingFinished : .loading
                 
