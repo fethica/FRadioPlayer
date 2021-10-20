@@ -32,8 +32,8 @@ open class FRadioPlayer: NSObject {
     /// Enable fetching albums artwork from the iTunes API. (default == true)
     open var enableArtwork = true
     
-    /// Artwork image size. (default == 100 | 100x100)
-    open var artworkSize = 100
+    /// Artwork API of type `FRadioArtworkAPI`. Default: iTunesAPI(artworkSize: 300)
+    open var artworkAPI: FRadioArtworkAPI = iTunesAPI(artworkSize: 300)
     
     /// HTTP headers for AVURLAsset (Ex: `["user-agent": "FRadioPlayer"]`).
     open var httpHeaderFields: [String: String]? = nil
@@ -84,7 +84,7 @@ open class FRadioPlayer: NSObject {
     open private(set) var currentMetadata: Metadata? = nil {
         didSet {
             metadataChange(currentMetadata)
-            shouldGetArtwork(for: currentMetadata?.rawValue, enableArtwork)
+            shouldGetArtwork(for: currentMetadata, enableArtwork)
         }
     }
     
@@ -307,18 +307,18 @@ open class FRadioPlayer: NSObject {
         }
     }
     
-    private func shouldGetArtwork(for rawValue: String?, _ enabled: Bool) {
+    private func shouldGetArtwork(for metadata: FRadioPlayer.Metadata?, _ enabled: Bool) {
         guard enabled else { return }
-        guard let rawValue = rawValue else {
+        guard let metadata = metadata else {
             artworkChange(url: nil)
             return
         }
         
-        FRadioAPI.getArtwork(for: rawValue, size: artworkSize, completionHandler: { [weak self] artworlURL in
+        artworkAPI.getArtwork(for: metadata) { [weak self] artworlURL in
             DispatchQueue.main.async {
                 self?.artworkChange(url: artworlURL)
             }
-        })
+        }
     }
     
     private func reloadItem() {

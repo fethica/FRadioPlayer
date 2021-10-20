@@ -71,7 +71,7 @@ class RadioPlayer: FRadioPlayerObserver, ObservableObject {
     
     init() {
         player.addObserver(self)
-        player.artworkSize = 500
+        player.artworkAPI = iTunesAPI(artworkSize: 500)
         player.isAutoPlay = true
     }
     

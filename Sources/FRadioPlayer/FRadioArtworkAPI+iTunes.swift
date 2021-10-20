@@ -1,51 +1,60 @@
 //
-//  FRadioAPI.swift
-//  FRadioPlayer
+//  FRadioArtworkAPI+iTunes.swift
+//  Pods
 //
-//  Created by Fethi El Hassasna on 2017-11-25.
-//  Copyright © 2017 Fethi El Hassasna (@fethica). All rights reserved.
+//  Created by Fethi El Hassasna on 2021-10-19.
 //
 
 import Foundation
+import UIKit
 
 // MARK: - iTunes API
-internal struct FRadioAPI {
+public struct iTunesAPI: FRadioArtworkAPI {
     
-    // MARK: - Util methods
+    let artworkSize: Int
     
-    static func getArtwork(for metadata: String, size: Int, completionHandler: @escaping (_ artworkURL: URL?) -> ()) {
-                
-        guard !metadata.isEmpty, metadata !=  " - ", let url = getURL(with: metadata) else {
-            completionHandler(nil)
+    public init(artworkSize: Int) {
+        self.artworkSize = artworkSize
+    }
+    
+    public func getArtwork(for metadata: FRadioPlayer.Metadata, _ completion: @escaping (URL?) -> Void) {
+        
+        guard !metadata.isEmpty, let rawValue = metadata.rawValue, let url = getURL(with: rawValue) else {
+            completion(nil)
             return
         }
-                
+        
         URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
             guard error == nil, let data = data else {
-                completionHandler(nil)
+                completion(nil)
                 return
             }
             
+            // Replace with Codable
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
             
             guard let parsedResult = json as? [String: Any],
                 let results = parsedResult[Keys.results] as? Array<[String: Any]>,
                 let result = results.first,
                 var artwork = result[Keys.artwork] as? String else {
-                    completionHandler(nil)
+                    completion(nil)
                     return
             }
-            
-            if size != 100, size > 0 {
-                artwork = artwork.replacingOccurrences(of: "100x100", with: "\(size)x\(size)")
+                        
+            if artworkSize != 100, artworkSize > 0 {
+                artwork = artwork.replacingOccurrences(of: "100x100", with: "\(artworkSize)x\(artworkSize)")
             }
             
             let artworkURL = URL(string: artwork)
-            completionHandler(artworkURL)
+            completion(artworkURL)
         }).resume()
     }
     
-    private static func getURL(with term: String) -> URL? {
+    
+    // MARK: - Util methods
+    
+    
+    private func getURL(with term: String) -> URL? {
         var components = URLComponents()
         components.scheme = Domain.scheme
         components.host = Domain.host
@@ -78,4 +87,3 @@ internal struct FRadioAPI {
         static let entity = "song"
     }
 }
-
