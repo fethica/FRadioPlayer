@@ -200,7 +200,7 @@ open class FRadioPlayer: NSObject {
         guard let player = player else { return }
         playbackState = .stopped
         player.replaceCurrentItem(with: nil)
-        resetMetadata()
+        currentMetadata = nil
     }
     
     /**
@@ -264,7 +264,7 @@ open class FRadioPlayer: NSObject {
         }
         
         lastPlayerItem = playerItem
-        resetMetadata()
+        currentMetadata = nil
         
         if let item = playerItem {
             
@@ -307,11 +307,6 @@ open class FRadioPlayer: NSObject {
         }
     }
     
-    private func resetMetadata() {
-        metadataChange(nil)
-        shouldGetArtwork(for: nil, enableArtwork)
-    }
-    
     private func shouldGetArtwork(for rawValue: String?, _ enabled: Bool) {
         guard enabled else { return }
         guard let rawValue = rawValue else {
@@ -324,20 +319,6 @@ open class FRadioPlayer: NSObject {
                 self?.artworkChange(url: artworlURL)
             }
         })
-    }
-    
-    private func cleanRawMetadataIfNeeded(_ rawValue: String?) -> String? {
-        guard let rawValue = rawValue else { return nil }
-        // Strip off trailing '[???]' characters left there by ShoutCast and Centova Streams
-        // It will leave the string alone if the pattern is not there
-        
-        let pattern = #"(\(.*?\)\w*)|(\[.*?\]\w*)"#
-        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else { return rawValue }
-        
-        let rawCleaned = NSMutableString(string: rawValue)
-        regex.replaceMatches(in: rawCleaned , options: .reportProgress, range: NSRange(location: 0, length: rawCleaned.length), withTemplate: "")
-        
-        return rawCleaned as String
     }
     
     private func reloadItem() {
@@ -500,16 +481,7 @@ extension FRadioPlayer: AVPlayerItemMetadataOutputPushDelegate {
     
     public func metadataOutput(_ output: AVPlayerItemMetadataOutput, didOutputTimedMetadataGroups groups: [AVTimedMetadataGroup], from track: AVPlayerItemTrack?) {
         
-        guard !groups.isEmpty else {
-            resetMetadata()
-            return
-        }
-        
-        let rawValue = groups.first?.items.first?.value as? String
-        let rawValueCleaned = cleanRawMetadataIfNeeded(rawValue)
-        let parts = rawValueCleaned?.components(separatedBy: " - ")
-        
-        currentMetadata = Metadata(artistName: parts?.first, trackName: parts?.last, rawValue: rawValueCleaned, groups: groups)
+        currentMetadata = Metadata(groups: groups)
     }
 }
 
