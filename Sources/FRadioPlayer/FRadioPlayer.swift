@@ -400,7 +400,7 @@ open class FRadioPlayer: NSObject {
         guard let url = url else { state = .urlNotSet; return }
 
         state = .urlNotLoaded
-        asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey : true])
+        asset = AVURLAsset(url: url, options: [AVURLAssetPreferPreciseDurationAndTimingKey : false])
 
         guard isAutoPlay else { return }
         
