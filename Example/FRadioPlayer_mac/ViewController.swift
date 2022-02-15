@@ -141,10 +141,6 @@ extension ViewController: FRadioPlayerObserver {
         track = Track(artist: metadata?.artistName, name: metadata?.trackName)
     }
     
-    func radioPlayer(_ player: FRadioPlayer, metadataDidChange rawValue: String?) {
-        print("Raw Meta:", rawValue ?? "none")
-    }
-    
     func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?) {
         track = nil
     }
