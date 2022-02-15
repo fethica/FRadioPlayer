@@ -12,9 +12,11 @@ import UIKit
 public struct iTunesAPI: FRadioArtworkAPI {
     
     let artworkSize: Int
+    private let session: URLSession
     
-    public init(artworkSize: Int) {
+    public init(artworkSize: Int, session: URLSession = URLSession.shared) {
         self.artworkSize = artworkSize
+        self.session = session
     }
     
     public func getArtwork(for metadata: FRadioPlayer.Metadata, _ completion: @escaping (URL?) -> Void) {
@@ -24,7 +26,7 @@ public struct iTunesAPI: FRadioArtworkAPI {
             return
         }
         
-        URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
+        session.dataTask(with: url, completionHandler: { (data, response, error) in
             guard error == nil, let data = data else {
                 completion(nil)
                 return
@@ -52,8 +54,6 @@ public struct iTunesAPI: FRadioArtworkAPI {
     
     
     // MARK: - Util methods
-    
-    
     private func getURL(with term: String) -> URL? {
         var components = URLComponents()
         components.scheme = Domain.scheme
@@ -65,8 +65,11 @@ public struct iTunesAPI: FRadioArtworkAPI {
         return components.url
     }
     
+}
+
+extension iTunesAPI {
+
     // MARK: - Constants
-    
     private struct Domain {
         static let scheme = "https"
         static let host = "itunes.apple.com"
