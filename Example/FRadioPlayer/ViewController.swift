@@ -51,7 +51,7 @@ class ViewController: UIViewController {
         didSet {
             defer {
                 selectStation(at: selectedIndex)
-                updateNowPlaying(with: track)
+                updateNowPlayingUI()
             }
             
             guard 0..<stations.endIndex ~= selectedIndex else {
@@ -61,11 +61,9 @@ class ViewController: UIViewController {
         }
     }
     
-    var track: Track? {
+    var currentArtworkImage: UIImage? {
         didSet {
-            artistLabel.text = track?.artist
-            trackLabel.text = track?.name
-            updateNowPlaying(with: track)
+            updateNowPlayingUI()
         }
     }
     
@@ -116,10 +114,10 @@ class ViewController: UIViewController {
     }
 }
 
-// MARK: - FRadioPlayerDelegate
+// MARK: - FRadioPlayerObserver
 
 extension ViewController: FRadioPlayerObserver {
-
+    
     func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayer.State) {
         statusLabel.text = state.description
     }
@@ -128,28 +126,22 @@ extension ViewController: FRadioPlayerObserver {
         playButton.isSelected = player.isPlaying
     }
     
-    func radioPlayer(_ player: FRadioPlayer, metadataDidChange metaData: FRadioPlayer.Metadata?) {
-        track = Track(artist: metaData?.artistName, name: metaData?.trackName)
-    }
-    
     func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?) {
-        track = nil
+        updateNowPlayingUI()
     }
     
-    func radioPlayer(_ player: FRadioPlayer, metadataDidChange rawValue: String?) {
-        infoContainer.isHidden = (rawValue == nil)
+    func radioPlayer(_ player: FRadioPlayer, metadataDidChange metadata: FRadioPlayer.Metadata?) {
+        updateNowPlayingUI()
     }
     
     func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?) {
-        
         // Please note that the following example is for demonstration purposes only, consider using asynchronous network calls to set the image from a URL.
         guard let artworkURL = artworkURL, let data = try? Data(contentsOf: artworkURL) else {
-            artworkImageView.image = stations[selectedIndex].image
+            currentArtworkImage = stations[selectedIndex].image
             return
         }
-        track?.image = UIImage(data: data)
-        artworkImageView.image = track?.image
-        updateNowPlaying(with: track)
+
+        currentArtworkImage = UIImage(data: data) ?? stations[selectedIndex].image
     }
 }
 
@@ -213,18 +205,26 @@ extension ViewController {
         }
     }
     
-    func updateNowPlaying(with track: Track?) {
+    func updateNowPlayingUI() {
+        
+        let metadata = player.currentMetadata
+        
+        // UI
+        infoContainer.isHidden = (metadata == nil)
+        artistLabel.text = metadata?.artistName
+        trackLabel.text = metadata?.trackName
+        artworkImageView.image = currentArtworkImage
     
-        // Define Now Playing Info
+        // Now Playing Info
         var nowPlayingInfo = [String : Any]()
         
-        if let artist = track?.artist {
+        if let artist = metadata?.artistName {
             nowPlayingInfo[MPMediaItemPropertyArtist] = artist
         }
         
-        nowPlayingInfo[MPMediaItemPropertyTitle] = track?.name ?? stations[selectedIndex].name
+        nowPlayingInfo[MPMediaItemPropertyTitle] = metadata?.trackName ?? stations[selectedIndex].name
         
-        if let image = track?.image ?? stations[selectedIndex].image {
+        if let image = currentArtworkImage {
             nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size, requestHandler: { _ -> UIImage in
                 return image
             })
