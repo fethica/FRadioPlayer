@@ -88,6 +88,13 @@ open class FRadioPlayer: NSObject {
         }
     }
     
+    /// Current artwork URL value of type `URL`
+    open private(set) var currentArtworkURL: URL? = nil {
+        didSet {
+            artworkChange(url: currentArtworkURL)
+        }
+    }
+    
     // MARK: - Internal / Private properties
     
     /// Observations
@@ -316,7 +323,7 @@ open class FRadioPlayer: NSObject {
         
         artworkAPI.getArtwork(for: metadata) { [weak self] artworlURL in
             DispatchQueue.main.async {
-                self?.artworkChange(url: artworlURL)
+                self?.currentArtworkURL = artworlURL
             }
         }
     }
