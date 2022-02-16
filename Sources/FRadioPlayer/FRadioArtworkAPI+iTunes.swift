@@ -26,30 +26,21 @@ public struct iTunesAPI: FRadioArtworkAPI {
             return
         }
         
-        session.dataTask(with: url, completionHandler: { (data, response, error) in
+        let task = session.dataTask(with: url) { (data, response, error) in
             guard error == nil, let data = data else {
                 completion(nil)
                 return
             }
-            
-            // Replace with Codable
-            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
-            
-            guard let parsedResult = json as? [String: Any],
-                let results = parsedResult[Keys.results] as? Array<[String: Any]>,
-                let result = results.first,
-                var artwork = result[Keys.artwork] as? String else {
-                    completion(nil)
-                    return
-            }
                         
-            if artworkSize != 100, artworkSize > 0 {
-                artwork = artwork.replacingOccurrences(of: "100x100", with: "\(artworkSize)x\(artworkSize)")
+            guard let response = try? JSONDecoder().decode(iTunesResponse.self, from: data), let artworkURL = response.results.first?.artworkURL(for: artworkSize) else {
+                completion(nil)
+                return
             }
             
-            let artworkURL = URL(string: artwork)
             completion(artworkURL)
-        }).resume()
+        }
+        
+        task.resume()
     }
     
     
@@ -80,13 +71,27 @@ extension iTunesAPI {
         // Request
         static let term = "term"
         static let entity = "entity"
-        
-        // Response
-        static let results = "results"
-        static let artwork = "artworkUrl100"
     }
     
     private struct Values {
         static let entity = "song"
+    }
+}
+
+private struct iTunesResponse: Decodable {
+    let results: [TrackResult]
+    
+    struct TrackResult: Decodable {
+        private let artworkUrl100: String
+                
+        func artworkURL(for size: Int) -> URL? {
+            var artwork = artworkUrl100
+            
+            if size != 100, size > 0 {
+                artwork = artwork.replacingOccurrences(of: "100x100", with: "\(size)x\(size)")
+            }
+            
+            return URL(string: artwork)
+        }
     }
 }
