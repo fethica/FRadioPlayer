@@ -242,6 +242,3 @@ extension UINavigationController {
         return .lightContent
     }
 }
-
-
-

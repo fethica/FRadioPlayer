@@ -38,6 +38,9 @@ open class FRadioPlayer: NSObject {
     /// HTTP headers for AVURLAsset (Ex: `["user-agent": "FRadioPlayer"]`).
     open var httpHeaderFields: [String: String]? = nil
     
+    /// Metadata extractor of type `FRadioMetadataExtractor'
+    open var metadataExtractor: FRadioMetadataExtractor = DefaultMetadataExtractor()
+    
     /// Read only property to get the current AVPlayer rate.
     open var rate: Float? {
         return player?.rate
@@ -488,7 +491,7 @@ extension FRadioPlayer: AVPlayerItemMetadataOutputPushDelegate {
     
     public func metadataOutput(_ output: AVPlayerItemMetadataOutput, didOutputTimedMetadataGroups groups: [AVTimedMetadataGroup], from track: AVPlayerItemTrack?) {
         
-        currentMetadata = Metadata(groups: groups)
+        currentMetadata = metadataExtractor.extract(from: groups)
     }
 }
 
