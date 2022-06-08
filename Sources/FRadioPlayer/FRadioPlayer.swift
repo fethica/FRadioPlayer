@@ -19,6 +19,9 @@ open class FRadioPlayer: NSObject {
     /// Returns the singleton `FRadioPlayer` instance.
     public static let shared = FRadioPlayer()
     
+    /// Enable / disable `playImmediately`. More info: https://developer.apple.com/documentation/avfoundation/avplayer/1643480-playimmediately
+    open var isPlayImmediately: Bool = false
+    
     /// The player current radio URL
     open var radioURL: URL? {
         didSet {
@@ -38,7 +41,7 @@ open class FRadioPlayer: NSObject {
     /// HTTP headers for AVURLAsset (Ex: `["user-agent": "FRadioPlayer"]`).
     open var httpHeaderFields: [String: String]? = nil
     
-    /// Metadata extractor of type `FRadioMetadataExtractor'
+    /// Metadata extractor of type `FRadioMetadataExtractor`
     open var metadataExtractor: FRadioMetadataExtractor = DefaultMetadataExtractor()
     
     /// Read only property to get the current AVPlayer rate.
@@ -188,7 +191,7 @@ open class FRadioPlayer: NSObject {
             player.replaceCurrentItem(with: playerItem)
         }
         
-        player.play()
+        isPlayImmediately ? player.playImmediately(atRate: 1.0) : player.play()
         playbackState = .playing
     }
     
