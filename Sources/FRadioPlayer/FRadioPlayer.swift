@@ -235,14 +235,8 @@ open class FRadioPlayer: NSObject {
             options = ["AVURLAssetHTTPHeaderFieldsKey": httpHeaderFields]
         }
         
-        preparePlayer(with: AVURLAsset(url: url, options: options)) { (success, asset) in
-            guard success, let asset = asset else {
-                self.resetPlayer()
-                self.state = .error
-                return
-            }
-            self.setupPlayer(with: asset)
-        }
+        let asset = AVURLAsset(url: url, options: options)
+        setupPlayer(with: asset)
     }
     
     private func setupPlayer(with asset: AVURLAsset) {
@@ -288,33 +282,6 @@ open class FRadioPlayer: NSObject {
         }
         
         itemChange(with: radioURL)
-    }
-    
-    /** Prepare the player from the passed AVURLAsset
-     
-     */
-    private func preparePlayer(with asset: AVURLAsset?, completionHandler: @escaping (_ isPlayable: Bool, _ asset: AVURLAsset?)->()) {
-        guard let asset = asset else {
-            completionHandler(false, nil)
-            return
-        }
-        
-        let requestedKey = ["playable"]
-        
-        asset.loadValuesAsynchronously(forKeys: requestedKey) {
-            
-            DispatchQueue.main.async {
-                var error: NSError?
-                
-                let keyStatus = asset.statusOfValue(forKey: "playable", error: &error)
-                if keyStatus == AVKeyValueStatus.failed || !asset.isPlayable {
-                    completionHandler(false, nil)
-                    return
-                }
-                
-                completionHandler(true, asset)
-            }
-        }
     }
     
     private func shouldGetArtwork(for metadata: FRadioPlayer.Metadata?, _ enabled: Bool) {
