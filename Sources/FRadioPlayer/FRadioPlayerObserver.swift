@@ -52,6 +52,23 @@ public protocol FRadioPlayerObserver: AnyObject {
      - parameter artworkURL: URL for the artwork from iTunes
      */
     func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?)
+    
+    /**
+     Called when player item changes the duration value
+     
+     - parameter player: FRadioPlayer
+     - parameter totalTime: player item total time, == 0 if not available (live stream)
+     */
+    func radioPlayer(_ player: FRadioPlayer, durationDidChange duration: TimeInterval)
+    
+    /**
+     Called when the current playing time gets changed
+     
+     - parameter player: FRadioPlayer
+     - parameter currentTime: current time
+     - parameter totalTime: player item total time
+     */
+    func radioPlayer(_ player: FRadioPlayer, playTimeDidChange currentTime: TimeInterval, duration: TimeInterval)
 }
 
 
@@ -63,4 +80,6 @@ public extension FRadioPlayerObserver {
     func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?) {}
     func radioPlayer(_ player: FRadioPlayer, metadataDidChange metadata: FRadioPlayer.Metadata?) {}
     func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?) {}
+    func radioPlayer(_ player: FRadioPlayer, playTimeDidChange currentTime: TimeInterval, duration: TimeInterval) {}
+    func radioPlayer(_ player: FRadioPlayer, durationDidChange duration: TimeInterval) {}
 }

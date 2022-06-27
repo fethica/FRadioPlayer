@@ -101,6 +101,26 @@ open class FRadioPlayer: NSObject {
         }
     }
     
+    /// Store the item duration, == 0 if not available
+    open private(set) var duration: TimeInterval = 0 {
+        didSet {
+            guard oldValue != duration else { return }
+            notifiyObservers { observer in
+                observer.radioPlayer(self, durationDidChange: duration)
+            }
+        }
+    }
+    
+    /// Store the current time, == 0 if not available
+    open private(set) var currentTime: Double = 0 {
+        didSet {
+            guard oldValue != currentTime else { return }
+            notifiyObservers { observer in
+                observer.radioPlayer(self, playTimeDidChange: currentTime, duration: duration)
+            }
+        }
+    }
+    
     // MARK: - Internal / Private properties
     
     /// Observations
@@ -267,6 +287,7 @@ open class FRadioPlayer: NSObject {
             item.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
             item.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackBufferEmpty))
             item.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp))
+            item.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.duration))
             item.remove(metadataOutput)
         }
         
@@ -278,6 +299,7 @@ open class FRadioPlayer: NSObject {
             item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: &playerItemContext)
             item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackBufferEmpty), options: [.old, .new], context: &playerItemContext)
             item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp), options: [.old, .new], context: &playerItemContext)
+            item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.duration), options: [.old, .new], context: &playerItemContext)
             item.add(metadataOutput)
             
             player?.replaceCurrentItem(with: item)
