@@ -252,10 +252,10 @@ open class FRadioPlayer: NSObject {
         
         state = .loading
         
-        var options: [String : Any]? = nil
+        var options: [String: Any] = [AVURLAssetPreferPreciseDurationAndTimingKey: false]
         
         if let httpHeaderFields = httpHeaderFields {
-            options = ["AVURLAssetHTTPHeaderFieldsKey": httpHeaderFields]
+            options["AVURLAssetHTTPHeaderFieldsKey"] = httpHeaderFields
         }
         
         let asset = AVURLAsset(url: url, options: options)
