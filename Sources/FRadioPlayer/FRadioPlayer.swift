@@ -312,7 +312,7 @@ open class FRadioPlayer: NSObject {
     private func shouldGetArtwork(for metadata: FRadioPlayer.Metadata?, _ enabled: Bool) {
         guard enabled else { return }
         guard let metadata = metadata else {
-            artworkChange(url: nil)
+            currentArtworkURL = nil
             return
         }
         
