@@ -234,6 +234,7 @@ open class FRadioPlayer: NSObject {
         playbackState = .stopped
         player.replaceCurrentItem(with: nil)
         currentMetadata = nil
+        currentArtworkURL = nil
     }
     
     /**
@@ -293,6 +294,7 @@ open class FRadioPlayer: NSObject {
         
         lastPlayerItem = playerItem
         currentMetadata = nil
+        currentArtworkURL = nil
         
         if let item = playerItem {
             
