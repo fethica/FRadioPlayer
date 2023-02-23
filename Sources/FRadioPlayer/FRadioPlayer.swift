@@ -139,7 +139,7 @@ open class FRadioPlayer: NSObject {
     
     /// Returns the singleton `FRadioPlayer` instance.
     public static let shared = FRadioPlayer()
-    
+
     /**
      The delegate object for the `FRadioPlayer`.
      Implement the methods declared by the `FRadioPlayerDelegate` object to respond to user interactions and the player output.
@@ -161,6 +161,9 @@ open class FRadioPlayer: NSObject {
     
     /// Artwork image size. (default == 100 | 100x100)
     open var artworkSize = 100
+    
+    /// HTTP headers for AVURLAsset (Ex: `["user-agent": "FRadioPlayer"]`).
+    open var httpHeaderFields: [String: String]? = nil
     
     /// Read only property to get the current AVPlayer rate.
     open var rate: Float? {
@@ -317,7 +320,13 @@ open class FRadioPlayer: NSObject {
         
         state = .loading
         
-        preparePlayer(with: AVAsset(url: url)) { (success, asset) in
+        var options: [String : Any]? = nil
+        
+        if let httpHeaderFields = httpHeaderFields {
+            options = ["AVURLAssetHTTPHeaderFieldsKey": httpHeaderFields]
+        }
+        
+        preparePlayer(with: AVURLAsset(url: url, options: options)) { (success, asset) in
             guard success, let asset = asset else {
                 self.resetPlayer()
                 self.state = .error
@@ -327,7 +336,8 @@ open class FRadioPlayer: NSObject {
         }
     }
     
-    private func setupPlayer(with asset: AVAsset) {
+    private func setupPlayer(with asset: AVURLAsset) {
+
         if player == nil {
             player = AVPlayer()
             // Removes black screen when connecting to appleTV
@@ -335,8 +345,11 @@ open class FRadioPlayer: NSObject {
         }
         
         playerItem = AVPlayerItem(asset: asset)
+        let metadataOutput = AVPlayerItemMetadataOutput(identifiers: nil)
+        metadataOutput.setDelegate(self, queue: DispatchQueue.main)
+        playerItem?.add(metadataOutput)
     }
-    
+        
     /** Reset all player item observers and create new ones
      
      */
@@ -351,7 +364,6 @@ open class FRadioPlayer: NSObject {
             item.removeObserver(self, forKeyPath: "status")
             item.removeObserver(self, forKeyPath: "playbackBufferEmpty")
             item.removeObserver(self, forKeyPath: "playbackLikelyToKeepUp")
-            item.removeObserver(self, forKeyPath: "timedMetadata")
         }
         
         lastPlayerItem = playerItem
@@ -362,7 +374,6 @@ open class FRadioPlayer: NSObject {
             item.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.new, context: nil)
             item.addObserver(self, forKeyPath: "playbackBufferEmpty", options: NSKeyValueObservingOptions.new, context: nil)
             item.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: NSKeyValueObservingOptions.new, context: nil)
-            item.addObserver(self, forKeyPath: "timedMetadata", options: NSKeyValueObservingOptions.new, context: nil)
             
             player?.replaceCurrentItem(with: item)
             if isAutoPlay { play() }
@@ -371,10 +382,10 @@ open class FRadioPlayer: NSObject {
         delegate?.radioPlayer?(self, itemDidChange: radioURL)
     }
     
-    /** Prepare the player from the passed AVAsset
+    /** Prepare the player from the passed AVURLAsset
      
      */
-    private func preparePlayer(with asset: AVAsset?, completionHandler: @escaping (_ isPlayable: Bool, _ asset: AVAsset?)->()) {
+    private func preparePlayer(with asset: AVURLAsset?, completionHandler: @escaping (_ isPlayable: Bool, _ asset: AVURLAsset?)->()) {
         guard let asset = asset else {
             completionHandler(false, nil)
             return
@@ -560,14 +571,24 @@ open class FRadioPlayer: NSObject {
             case "playbackLikelyToKeepUp":
                 
                 self.state = item.isPlaybackLikelyToKeepUp ? .loadingFinished : .loading
-
-            case "timedMetadata":
-                let rawValue = item.timedMetadata?.first?.value as? String
-                timedMetadataDidChange(rawValue: rawValue)
                 
             default:
                 break
             }
         }
+    }
+}
+
+extension FRadioPlayer: AVPlayerItemMetadataOutputPushDelegate {
+    
+    public func metadataOutput(_ output: AVPlayerItemMetadataOutput, didOutputTimedMetadataGroups groups: [AVTimedMetadataGroup], from track: AVPlayerItemTrack?) {
+        
+        // make this an AVMetadata item
+        guard let item = groups.first?.items.first else {
+            timedMetadataDidChange(rawValue: nil)
+            return
+        }
+        
+        timedMetadataDidChange(rawValue: item.value as? String)
     }
 }

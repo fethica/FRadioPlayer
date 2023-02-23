@@ -13,7 +13,8 @@ import Cocoa
 #endif
 
 
-struct Station {
+struct Station: Identifiable, Hashable {
+    var id = UUID()
     let name: String
     let detail: String
     let url: URL

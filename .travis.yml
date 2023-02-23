@@ -2,7 +2,7 @@
 # * http://www.objc.io/issue-6/travis-ci.html
 # * https://github.com/supermarin/xcpretty#usage
 
-osx_image: xcode11
+osx_image: xcode12.2
 language: swift
 
 sudo: required
@@ -11,18 +11,22 @@ env:
   global:
     - WORKSPACE=Example/FRadioPlayer.xcworkspace
   matrix:
-    - DESTINATION="platform=iOS Simulator,name=iPhone 11,OS=13.0"
+    - DESTINATION="platform=iOS Simulator,name=iPhone 12 Pro,OS=14.2"
       SCHEME=FRadioPlayer-Example
-      SDK=iphonesimulator13.0
+      SDK=iphonesimulator14.2
       PLATFORM=ios
-#    - DESTINATION="platform=OS X,arch=x86_64"
-#      SCHEME=FRadioPlayer_mac
-#      SDK=macosx10.15
-#      PLATFORM=macos
-    - DESTINATION="platform=tvOS Simulator,name=Apple TV,OS=13.0"
+    #- DESTINATION="platform=macOS,arch=x86_64"
+    #  SCHEME=FRadioPlayer_mac
+    #  SDK=macosx11.0
+    #  PLATFORM=macos
+    - DESTINATION="platform=tvOS Simulator,name=Apple TV,OS=14.2"
       SCHEME=FRadioPlayer_tvOS
-      SDK=appletvsimulator13.0
+      SDK=appletvsimulator14.2
       PLATFORM=tvos
+    - DESTINATION="platform=iOS Simulator,name=iPhone 12 Pro,OS=14.2"
+      SCHEME=FRadioPlayer_SwiftUI
+      SDK=iphonesimulator14.2
+      PLATFORM=ios
 podfile: Example/Podfile
 before_install:
 - gem install cocoapods # Since Travis is not always on latest version

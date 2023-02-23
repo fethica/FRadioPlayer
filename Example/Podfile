@@ -5,9 +5,14 @@ target 'FRadioPlayer_ios' do
   pod 'FRadioPlayer', :path => '../'
 
   target 'FRadioPlayer_Tests' do
-    inherit! :search_paths
+    inherit! :complete
 
   end
+end
+
+target 'FRadioPlayer_SwiftUI' do
+  platform :ios, '14.0'
+  pod 'FRadioPlayer', :path => '../'
 end
 
 target 'FRadioPlayer_mac' do
