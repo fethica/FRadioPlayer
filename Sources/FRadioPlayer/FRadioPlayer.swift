@@ -323,7 +323,6 @@ open class FRadioPlayer: NSObject {
         }
         
         lastPlayerItem = playerItem
-        durationDidChange(.zero)
         currentMetadata = nil
         currentArtworkURL = nil
         
