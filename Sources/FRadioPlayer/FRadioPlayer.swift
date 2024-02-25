@@ -323,6 +323,7 @@ open class FRadioPlayer: NSObject {
         }
         
         lastPlayerItem = playerItem
+        durationDidChange(.zero)
         currentMetadata = nil
         currentArtworkURL = nil
         
@@ -485,7 +486,6 @@ open class FRadioPlayer: NSObject {
             switch keyPath {
                 
             case #keyPath(AVPlayerItem.status):
-                
                 let status: AVPlayerItem.Status
                 
                 if let statusNumber = change?[.newKey] as? NSNumber, let statusValue = AVPlayerItem.Status(rawValue: statusNumber.intValue) {
@@ -504,15 +504,16 @@ open class FRadioPlayer: NSObject {
                 }
                 
             case #keyPath(AVPlayerItem.isPlaybackBufferEmpty):
-                
                 if item.isPlaybackBufferEmpty {
                     state = .loading
                     checkNetworkInterruption()
                 }
                 
             case #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp):
-                
                 self.state = item.isPlaybackLikelyToKeepUp ? .loadingFinished : .loading
+                
+            case #keyPath(AVPlayerItem.duration):
+                durationDidChange(item.duration)
                 
             default:
                 break
