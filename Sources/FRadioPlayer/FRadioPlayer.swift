@@ -160,6 +160,12 @@ open class FRadioPlayer: NSObject {
         "hasProtectedContent"
     ]
     
+    /// Player time observer
+    private var timeObserver: Any?
+    
+    /// Item played to the end
+    private var hasPlayedToEndTime = false
+    
     // MARK: - Initialization
     
     private override init() {
@@ -217,7 +223,6 @@ open class FRadioPlayer: NSObject {
     
     /**
      Trigger the pause function of the radio player
-     
      */
     open func pause() {
         guard let player = player else { return }
@@ -231,10 +236,35 @@ open class FRadioPlayer: NSObject {
      */
     open func stop() {
         guard let player = player else { return }
+        
+        if duration != 0 {
+            currentTime = 0
+            player.pause()
+            player.seek(to: .zero)
+        } else {
+            player.replaceCurrentItem(with: nil)
+            currentMetadata = nil
+            currentArtworkURL = nil
+        }
+        
         playbackState = .stopped
-        player.replaceCurrentItem(with: nil)
-        currentMetadata = nil
-        currentArtworkURL = nil
+    }
+    
+    /**
+     Triggers the seek to a given time
+     
+     - parameter seconds: time in seconds to seek to
+     - parameter completion: optional completion
+     */
+    open func seek(to seconds: TimeInterval, completion: (() -> Void)?) {
+        guard duration != 0 else { return }
+        
+        let seekTime = CMTime(seconds: seconds, preferredTimescale: 1)
+        
+        player?.seek(to: seekTime, toleranceBefore: .zero, toleranceAfter: .positiveInfinity, completionHandler: { [weak self] _ in
+            self?.play()
+            completion?()
+        })
     }
     
     /**
@@ -297,7 +327,8 @@ open class FRadioPlayer: NSObject {
         currentArtworkURL = nil
         
         if let item = playerItem {
-            
+            NotificationCenter.default.addObserver(self, selector: #selector(itemDidPlayToEnd), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
+
             item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: &playerItemContext)
             item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackBufferEmpty), options: [.old, .new], context: &playerItemContext)
             item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp), options: [.old, .new], context: &playerItemContext)
@@ -331,10 +362,19 @@ open class FRadioPlayer: NSObject {
     }
     
     private func resetPlayer() {
+        if let timeObserver = timeObserver {
+            player?.removeTimeObserver(timeObserver)
+            self.timeObserver = nil
+        }
+        
         stop()
         playerItem = nil
         lastPlayerItem = nil
         player = nil
+        playerItem = nil
+        lastPlayerItem = nil
+        duration = 0
+        currentTime = 0
     }
     
     deinit {
@@ -529,6 +569,48 @@ private extension FRadioPlayer {
             }
             
             action(observer)
+        }
+    }
+}
+
+// MARK: - Audio file support
+
+private extension FRadioPlayer {
+    
+    private func periodicTimeUpdate(_ time: CMTime) {
+        guard !hasPlayedToEndTime else { return }
+        let playedTime = CMTimeGetSeconds(time)
+        currentTime = playedTime
+    }
+    
+    @objc private func itemDidPlayToEnd() {
+        pause()
+        hasPlayedToEndTime = true
+        
+        player?.seek(to: .zero) { [weak self] _ in
+            self?.hasPlayedToEndTime = false
+        }
+    }
+    
+    private func durationDidChange(_ duration: CMTime) {
+        
+        if CMTIME_IS_INDEFINITE(duration) || duration == .zero {
+            // Live stream
+            self.duration = 0
+            
+            if let timeObserver = self.timeObserver {
+                player?.removeTimeObserver(timeObserver)
+                self.timeObserver = nil
+            }
+            
+        } else {
+            // Audio file
+            self.duration = Double(CMTimeGetSeconds(duration))
+            let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+            
+            timeObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
+                self?.periodicTimeUpdate(time)
+            })
         }
     }
 }
