@@ -119,6 +119,24 @@ import AVFoundation
     @objc optional func radioPlayer(_ player: FRadioPlayer, metadataDidChange rawValue: String?)
     
     /**
+     Called when player item changes the timed metadata value
+     
+     - parameter player: FRadioPlayer
+     - parameter rawValue: metadata raw value
+     - parameter originalRawValue: original metadata raw value
+     */
+    @objc optional func radioPlayer(_ player: FRadioPlayer, metadataDidChange rawValue: String?, originalRawValue: String?)
+    
+    /**
+     Called when player item changes the timed metadata value, and gives the delegate the opportunity to transform it
+     
+     - parameter player: FRadioPlayer
+     - parameter rawValue: metadata raw value
+     - returns the transformedraw value
+     */
+    @objc optional func radioPlayer(_ player: FRadioPlayer, metadataWillTransform rawValue: String?) -> String?
+    
+    /**
      Called when the player gets the artwork for the playing song
      
      - parameter player: FRadioPlayer
@@ -410,11 +428,15 @@ open class FRadioPlayer: NSObject {
     }
     
     private func timedMetadataDidChange(rawValue: String?) {
-        let metadataCleaned = cleanMetadata(rawValue)
+        let transformedRawValue = delegate?.radioPlayer?(self, metadataWillTransform: rawValue) ?? rawValue
+        let metadataCleaned = cleanMetadata(transformedRawValue)
+        
+        
         let parts = metadataCleaned?.components(separatedBy: " - ")
         delegate?.radioPlayer?(self, metadataDidChange: parts?.first, trackName: parts?.last)
         delegate?.radioPlayer?(self, metadataDidChange: rawValue)
-        shouldGetArtwork(for: rawValue, enableArtwork)
+        delegate?.radioPlayer?(self, metadataDidChange: transformedRawValue, originalRawValue: rawValue)
+        shouldGetArtwork(for: transformedRawValue, enableArtwork)
     }
     
     private func shouldGetArtwork(for rawValue: String?, _ enabled: Bool) {
