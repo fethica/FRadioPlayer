@@ -1,6 +1,6 @@
 //
 //  Track.swift
-//  FRadioPlayerDemo
+//  SwiftRadioPlayerDemo
 //
 //  Created by Fethi El Hassasna on 2017-12-03.
 //  Copyright © 2017 Fethi El Hassasna. All rights reserved.

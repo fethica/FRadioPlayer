@@ -1,6 +1,6 @@
 import UIKit
 import XCTest
-import FRadioPlayer
+import SwiftRadioPlayer
 
 class Tests: XCTestCase {
     

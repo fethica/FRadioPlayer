@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "FRadioPlayer",
+    name: "SwiftRadioPlayer",
     platforms: [
         .macOS(.v10_12),
         .iOS(.v10),
@@ -12,16 +12,16 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "FRadioPlayer",
-            targets: ["FRadioPlayer"]),
+            name: "SwiftRadioPlayer",
+            targets: ["SwiftRadioPlayer"]),
     ],
     dependencies: [],
     targets: [
         .target(
-            name: "FRadioPlayer",
+            name: "SwiftRadioPlayer",
             dependencies: []),
         .testTarget(
-            name: "FRadioPlayerTests",
-            dependencies: ["FRadioPlayer"]),
+            name: "SwiftRadioPlayerTests",
+            dependencies: ["SwiftRadioPlayer"]),
     ]
 )

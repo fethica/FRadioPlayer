@@ -1,7 +1,7 @@
 import XCTest
 
-import FRadioPlayerTests
+import SwiftRadioPlayerTests
 
 var tests = [XCTestCaseEntry]()
-tests += FRadioPlayerTests.allTests()
+tests += SwiftRadioPlayerTests.allTests()
 XCTMain(tests)

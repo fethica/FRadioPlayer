@@ -1,0 +1,487 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		17840497CCA9E1F5451A683E /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A33975E82C296004FBFCD4B /* Reachability.swift */; };
+		3B6A70BE5A795000DDBE175C /* SwiftRadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7DEE4AB91E6E158B1659E0 /* SwiftRadioPlayer.swift */; };
+		7D76D344D6E5A2738AB1FC1E /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A33975E82C296004FBFCD4B /* Reachability.swift */; };
+		88CC1FBA26F0AEBDAE5C059A /* FRadioAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA0420730ED6A68A5F53F6C /* FRadioAPI.swift */; };
+		9F87BCF4429071F9536F6414 /* FRadioAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA0420730ED6A68A5F53F6C /* FRadioAPI.swift */; };
+		A83BCC0BA5D56269E9FBF2CB /* FRadioAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA0420730ED6A68A5F53F6C /* FRadioAPI.swift */; };
+		CF0B550787ED266277DDCF92 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A33975E82C296004FBFCD4B /* Reachability.swift */; };
+		E01E712565214B3AF63D8780 /* SwiftRadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7DEE4AB91E6E158B1659E0 /* SwiftRadioPlayer.swift */; };
+		E3357EBA28AEADEBE4DFC380 /* SwiftRadioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B7DEE4AB91E6E158B1659E0 /* SwiftRadioPlayer.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1B7DEE4AB91E6E158B1659E0 /* SwiftRadioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftRadioPlayer.swift; sourceTree = "<group>"; };
+		4FA0420730ED6A68A5F53F6C /* FRadioAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRadioAPI.swift; sourceTree = "<group>"; };
+		7A33975E82C296004FBFCD4B /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		A6061AB427C815EEAEEE40AB /* SwiftRadioPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftRadioPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B522A5BC710885159DEA95F7 /* SwiftRadioPlayer_mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftRadioPlayer_mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA05B39167363A13F814BD56 /* SwiftRadioPlayer_tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftRadioPlayer_tvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		5A025BE5F61B9487FAB69938 /* SwiftRadioPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				4FA0420730ED6A68A5F53F6C /* FRadioAPI.swift */,
+				7A33975E82C296004FBFCD4B /* Reachability.swift */,
+				1B7DEE4AB91E6E158B1659E0 /* SwiftRadioPlayer.swift */,
+			);
+			name = SwiftRadioPlayer;
+			path = Sources/SwiftRadioPlayer;
+			sourceTree = "<group>";
+		};
+		5AE9E164015B646146FD3CB2 = {
+			isa = PBXGroup;
+			children = (
+				5A025BE5F61B9487FAB69938 /* SwiftRadioPlayer */,
+				973793796964ECF54C3189CE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		973793796964ECF54C3189CE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B522A5BC710885159DEA95F7 /* SwiftRadioPlayer_mac.framework */,
+				CA05B39167363A13F814BD56 /* SwiftRadioPlayer_tvOS.framework */,
+				A6061AB427C815EEAEEE40AB /* SwiftRadioPlayer.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		146A72EE52B413828F7CE3E4 /* SwiftRadioPlayer_mac_macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D2842B678DE2F8FEFE4C4F91 /* Build configuration list for PBXNativeTarget "SwiftRadioPlayer_mac_macOS" */;
+			buildPhases = (
+				EFB1BDD435888869E7C1CB05 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftRadioPlayer_mac_macOS;
+			packageProductDependencies = (
+			);
+			productName = SwiftRadioPlayer_mac_macOS;
+			productReference = B522A5BC710885159DEA95F7 /* SwiftRadioPlayer_mac.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		4E68158963C86B5EC2B3A798 /* SwiftRadioPlayer_tvOS_tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EC48B6A178B36921BA6D43A1 /* Build configuration list for PBXNativeTarget "SwiftRadioPlayer_tvOS_tvOS" */;
+			buildPhases = (
+				42F6FFD3D908FDD13F68F47D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftRadioPlayer_tvOS_tvOS;
+			packageProductDependencies = (
+			);
+			productName = SwiftRadioPlayer_tvOS_tvOS;
+			productReference = CA05B39167363A13F814BD56 /* SwiftRadioPlayer_tvOS.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		9952464010CB56B2F53F5AC8 /* SwiftRadioPlayer_iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 32F9247DF643EEAAB40802F7 /* Build configuration list for PBXNativeTarget "SwiftRadioPlayer_iOS" */;
+			buildPhases = (
+				2F8528B2C2946F2103E11D25 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftRadioPlayer_iOS;
+			packageProductDependencies = (
+			);
+			productName = SwiftRadioPlayer_iOS;
+			productReference = A6061AB427C815EEAEEE40AB /* SwiftRadioPlayer.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8D145DB52E35B5D4889E40EE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 0587EA0BB54B629467C84D7F /* Build configuration list for PBXProject "SwiftRadioPlayer" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 5AE9E164015B646146FD3CB2;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 54;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9952464010CB56B2F53F5AC8 /* SwiftRadioPlayer_iOS */,
+				146A72EE52B413828F7CE3E4 /* SwiftRadioPlayer_mac_macOS */,
+				4E68158963C86B5EC2B3A798 /* SwiftRadioPlayer_tvOS_tvOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2F8528B2C2946F2103E11D25 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				88CC1FBA26F0AEBDAE5C059A /* FRadioAPI.swift in Sources */,
+				CF0B550787ED266277DDCF92 /* Reachability.swift in Sources */,
+				E3357EBA28AEADEBE4DFC380 /* SwiftRadioPlayer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		42F6FFD3D908FDD13F68F47D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A83BCC0BA5D56269E9FBF2CB /* FRadioAPI.swift in Sources */,
+				17840497CCA9E1F5451A683E /* Reachability.swift in Sources */,
+				E01E712565214B3AF63D8780 /* SwiftRadioPlayer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EFB1BDD435888869E7C1CB05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9F87BCF4429071F9536F6414 /* FRadioAPI.swift in Sources */,
+				7D76D344D6E5A2738AB1FC1E /* Reachability.swift in Sources */,
+				3B6A70BE5A795000DDBE175C /* SwiftRadioPlayer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		3E8048A2CA8E80013B45E6EE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CarthageInfo.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.flyingpingu.SwiftRadioPlayer-mac-macOS";
+				PRODUCT_NAME = SwiftRadioPlayer_mac;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		4C5569B6DCFB0BF8E4C38423 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CarthageInfo.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.flyingpingu.SwiftRadioPlayer-iOS";
+				PRODUCT_NAME = SwiftRadioPlayer;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		96E9683A4F2B11A9B5952530 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CarthageInfo.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.flyingpingu.SwiftRadioPlayer-mac-macOS";
+				PRODUCT_NAME = SwiftRadioPlayer_mac;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		9D41D76E4309033066C8629E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CarthageInfo.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.flyingpingu.SwiftRadioPlayer-tvOS-tvOS";
+				PRODUCT_NAME = SwiftRadioPlayer_tvOS;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		9F6ECEF9266AFE84DABD35AC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+		D488206287AD7BFADDB7224C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TVOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		EAD251FF635A0C101C501E73 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CarthageInfo.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.flyingpingu.SwiftRadioPlayer-iOS";
+				PRODUCT_NAME = SwiftRadioPlayer;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		FCE858C4DBE09DE1CCD7FC6E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CarthageInfo.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.flyingpingu.SwiftRadioPlayer-tvOS-tvOS";
+				PRODUCT_NAME = SwiftRadioPlayer_tvOS;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0587EA0BB54B629467C84D7F /* Build configuration list for PBXProject "SwiftRadioPlayer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D488206287AD7BFADDB7224C /* Debug */,
+				9F6ECEF9266AFE84DABD35AC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		32F9247DF643EEAAB40802F7 /* Build configuration list for PBXNativeTarget "SwiftRadioPlayer_iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EAD251FF635A0C101C501E73 /* Debug */,
+				4C5569B6DCFB0BF8E4C38423 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D2842B678DE2F8FEFE4C4F91 /* Build configuration list for PBXNativeTarget "SwiftRadioPlayer_mac_macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3E8048A2CA8E80013B45E6EE /* Debug */,
+				96E9683A4F2B11A9B5952530 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EC48B6A178B36921BA6D43A1 /* Build configuration list for PBXNativeTarget "SwiftRadioPlayer_tvOS_tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9D41D76E4309033066C8629E /* Debug */,
+				FCE858C4DBE09DE1CCD7FC6E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8D145DB52E35B5D4889E40EE /* Project object */;
+}

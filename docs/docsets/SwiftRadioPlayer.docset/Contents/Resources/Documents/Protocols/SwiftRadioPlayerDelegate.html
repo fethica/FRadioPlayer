@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SwiftRadioPlayerDelegate Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/SwiftRadioPlayerDelegate" class="dashAnchor"></a>
+    <a title="SwiftRadioPlayerDelegate Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">SwiftRadioPlayer Docs</a> (100% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">SwiftRadioPlayer Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        SwiftRadioPlayerDelegate Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/SwiftRadioPlayer.html">SwiftRadioPlayer</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/FRadioPlaybackState.html">FRadioPlaybackState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SwiftRadioPlayerState.html">SwiftRadioPlayerState</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/SwiftRadioPlayerDelegate.html">SwiftRadioPlayerDelegate</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>SwiftRadioPlayerDelegate</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">@objc</span> <span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">SwiftRadioPlayerDelegate</span><span class="p">:</span> <span class="kd">class</span></code></pre>
+
+                </div>
+              </div>
+            <p>The <code>SwiftRadioPlayerDelegate</code> protocol defines methods you can implement to respond to playback events associated with an <code><a href="../Classes/SwiftRadioPlayer.html">SwiftRadioPlayer</a></code> object.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@SwiftRadioPlayer@objc(pl)SwiftRadioPlayerDelegate(im)radioPlayer:playerStateDidChange:"></a>
+                    <a name="//apple_ref/swift/Method/radioPlayer(_:playerStateDidChange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@SwiftRadioPlayer@objc(pl)SwiftRadioPlayerDelegate(im)radioPlayer:playerStateDidChange:">radioPlayer(_:playerStateDidChange:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when player changes state</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt"><a href="../Classes/SwiftRadioPlayer.html">SwiftRadioPlayer</a></span><span class="p">,</span> <span class="n">playerStateDidChange</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Enums/SwiftRadioPlayerState.html">SwiftRadioPlayerState</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>player</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>SwiftRadioPlayer</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>state</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>SwiftRadioPlayerState</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@SwiftRadioPlayer@objc(pl)SwiftRadioPlayerDelegate(im)radioPlayer:playbackStateDidChange:"></a>
+                    <a name="//apple_ref/swift/Method/radioPlayer(_:playbackStateDidChange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@SwiftRadioPlayer@objc(pl)SwiftRadioPlayerDelegate(im)radioPlayer:playbackStateDidChange:">radioPlayer(_:playbackStateDidChange:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the player changes the playing state</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt"><a href="../Classes/SwiftRadioPlayer.html">SwiftRadioPlayer</a></span><span class="p">,</span> <span class="n">playbackStateDidChange</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Enums/FRadioPlaybackState.html">FRadioPlaybackState</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>player</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>SwiftRadioPlayer</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>state</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>FRadioPlaybackState</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@SwiftRadioPlayer@objc(pl)SwiftRadioPlayerDelegate(im)radioPlayer:itemDidChange:"></a>
+                    <a name="//apple_ref/swift/Method/radioPlayer(_:itemDidChange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@SwiftRadioPlayer@objc(pl)SwiftRadioPlayerDelegate(im)radioPlayer:itemDidChange:">radioPlayer(_:itemDidChange:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when player changes the current player item</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">@objc</span> <span class="kd">optional</span> <span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt"><a href="../Classes/SwiftRadioPlayer.html">SwiftRadioPlayer</a></span><span class="p">,</span> <span class="n">itemDidChange</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>player</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>SwiftRadioPlayer</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>url</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Radio URL</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@SwiftRadioPlayer@objc(pl)SwiftRadioPlayerDelegate(im)radioPlayer:metadataDidChange:trackName:"></a>
+                    <a name="//apple_ref/swift/Method/radioPlayer(_:metadataDidChange:trackName:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@SwiftRadioPlayer@objc(pl)SwiftRadioPlayerDelegate(im)radioPlayer:metadataDidChange:trackName:">radioPlayer(_:metadataDidChange:trackName:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when player item changes the timed metadata value, it uses (separatedBy: <q>-</q>) to get the artist/song name, if you want more control over the raw metadata, consider using <code>metadataDidChange rawValue</code> instead</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">@objc</span> <span class="kd">optional</span> <span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt"><a href="../Classes/SwiftRadioPlayer.html">SwiftRadioPlayer</a></span><span class="p">,</span> <span class="n">metadataDidChange</span> <span class="nv">artistName</span><span class="p">:</span> <span class="kt">String</span><span class="p">?,</span> <span class="nv">trackName</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>player</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>SwiftRadioPlayer</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>artistName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The artist name</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>trackName</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The track name</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@SwiftRadioPlayer@objc(pl)SwiftRadioPlayerDelegate(im)radioPlayer:metadataDidChange:"></a>
+                    <a name="//apple_ref/swift/Method/radioPlayer(_:metadataDidChange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@SwiftRadioPlayer@objc(pl)SwiftRadioPlayerDelegate(im)radioPlayer:metadataDidChange:">radioPlayer(_:metadataDidChange:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when player item changes the timed metadata value</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">@objc</span> <span class="kd">optional</span> <span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt"><a href="../Classes/SwiftRadioPlayer.html">SwiftRadioPlayer</a></span><span class="p">,</span> <span class="n">metadataDidChange</span> <span class="nv">rawValue</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>player</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>SwiftRadioPlayer</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>rawValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>metadata raw value</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/c:@M@SwiftRadioPlayer@objc(pl)SwiftRadioPlayerDelegate(im)radioPlayer:artworkDidChange:"></a>
+                    <a name="//apple_ref/swift/Method/radioPlayer(_:artworkDidChange:)" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@SwiftRadioPlayer@objc(pl)SwiftRadioPlayerDelegate(im)radioPlayer:artworkDidChange:">radioPlayer(_:artworkDidChange:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Called when the player gets the artwork for the playing song</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">@objc</span> <span class="kd">optional</span> <span class="kd">func</span> <span class="nf">radioPlayer</span><span class="p">(</span><span class="n">_</span> <span class="nv">player</span><span class="p">:</span> <span class="kt"><a href="../Classes/SwiftRadioPlayer.html">SwiftRadioPlayer</a></span><span class="p">,</span> <span class="n">artworkDidChange</span> <span class="nv">artworkURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>player</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>SwiftRadioPlayer</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>artworkURL</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>URL for the artwork from iTunes</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2018 <a class="link" href="https://fethica.com" target="_blank" rel="external">Fethi El Hassasna</a>. All rights reserved. (Last updated: 2018-01-03)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

@@ -1,29 +1,29 @@
-name: FRadioPlayer
+name: SwiftRadioPlayer
 options:
-  bundleIdPrefix: com.fethica
+  bundleIdPrefix: com.flyingpingu
   deploymentTarget:
     iOS: 10.0
     macOS: 10.12
     tvOS: 10.0
 targets:
-  FRadioPlayer:
+  SwiftRadioPlayer:
     type: framework
     platform: [iOS]
-    sources: Sources/FRadioPlayer
+    sources: Sources/SwiftRadioPlayer
     scheme: {}
     settings:
       INFOPLIST_FILE: CarthageInfo.plist
-  FRadioPlayer_mac:
+  SwiftRadioPlayer_mac:
     type: framework
     platform: [macOS]
-    sources: Sources/FRadioPlayer
+    sources: Sources/SwiftRadioPlayer
     scheme: {}
     settings:
       INFOPLIST_FILE: CarthageInfo.plist
-  FRadioPlayer_tvOS:
+  SwiftRadioPlayer_tvOS:
     type: framework
     platform: [tvOS]
-    sources: Sources/FRadioPlayer
+    sources: Sources/SwiftRadioPlayer
     scheme: {}
     settings:
       INFOPLIST_FILE: CarthageInfo.plist
