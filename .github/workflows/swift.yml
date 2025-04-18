@@ -1,4 +1,4 @@
-name: Swift
+name: CI
 
 on:
   push:
@@ -8,12 +8,36 @@ on:
 
 jobs:
   build:
-
     runs-on: macos-latest
+
+    strategy:
+      matrix:
+        destination:
+          - "platform=iOS Simulator,name=iPhone 12 Pro,OS=14.2"
+          - "platform=tvOS Simulator,name=Apple TV,OS=14.2"
+        scheme:
+          - SwiftRadioPlayer-Example
+          - SwiftRadioPlayer_tvOS
+        sdk:
+          - iphonesimulator14.2
+          - appletvsimulator14.2
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build
-      run: swift build -v
-    - name: Run tests
-      run: swift test -v
+
+    - name: Install CocoaPods
+      run: |
+        gem install cocoapods
+        pod install --project-directory=Example
+
+    - name: Build and Test
+      run: |
+        set -o pipefail && xcodebuild \
+          -workspace Example/SwiftRadioPlayer.xcworkspace \
+          -scheme ${{ matrix.scheme }} \
+          -sdk ${{ matrix.sdk }} \
+          -destination "${{ matrix.destination }}" \
+          -configuration Debug ONLY_ACTIVE_ARCH=NO build | xcpretty -c
+
+    - name: Validate Podspec
+      run: pod lib lint --quick
