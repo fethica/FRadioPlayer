@@ -28,7 +28,7 @@ open FRadioPlayerDemo.xcodeproj
 - [x] Automatic handling of interruptions
 - [x] Automatic handling of route changes
 - [x] Support bluetooth playback
-- [x] Swift 5
+- [x] Swift 5.5+
 - [x] Network interruptions handling
 - [x] Support for macOS
 - [x] Support for tvOS
@@ -40,8 +40,8 @@ open FRadioPlayerDemo.xcodeproj
 - macOS 10.12+
 - iOS 10.0+
 - tvOS 10.0+
-- Xcode 10.2+
-- Swift 5
+- Xcode 13+
+- Swift 5.5+
 
 ## Installation
 
