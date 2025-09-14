@@ -1,0 +1,30 @@
+name: Demo
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build-demo:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: |
+          brew update
+          brew install xcodegen
+      - name: Generate demo project
+        working-directory: Example
+        run: xcodegen
+      - name: Build demo (iOS Simulator)
+        run: |
+          xcodebuild \
+            -project Example/FRadioPlayerDemo.xcodeproj \
+            -scheme FRadioPlayerDemo \
+            -sdk iphonesimulator \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+

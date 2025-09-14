@@ -17,4 +17,5 @@ targets:
     settings:
       INFOPLIST_FILE: FRadioPlayerDemo/Info.plist
       PRODUCT_BUNDLE_IDENTIFIER: com.fethica.fradioplayerdemo
-    scheme: {}
+    scheme:
+      shared: true

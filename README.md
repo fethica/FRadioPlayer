@@ -4,7 +4,8 @@
 
 # FRadioPlayer
 
-[![CI Status](https://github.com/fethica/FRadioPlayer/workflows/Swift/badge.svg)](https://github.com/fethica/FRadioPlayer/actions?query=workflow%3ASwift)
+[![SPM](https://github.com/fethica/FRadioPlayer/actions/workflows/spm.yml/badge.svg)](https://github.com/fethica/FRadioPlayer/actions/workflows/spm.yml)
+[![Demo](https://github.com/fethica/FRadioPlayer/actions/workflows/demo.yml/badge.svg)](https://github.com/fethica/FRadioPlayer/actions/workflows/demo.yml)
 
 FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
 
