@@ -10,7 +10,16 @@ FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
 
 ## Example
 
-Sample apps live under `Example/` for reference. The package itself builds and tests via Swift Package Manager.
+SwiftUI demo source lives under `Example/FRadioPlayerDemo/`.
+
+Use XcodeGen to generate and open the demo project:
+
+```sh
+brew install xcodegen    # once
+cd Example
+xcodegen                 # generates FRadioPlayerDemo.xcodeproj
+open FRadioPlayerDemo.xcodeproj
+```
 
 ## Features
 - [x] Support internet radio URL playback
