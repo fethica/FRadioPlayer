@@ -20,7 +20,6 @@ Sample apps live under `Example/` for reference. The package itself builds and t
 - [x] Automatic handling of route changes
 - [x] Support bluetooth playback
 - [x] Swift 5
-- [x] [Full documentation](https://fethica.github.io/FRadioPlayer/)
 - [x] Network interruptions handling
 - [x] Support for macOS
 - [x] Support for tvOS
