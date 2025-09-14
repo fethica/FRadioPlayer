@@ -1,5 +1,5 @@
 //
-//  Copyright © 2018 CocoaPods. All rights reserved.
+//  Copyright © 2018 FRadioPlayer Contributors. All rights reserved.
 //
 
 import UIKit
@@ -39,4 +39,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
-

@@ -1,6 +1,6 @@
 //
 //  FRadioPlayerObserver.swift
-//  Pods
+//  FRadioPlayer
 //
 //  Created by Fethi El Hassasna on 2021-10-10.
 //

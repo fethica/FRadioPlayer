@@ -3,7 +3,7 @@
 //  FRadioPlayer_tvOS
 //
 //  Created by Stefan Brighiu on 11/30/18.
-//  Copyright © 2018 CocoaPods. All rights reserved.
+//  Copyright © 2018 FRadioPlayer Contributors. All rights reserved.
 //
 
 import UIKit

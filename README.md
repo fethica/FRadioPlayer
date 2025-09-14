@@ -5,20 +5,12 @@
 # FRadioPlayer
 
 [![CI Status](https://github.com/fethica/FRadioPlayer/workflows/Swift/badge.svg)](https://github.com/fethica/FRadioPlayer/actions?query=workflow%3ASwift)
-[![CI Status](http://img.shields.io/travis/fethica/FRadioPlayer.svg?style=flat)](https://travis-ci.org/fethica/FRadioPlayer)
-[![Version](https://img.shields.io/cocoapods/v/FRadioPlayer.svg?style=flat)](http://cocoapods.org/pods/FRadioPlayer)
-[![License](https://img.shields.io/cocoapods/l/FRadioPlayer.svg?style=flat)](http://cocoapods.org/pods/FRadioPlayer)
-[![Platform](https://img.shields.io/cocoapods/p/FRadioPlayer.svg?style=flat)](http://cocoapods.org/pods/FRadioPlayer)
 
 FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
 
 ## Example
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-<p align="center">
-    <img alt="FRadioPlayer" src="https://fethica.com/assets/img/web/fradioplayer-example.png" width="485">
-</p>
+Sample apps live under `Example/` for reference. The package itself builds and tests via Swift Package Manager.
 
 ## Features
 - [x] Support internet radio URL playback
@@ -30,7 +22,6 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 - [x] Swift 5
 - [x] [Full documentation](https://fethica.github.io/FRadioPlayer/)
 - [x] Network interruptions handling
-- [x] Support for Carthage
 - [x] Support for macOS
 - [x] Support for tvOS
 - [x] Support for Swift Package Manager SPM
@@ -46,26 +37,9 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Installation
 
-### CocoaPods
-
-FRadioPlayer is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-```ruby
-pod 'FRadioPlayer'
-```
-
-### Carthage
-
-FRadioPlayer is available through [Carthage](https://github.com/Carthage/Carthage). To install it, simply add the following line to your Cartfile:
-
-```text
-github "fethica/FRadioPlayer" ~> 0.1.10
-```
-
 ### Swift Package Manager
 
-FRadioPlayer is available through [SPM](https://github.com/apple/swift-package-manager). To install it, simply add the following dependency to your `Package.swift` file:
+FRadioPlayer is available through [SPM](https://github.com/apple/swift-package-manager). To add it in Xcode: File > Add Packages… and use the URL of this repository. Or add the dependency in `Package.swift`:
 
 ```text
 .package(url: "https://github.com/fethica/FRadioPlayer.git", from: "0.1.18")
@@ -79,7 +53,7 @@ Drag the `Source` folder into your project.
 
 ### Basics
 
-1. Import `FRadioPlayer` (if you are using Cocoapods)
+1. Import `FRadioPlayer`
 
 ```swift
 import FRadioPlayer
@@ -180,13 +154,13 @@ For more complete app features, check out [Swift Radio App](https://github.com/a
     <img alt="Swift Radio" src="https://fethica.com/assets/img/web/swift-radio.jpg">
 </p>
 
-## Hacking
+## Development
 
-The Xcode project is generated automatically from `project.yml` using [XcodeGen](https://github.com/yonaskolb/XcodeGen). It's only checked in because Carthage needs it, do not edit it manually.
+This repository uses Swift Package Manager for building and testing:
 
 ```sh
-$ mint run yonaskolb/xcodegen
-💾  Saved project to FRadioPlayer.xcodeproj
+swift build
+swift test
 ```
 
 ## Author

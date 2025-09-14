@@ -3,7 +3,7 @@
 //  FRadioPlayer_SwiftUI
 //
 //  Created by Fethi El Hassasna on 2020-12-09.
-//  Copyright © 2020 CocoaPods. All rights reserved.
+//  Copyright © 2020 FRadioPlayer Contributors. All rights reserved.
 //
 
 import SwiftUI

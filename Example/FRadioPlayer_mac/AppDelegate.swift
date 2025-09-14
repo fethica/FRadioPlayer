@@ -3,7 +3,7 @@
 //  FRadioPlayer_mac
 //
 //  Created by Aleksandr Bobrov on 11/26/18.
-//  Copyright © 2018 CocoaPods. All rights reserved.
+//  Copyright © 2018 FRadioPlayer Contributors. All rights reserved.
 //
 
 import Cocoa
@@ -23,4 +23,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 
 }
-
