@@ -1,0 +1,22 @@
+name: FRadioPlayerDemo
+options:
+  deploymentTarget:
+    iOS: 15.0
+packages:
+  FRadioPlayer:
+    path: ../
+targets:
+  FRadioPlayerDemo:
+    type: application
+    platform: iOS
+    sources:
+      - path: FRadioPlayerDemo
+    dependencies:
+      - package: FRadioPlayer
+        product: FRadioPlayer
+    settings:
+      INFOPLIST_FILE: FRadioPlayerDemo/Info.plist
+      PRODUCT_BUNDLE_IDENTIFIER: com.fethica.fradioplayerdemo
+      SWIFT_VERSION: 5.5
+    scheme:
+      shared: true

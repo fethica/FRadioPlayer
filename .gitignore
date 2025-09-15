@@ -40,24 +40,8 @@ playground.xcworkspace
 # Package.resolved
 .build/
 
-# CocoaPods
-#
-# We recommend against adding the Pods directory to your .gitignore. However
-# you should judge for yourself, the pros and cons are mentioned at:
-# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
-
-Pods/
-Example/Podfile.lock
-
-# Add this line if you want to avoid checking in source code from the Xcode workspace
+# Xcode workspaces (rarely needed without CocoaPods)
 *.xcworkspace
-
-# Carthage
-#
-# Add this line if you want to avoid checking in source code from Carthage dependencies.
-# Carthage/Checkouts
-
-Carthage/Build
 
 # fastlane
 #
@@ -84,3 +68,11 @@ iOSInjectionProject/
 
 generated
 
+# Swift Package Manager
+.swiftpm/
+
+# Generated demo project (XcodeGen)
+Example/FRadioPlayerDemo.xcodeproj/
+
+# Local docs (generated elsewhere)
+docs/
