@@ -14,11 +14,22 @@ struct NowPlayingView: View {
     
     var body: some View {
         HStack {
-            Image(uiImage: radioPlayer.radio.track.image ?? #imageLiteral(resourceName: "albumArt"))
-                .resizable()
-                .foregroundColor(Color.secondary)
+            if let url = radioPlayer.radio.artworkURL {
+                AsyncImage(url: url) { image in
+                    image.resizable()
+                } placeholder: {
+                    Image(radioPlayer.radio.currentStationImageName ?? "albumArt").resizable()
+                }
                 .scaledToFit()
                 .frame(width: 50, height: 50)
+                .cornerRadius(6)
+            } else {
+                Image(radioPlayer.radio.currentStationImageName ?? "albumArt")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(6)
+            }
             
             VStack(alignment: .leading, spacing: 8, content: {
                 

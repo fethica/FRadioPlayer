@@ -28,6 +28,8 @@ struct Radio {
     var playbackState = FRadioPlayer.PlaybackState.stopped
     var url: URL? = nil
     var rawMetadata: String? = nil
+    var artworkURL: URL? = nil
+    var currentStationImageName: String? = nil
 }
 
 class RadioPlayer: ObservableObject {
@@ -38,25 +40,24 @@ class RadioPlayer: ObservableObject {
     let player: FRadioPlayer
     
     // List of stations
-    var stations = [Station(name: "AZ Rock Radio",
-                            detail: "We Know Music from A to Z",
-                            url: URL(string: "http://cassini.shoutca.st:9300/stream")!,
-                            image: #imageLiteral(resourceName: "station4")),
-                    
-                    Station(name: "Metal PR",
-                            detail: "El Lechón Atómico",
-                            url: URL(string: "http://199.195.194.140:8026/live")!,
-                            image: #imageLiteral(resourceName: "station5")),
-                    
-                    Station(name: "Chillout",
-                            detail: "Your Lifestyle... Your Music!",
-                            url: URL(string: "http://ic7.101.ru:8000/c15_3")!,
-                            image: #imageLiteral(resourceName: "albumArt")),
-                    
-                    Station(name: "Absolute Country Hits Radio",
-                            detail: "The Music Starts Here",
-                            url: URL(string: "http:strm112.1.fm/acountry_mobile_mp3")!,
-                            image: #imageLiteral(resourceName: "station1"))]
+    var stations = [
+        Station(name: "AZ Rock Radio",
+                detail: "We Know Music from A to Z",
+                url: URL(string: "http://cassini.shoutca.st:9300/stream")!,
+                imageName: "station4"),
+        Station(name: "The Rock FM",
+                detail: "NZ's number one Rock music station.",
+                url: URL(string: "https://20593.live.streamtheworld.com/CKGEFMAAC.aac")!,
+                imageName: "station6"),
+        Station(name: "Classic Rock",
+                detail: "Your Lifestyle... Your Music!",
+                url: URL(string: "https://rfcm.streamguys1.com/classicrock-mp3")!,
+                imageName: "station7"),
+        Station(name: "Absolute Country Hits Radio",
+                detail: "The Music Starts Here",
+                url: URL(string: "http://strm112.1.fm/acountry_mobile_mp3")!,
+                imageName: "station1")
+    ]
     
     var currentIndex = 0 {
         didSet {
@@ -76,6 +77,8 @@ class RadioPlayer: ObservableObject {
         self.player.addObserver(self)
         self.player.artworkAPI = iTunesAPI(artworkSize: 500)
         self.player.isAutoPlay = true
+        self.player.isPlayImmediately = false
+        self.player.httpHeaderFields = ["User-Agent": "FRadioPlayerDemo/0.2.1"]
         
         setupRemoteTransportControls()
     }
@@ -84,7 +87,9 @@ class RadioPlayer: ObservableObject {
     
     private func stationDidChange(station: Station) {
         player.radioURL = station.url
-        radio.track = Track(artist: station.detail, name: station.name, image: station.image)
+        radio.track = Track(artist: station.detail, name: station.name)
+        radio.currentStationImageName = station.imageName
+        radio.artworkURL = nil
     }
 }
 
@@ -96,10 +101,12 @@ extension RadioPlayer: FRadioPlayerObserver {
     
     func radioPlayer(_ player: FRadioPlayer, playbackStateDidChange state: FRadioPlayer.PlaybackState) {
         radio.playbackState = state
+        updateNowPlayingPlayback()
     }
     
     func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?) {
         radio.url = url
+        updateNowPlayingUI(with: radio)
     }
     
     func radioPlayer(_ player: FRadioPlayer, metadataDidChange metadata: FRadioPlayer.Metadata?) {
@@ -112,16 +119,24 @@ extension RadioPlayer: FRadioPlayerObserver {
         
         radio.track.artist = artistName
         radio.track.name = trackName
+        updateNowPlayingUI(with: radio)
     }
     
     func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?) {
-        // Please note that the following example is for demonstration purposes only, consider using asynchronous network calls to set the image from a URL.
-        guard let artworkURL = artworkURL, let data = try? Data(contentsOf: artworkURL), let image = UIImage(data: data) else {
-            radio.track.image = stations[currentIndex].image
+        radio.artworkURL = artworkURL
+        guard let url = artworkURL else {
+            setNowPlayingArtwork(nil)
             return
         }
-        
-        radio.track.image = image
+        Task {
+            do {
+                let (data, _) = try await URLSession.shared.data(from: url)
+                let image = UIImage(data: data)
+                await MainActor.run { self.setNowPlayingArtwork(image) }
+            } catch {
+                await MainActor.run { self.setNowPlayingArtwork(nil) }
+            }
+        }
     }
 }
 
@@ -165,23 +180,32 @@ extension RadioPlayer {
     }
     
     func updateNowPlayingUI(with radio: Radio) {
-        
-        // Now Playing Info
-        var nowPlayingInfo = [String : Any]()
-        
-        if let artist = radio.track.artist {
-            nowPlayingInfo[MPMediaItemPropertyArtist] = artist
+        var info = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
+        if let artist = radio.track.artist { info[MPMediaItemPropertyArtist] = artist }
+        if let title = radio.track.name { info[MPMediaItemPropertyTitle] = title }
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+    }
+
+    private func setNowPlayingArtwork(_ image: UIImage?) {
+        var info = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
+        if let image = image {
+            info[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size, requestHandler: { _ in image })
+        } else {
+            info.removeValue(forKey: MPMediaItemPropertyArtwork)
         }
-        
-        nowPlayingInfo[MPMediaItemPropertyTitle] = radio.track.name
-        
-        if let image = radio.track.image {
-            nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(boundsSize: image.size, requestHandler: { _ -> UIImage in
-                return image
-            })
-        }
-        
-        // Set the metadata
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+    }
+
+    private func updateNowPlayingPlayback() {
+        var info = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [:]
+        // Playback rate: 1.0 when playing, 0 when paused/stopped
+        let rate: Double = (radio.playbackState == .playing) ? 1.0 : 0.0
+        info[MPNowPlayingInfoPropertyPlaybackRate] = rate
+        // Elapsed time and duration
+        info[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.currentTime
+        info[MPMediaItemPropertyPlaybackDuration] = player.duration
+        info[MPNowPlayingInfoPropertyIsLiveStream] = (player.duration == 0)
+        info[MPNowPlayingInfoPropertyMediaType] = MPNowPlayingInfoMediaType.audio.rawValue
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
     }
 }

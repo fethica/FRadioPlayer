@@ -1,7 +1,7 @@
 name: FRadioPlayerDemo
 options:
   deploymentTarget:
-    iOS: 14.0
+    iOS: 15.0
 packages:
   FRadioPlayer:
     path: ../
@@ -17,5 +17,6 @@ targets:
     settings:
       INFOPLIST_FILE: FRadioPlayerDemo/Info.plist
       PRODUCT_BUNDLE_IDENTIFIER: com.fethica.fradioplayerdemo
+      SWIFT_VERSION: 5.5
     scheme:
       shared: true
