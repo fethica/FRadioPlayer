@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 // MARK: - iTunes API
 public struct iTunesAPI: FRadioArtworkAPI {
