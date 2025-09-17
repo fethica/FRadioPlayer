@@ -37,7 +37,7 @@ open FRadioPlayerDemo.xcodeproj
 
 ## Requirements
 - macOS 10.12+
-- iOS 10.0+
+- iOS 15.0+
 - tvOS 10.0+
 - Xcode 13+
 - Swift 5.5+
