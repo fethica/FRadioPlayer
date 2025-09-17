@@ -176,9 +176,9 @@ open class FRadioPlayer: NSObject {
         #if !os(macOS)
         let options: AVAudioSession.CategoryOptions
 
-        // Enable bluetooth playback
+        // Enable AirPlay and Bluetooth A2DP for playback
         #if os(iOS)
-        options = [.defaultToSpeaker, .allowBluetooth, .allowAirPlay]
+        options = [.allowAirPlay, .allowBluetoothA2DP]
         #else
         options = []
         #endif
