@@ -178,7 +178,7 @@ open class FRadioPlayer: NSObject {
 
         // Enable bluetooth playback
         #if os(iOS)
-        options = [.defaultToSpeaker, .allowBluetooth, .allowAirPlay]
+        options = [.defaultToSpeaker, .allowBluetoothHFP, .allowAirPlay]
         #else
         options = []
         #endif
