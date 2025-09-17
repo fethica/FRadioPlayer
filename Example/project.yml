@@ -11,6 +11,9 @@ targets:
     platform: iOS
     sources:
       - path: FRadioPlayerDemo
+    capabilities:
+      background-modes:
+        - audio
     dependencies:
       - package: FRadioPlayer
         product: FRadioPlayer
