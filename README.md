@@ -29,18 +29,15 @@ open FRadioPlayerDemo.xcodeproj
 - [x] Automatic handling of interruptions
 - [x] Automatic handling of route changes
 - [x] Support bluetooth playback
-- [x] Swift 5.5+
 - [x] Network interruptions handling
 - [x] Support for Swift Package Manager SPM
-- [ ] Support for Audio Taps
-- [ ] Support for Audio Recording
 
 ## Requirements
-- macOS 10.12+
-- iOS 15.0+
-- tvOS 10.0+
-- Xcode 13+
-- Swift 5.5+
+- iOS 14.0+
+- macOS 11.0+
+- tvOS 14.0+
+- Xcode 15+
+- Swift 5.9+
 
 ## Installation
 
@@ -48,8 +45,8 @@ open FRadioPlayerDemo.xcodeproj
 
 FRadioPlayer is available through [SPM](https://github.com/apple/swift-package-manager). To add it in Xcode: File > Add Packages… and use the URL of this repository. Or add the dependency in `Package.swift`:
 
-```text
-.package(url: "https://github.com/fethica/FRadioPlayer.git", branch: "main")
+```swift
+.package(url: "https://github.com/fethica/FRadioPlayer.git", from: "0.2.3")
 ```
 
 ## Quick Start
