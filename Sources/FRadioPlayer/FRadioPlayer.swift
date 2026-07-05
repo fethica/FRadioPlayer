@@ -98,6 +98,7 @@ open class FRadioPlayer: NSObject {
     /// Current artwork URL value of type `URL`
     open private(set) var currentArtworkURL: URL? = nil {
         didSet {
+            guard oldValue != currentArtworkURL else { return }
             artworkChange(url: currentArtworkURL)
         }
     }
@@ -285,6 +286,10 @@ open class FRadioPlayer: NSObject {
     
     private func radioURLDidChange(with url: URL?) {
         resetPlayer()
+
+        // Exactly one itemDidChange per radioURL change, after all setup work
+        defer { itemChange(with: url) }
+
         guard let url = url else { state = .urlNotSet; return }
         
         state = .loading
@@ -318,8 +323,10 @@ open class FRadioPlayer: NSObject {
         guard lastPlayerItem != playerItem else { return }
         
         if let item = lastPlayerItem {
-            pause()
-            
+            // Only pause if something was actually playing: tearing down an
+            // idle item must not emit a spurious playback state change
+            if isPlaying { pause() }
+
             NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: item)
             item.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
             item.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackBufferEmpty))
@@ -344,8 +351,6 @@ open class FRadioPlayer: NSObject {
             player?.replaceCurrentItem(with: item)
             if isAutoPlay { play() }
         }
-        
-        itemChange(with: radioURL)
     }
     
     private func shouldGetArtwork(for metadata: FRadioPlayer.Metadata?, _ enabled: Bool) {
@@ -377,8 +382,6 @@ open class FRadioPlayer: NSObject {
         playerItem = nil
         lastPlayerItem = nil
         player = nil
-        playerItem = nil
-        lastPlayerItem = nil
         duration = 0
         currentTime = 0
     }
