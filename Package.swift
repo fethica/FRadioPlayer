@@ -22,6 +22,7 @@ let package = Package(
             dependencies: []),
         .testTarget(
             name: "FRadioPlayerTests",
-            dependencies: ["FRadioPlayer"]),
+            dependencies: ["FRadioPlayer"],
+            resources: [.copy("Fixtures")]),
     ]
 )
