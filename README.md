@@ -30,6 +30,7 @@ open FRadioPlayerDemo.xcodeproj
 - [x] Automatic handling of route changes
 - [x] Support bluetooth playback
 - [x] Network interruptions handling
+- [x] Automatic stall recovery with bounded retries (reload with backoff, clean error state when the stream is gone)
 - [x] Support for Swift Package Manager SPM
 
 ## Requirements
@@ -46,7 +47,7 @@ open FRadioPlayerDemo.xcodeproj
 FRadioPlayer is available through [SPM](https://github.com/apple/swift-package-manager). To add it in Xcode: File > Add Packages… and use the URL of this repository. Or add the dependency in `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/fethica/FRadioPlayer.git", from: "0.2.3")
+.package(url: "https://github.com/fethica/FRadioPlayer.git", from: "0.3.0")
 ```
 
 ## Quick Start
@@ -207,6 +208,8 @@ This repository uses Swift Package Manager for building and testing:
 swift build
 swift test
 ```
+
+The test suite covers the public API contract, metadata extraction, the artwork API (stubbed, no network), playback against bundled fixtures, and state machine regressions. CI runs it on every push and pull request. Bug fixes should come with a failing test first.
 
 ## Author
 
