@@ -7,6 +7,7 @@
 //
 
 import AVFoundation
+import Network
 
 /**
  FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
@@ -145,9 +146,9 @@ open class FRadioPlayer: NSObject {
         }
     }
     
-    /// Reachability for network interruption handling
-    private let reachability = Reachability()!
-    
+    /// Network path monitor for interruption handling
+    private let pathMonitor = NWPathMonitor()
+
     /// Current network connectivity
     private var isConnected = false
     
@@ -196,10 +197,15 @@ open class FRadioPlayer: NSObject {
         checkHeadphonesConnection(outputs: AVAudioSession.sharedInstance().currentRoute.outputs)
         #endif
 
-        // Reachability config
-        try? reachability.startNotifier()
-        NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: .reachabilityChanged, object: reachability)
-        isConnected = reachability.connection != .none
+        // Network path monitoring config. The handler fires once right after
+        // start with the current path, which seeds `isConnected`; the
+        // reload check it may trigger is inert at init (playerItem is nil).
+        pathMonitor.pathUpdateHandler = { [weak self] path in
+            DispatchQueue.main.async {
+                self?.networkPathDidChange(path)
+            }
+        }
+        pathMonitor.start(queue: DispatchQueue(label: "FRadioPlayer.pathMonitor"))
         
         // Setup Metadata Output Delegate
         metadataOutput.setDelegate(self, queue: DispatchQueue.main)
@@ -379,6 +385,7 @@ open class FRadioPlayer: NSObject {
     
     deinit {
         resetPlayer()
+        pathMonitor.cancel()
         NotificationCenter.default.removeObserver(self)
     }
     
@@ -414,24 +421,23 @@ open class FRadioPlayer: NSObject {
         #endif
     }
     
-    @objc func reachabilityChanged(note: Notification) {
-        
-        guard let reachability = note.object as? Reachability else { return }
-        
-        // Check if the internet connection was lost
-        if reachability.connection != .none, !isConnected {
+    private func networkPathDidChange(_ path: NWPath) {
+        let isNowConnected = path.status == .satisfied
+
+        // Recover playback when the connection comes back after being lost
+        if isNowConnected, !isConnected {
             checkNetworkInterruption()
         }
-        
-        isConnected = reachability.connection != .none
+
+        isConnected = isNowConnected
     }
-    
+
     // Check if the playback could keep up after a network interruption
     private func checkNetworkInterruption() {
         guard
             let item = playerItem,
             !item.isPlaybackLikelyToKeepUp,
-            reachability.connection != .none else { return }
+            isConnected else { return }
         
         player?.pause()
         
