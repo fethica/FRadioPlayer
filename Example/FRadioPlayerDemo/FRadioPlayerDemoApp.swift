@@ -81,6 +81,15 @@ class RadioPlayer: ObservableObject {
         self.player.httpHeaderFields = ["User-Agent": "FRadioPlayerDemo/0.2.1"]
         
         setupRemoteTransportControls()
+        updateRemoteCommandsForStreamType()
+    }
+
+    /// Live streams get a stop button on the lock screen, on-demand gets pause
+    private func updateRemoteCommandsForStreamType() {
+        let commandCenter = MPRemoteCommandCenter.shared()
+        let isLive = player.duration == 0
+        commandCenter.pauseCommand.isEnabled = !isLive
+        commandCenter.stopCommand.isEnabled = isLive
     }
     
     // - MARK: Station did Change
@@ -92,6 +101,8 @@ class RadioPlayer: ObservableObject {
         radio.artworkURL = nil
         // Lock screen shows the station's own artwork until iTunes art arrives
         setNowPlayingArtwork(defaultStationImage())
+        // New station defaults to live (duration 0) until proven otherwise
+        updateRemoteCommandsForStreamType()
     }
 
     private func defaultStationImage() -> UIImage? {
@@ -129,6 +140,11 @@ extension RadioPlayer: FRadioPlayerObserver {
         updateNowPlayingUI(with: radio)
     }
     
+    func radioPlayer(_ player: FRadioPlayer, durationDidChange duration: TimeInterval) {
+        updateNowPlayingPlayback()
+        updateRemoteCommandsForStreamType()
+    }
+
     func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?) {
         radio.artworkURL = artworkURL
         guard let url = artworkURL else {
@@ -175,6 +191,15 @@ extension RadioPlayer {
             return .commandFailed
         }
         
+        // Add handler for Stop Command (shown for live streams instead of pause)
+        commandCenter.stopCommand.addTarget { [unowned self] event in
+            if self.player.isPlaying {
+                self.player.stop()
+                return .success
+            }
+            return .commandFailed
+        }
+
         // Add handler for Next Command
         commandCenter.nextTrackCommand.addTarget { [unowned self] event in
             self.currentIndex += 1
