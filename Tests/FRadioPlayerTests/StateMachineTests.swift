@@ -106,6 +106,50 @@ final class StateMachineTests: XCTestCase {
         XCTAssertFalse(player.isPlaying)
     }
 
+    func testPlayAfterErrorRebuildsAndRecovers() throws {
+        // Demo-pass find: after a fatal error, play() reattached the dead item
+        // (failed items are terminal per AVFoundation), so nothing played while
+        // the button showed playing. play() must rebuild from the URL instead.
+        final class StateWaiter: FRadioPlayerObserver {
+            var onState: ((FRadioPlayer.State) -> Void)?
+            func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayer.State) {
+                onState?(state)
+            }
+        }
+
+        let player = FRadioPlayer.shared
+        player.isAutoPlay = true
+
+        let waiter = StateWaiter()
+        player.addObserver(waiter)
+        defer { player.removeObserver(waiter) }
+
+        // Phase 1: the stream is "down" (file does not exist yet)
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("comeback-\(UUID().uuidString).wav")
+        let errored = expectation(description: "errors while down")
+        errored.assertForOverFulfill = false
+        waiter.onState = { if $0 == .error { errored.fulfill() } }
+        player.radioURL = tempURL
+        wait(for: [errored], timeout: 10)
+        XCTAssertEqual(player.playbackState, .stopped)
+
+        // Phase 2: the "stream" comes back (file now exists)
+        try Data(contentsOf: fixture).write(to: tempURL)
+        defer { try? FileManager.default.removeItem(at: tempURL) }
+
+        let recovered = expectation(description: "play() rebuilds and loads")
+        recovered.assertForOverFulfill = false
+        waiter.onState = { state in
+            if state == .readyToPlay || state == .loadingFinished { recovered.fulfill() }
+        }
+        player.play()
+        wait(for: [recovered], timeout: 10)
+
+        XCTAssertNotEqual(player.state, .error, "retry must attempt a fresh load")
+        XCTAssertEqual(player.playbackState, .playing)
+    }
+
     func testPauseCancelsPendingRecovery() {
         let player = FRadioPlayer.shared
         player.isAutoPlay = true

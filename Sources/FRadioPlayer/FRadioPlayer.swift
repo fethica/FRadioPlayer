@@ -242,11 +242,18 @@ open class FRadioPlayer: NSObject {
      
      */
     open func play() {
+        // A failed pipeline is terminal (failed AVPlayerItems can never play
+        // again): pressing play after an error rebuilds from the URL instead
+        // of reattaching the dead item
+        if state == .error, let url = radioURL {
+            rebuildPipeline(with: url)
+        }
+
         guard let player = player else { return }
         if player.currentItem == nil, playerItem != nil {
             player.replaceCurrentItem(with: playerItem)
         }
-        
+
         isPlayImmediately ? player.playImmediately(atRate: 1.0) : player.play()
         playbackState = .playing
     }
@@ -327,15 +334,21 @@ open class FRadioPlayer: NSObject {
         defer { itemChange(with: url) }
 
         guard let url = url else { state = .urlNotSet; return }
-        
+
+        rebuildPipeline(with: url)
+    }
+
+    /// Builds a fresh asset + item for the URL. Used on every radioURL change
+    /// and on play() after a fatal error (failed items cannot be reused).
+    private func rebuildPipeline(with url: URL) {
         state = .loading
-        
+
         var options: [String: Any] = [AVURLAssetPreferPreciseDurationAndTimingKey: false]
-        
+
         if let httpHeaderFields = httpHeaderFields {
             options["AVURLAssetHTTPHeaderFieldsKey"] = httpHeaderFields
         }
-        
+
         let asset = AVURLAsset(url: url, options: options)
         setupPlayer(with: asset)
     }
