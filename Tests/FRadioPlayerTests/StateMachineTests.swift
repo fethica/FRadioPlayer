@@ -75,6 +75,37 @@ final class StateMachineTests: XCTestCase {
         XCTAssertEqual(player.playbackState, .stopped)
     }
 
+    func testDeadStreamStopsPlaybackAlongsideErrorState() {
+        // Demo-pass find: a stream that fails at connect time set state to
+        // .error but left playbackState on .playing, so play buttons lied.
+        final class ErrorWaiter: FRadioPlayerObserver {
+            var onError: (() -> Void)?
+            func radioPlayer(_ player: FRadioPlayer, playerStateDidChange state: FRadioPlayer.State) {
+                if state == .error { onError?() }
+            }
+        }
+
+        let player = FRadioPlayer.shared
+        player.isAutoPlay = true
+
+        let waiter = ErrorWaiter()
+        player.addObserver(waiter)
+        defer { player.removeObserver(waiter) }
+
+        let errored = expectation(description: "player reports error")
+        errored.assertForOverFulfill = false
+        waiter.onError = { errored.fulfill() }
+
+        // A nonexistent local file fails the item deterministically, no network
+        player.radioURL = URL(fileURLWithPath: "/nonexistent-\(UUID().uuidString).wav")
+        wait(for: [errored], timeout: 10)
+
+        XCTAssertEqual(player.state, .error)
+        XCTAssertEqual(player.playbackState, .stopped,
+                       "a fatal stream error must stop playback, not leave the button on playing")
+        XCTAssertFalse(player.isPlaying)
+    }
+
     func testPauseCancelsPendingRecovery() {
         let player = FRadioPlayer.shared
         player.isAutoPlay = true

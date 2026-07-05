@@ -231,9 +231,7 @@ open class FRadioPlayer: NSObject {
             return false // success surfaces as .playing, which cancels the ladder
         }
         stallRecovery.onExhausted = { [weak self] in
-            guard let self = self else { return }
-            self.stop()
-            self.state = .error
+            self?.failPlayback()
         }
     }
     
@@ -597,10 +595,17 @@ open class FRadioPlayer: NSObject {
         case .readyToPlay:
             state = .readyToPlay
         case .failed:
-            state = .error
+            failPlayback()
         default:
             break
         }
+    }
+
+    /// A fatal playback failure: stop cleanly (releases the connection,
+    /// resets the playback state so play buttons don't lie) and report error.
+    private func failPlayback() {
+        stop()
+        state = .error
     }
 
     func itemBufferEmptyDidChange(_ item: AVPlayerItem) {
