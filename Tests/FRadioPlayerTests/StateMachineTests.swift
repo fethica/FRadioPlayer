@@ -150,6 +150,30 @@ final class StateMachineTests: XCTestCase {
         XCTAssertEqual(player.playbackState, .playing)
     }
 
+    func testStateStaysInSyncWithTimeControlOnResume() {
+        // Demo-pass find: play() after stop-during-load reattaches the item
+        // and re-buffers, but state stayed frozen on .loadingFinished during
+        // the re-load. timeControlStatus must drive the loading vocabulary.
+        let player = FRadioPlayer.shared
+        player.isAutoPlay = true
+
+        player.radioURL = fixture
+        player.stop()
+        XCTAssertEqual(player.state, .loadingFinished)
+
+        player.play()
+
+        // The player reports it is waiting: state must say loading
+        player.handleTimeControlStatus(.waitingToPlayAtSpecifiedRate)
+        XCTAssertEqual(player.state, .loading,
+                       "waiting while playback is intended must surface as loading")
+
+        // The player reports audio is flowing: loading is over
+        player.handleTimeControlStatus(.playing)
+        XCTAssertEqual(player.state, .loadingFinished,
+                       "audio flowing while state says loading is out of sync")
+    }
+
     func testPauseCancelsPendingRecovery() {
         let player = FRadioPlayer.shared
         player.isAutoPlay = true

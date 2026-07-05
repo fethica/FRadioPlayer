@@ -490,12 +490,22 @@ open class FRadioPlayer: NSObject {
 
     private func timeControlStatusDidChange() {
         guard let player = player else { return }
+        handleTimeControlStatus(player.timeControlStatus)
+    }
 
-        switch player.timeControlStatus {
+    func handleTimeControlStatus(_ status: AVPlayer.TimeControlStatus) {
+        switch status {
         case .playing:
             didStartPlaying = true
             stallRecovery.cancel()
+            // Audio is flowing: a lingering .loading would be out of sync
+            if state == .loading { state = .loadingFinished }
         case .waitingToPlayAtSpecifiedRate:
+            // Waiting with playback intent is loading, whatever came before
+            // (keeps state in sync when a stopped item is reattached by play)
+            if playbackState == .playing, state != .error {
+                state = .loading
+            }
             // Only recover mid-playback stalls: initial buffering manages itself
             guard didStartPlaying, playbackState == .playing else { return }
             stallRecovery.start()
