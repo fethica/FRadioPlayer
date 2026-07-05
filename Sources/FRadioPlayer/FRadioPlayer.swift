@@ -285,6 +285,13 @@ open class FRadioPlayer: NSObject {
             currentArtworkURL = nil
         }
 
+        // Stopping an in-flight load detaches the item, so the loading
+        // lifecycle is over: without this, `state` freezes on .loading
+        // (a proper .stopped/.idle case in State is a v1.0 vocabulary change)
+        if state == .loading {
+            state = .loadingFinished
+        }
+
         playbackState = .stopped
     }
     

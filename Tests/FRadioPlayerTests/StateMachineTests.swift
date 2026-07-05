@@ -36,6 +36,8 @@ final class StateMachineTests: XCTestCase {
 
         XCTAssertEqual(player.playbackState, .stopped)
         XCTAssertFalse(player.isPlaying)
+        XCTAssertEqual(player.state, .loadingFinished,
+                       "stopping an in-flight load must end the loading lifecycle, not freeze it")
 
         // Readiness lands asynchronously: it must NOT resurrect playback
         let settled = expectation(description: "async readiness settled")
@@ -46,6 +48,8 @@ final class StateMachineTests: XCTestCase {
                        "readiness arriving after stop() must not restart playback")
         XCTAssertFalse(player.isPlaying)
         XCTAssertEqual(player.rate ?? 0, 0, "AVPlayer must not be advancing after stop")
+        XCTAssertNotEqual(player.state, .loading,
+                          "state must never sit on loading after a stop")
     }
 
     func testPauseCancelsPendingRecovery() {
