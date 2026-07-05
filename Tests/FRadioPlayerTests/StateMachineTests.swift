@@ -7,7 +7,8 @@
 //
 
 import XCTest
-import FRadioPlayer
+import AVFoundation
+@testable import FRadioPlayer
 
 final class StateMachineTests: XCTestCase {
 
@@ -50,6 +51,28 @@ final class StateMachineTests: XCTestCase {
         XCTAssertEqual(player.rate ?? 0, 0, "AVPlayer must not be advancing after stop")
         XCTAssertNotEqual(player.state, .loading,
                           "state must never sit on loading after a stop")
+    }
+
+    func testDetachedItemChurnCannotResurrectLoading() {
+        // Demo-pass repro: on real streams, the item detached by stop() keeps
+        // churning its buffer properties asynchronously; those KVO signals
+        // must not flip state back to .loading (the post-stop "blink").
+        let player = FRadioPlayer.shared
+        player.isAutoPlay = true
+        player.radioURL = fixture
+        player.stop()
+        XCTAssertEqual(player.state, .loadingFinished)
+
+        // Simulate the detached item's async churn directly on the handlers
+        let ghost = AVPlayerItem(url: fixture)
+        player.itemBufferEmptyDidChange(ghost)
+        player.itemKeepUpDidChange(ghost)
+        player.itemDurationDidChange(ghost)
+        player.itemStatusDidChange(ghost, change: nil)
+
+        XCTAssertEqual(player.state, .loadingFinished,
+                       "detached-item KVO must not drive the loading vocabulary")
+        XCTAssertEqual(player.playbackState, .stopped)
     }
 
     func testPauseCancelsPendingRecovery() {

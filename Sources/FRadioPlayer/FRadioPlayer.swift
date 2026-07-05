@@ -558,43 +558,65 @@ open class FRadioPlayer: NSObject {
         }
         
         if let item = object as? AVPlayerItem, let keyPath = keyPath, item == self.playerItem {
-            
+
             switch keyPath {
-                
             case #keyPath(AVPlayerItem.status):
-                let status: AVPlayerItem.Status
-                
-                if let statusNumber = change?[.newKey] as? NSNumber, let statusValue = AVPlayerItem.Status(rawValue: statusNumber.intValue) {
-                    status = statusValue
-                } else {
-                    status = .unknown
-                }
-                
-                switch status {
-                case .readyToPlay:
-                    self.state = .readyToPlay
-                case .failed:
-                    self.state = .error
-                default:
-                    break
-                }
-                
+                itemStatusDidChange(item, change: change)
             case #keyPath(AVPlayerItem.isPlaybackBufferEmpty):
-                if item.isPlaybackBufferEmpty {
-                    state = .loading
-                    checkNetworkInterruption()
-                }
-                
+                itemBufferEmptyDidChange(item)
             case #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp):
-                self.state = item.isPlaybackLikelyToKeepUp ? .loadingFinished : .loading
-                
+                itemKeepUpDidChange(item)
             case #keyPath(AVPlayerItem.duration):
-                durationDidChange(item.duration)
-                
+                itemDurationDidChange(item)
             default:
                 break
             }
         }
+    }
+
+    // MARK: - Item KVO handlers
+
+    /// Item KVO only drives the loading vocabulary while the item is attached
+    /// to the player: after stop() detaches an item, its asynchronous buffer
+    /// churn must not resurrect the .loading state.
+    private func isItemAttached(_ item: AVPlayerItem) -> Bool {
+        player?.currentItem === item
+    }
+
+    func itemStatusDidChange(_ item: AVPlayerItem, change: [NSKeyValueChangeKey: Any]?) {
+        guard isItemAttached(item) else { return }
+
+        let status: AVPlayerItem.Status
+        if let statusNumber = change?[.newKey] as? NSNumber, let statusValue = AVPlayerItem.Status(rawValue: statusNumber.intValue) {
+            status = statusValue
+        } else {
+            status = .unknown
+        }
+
+        switch status {
+        case .readyToPlay:
+            state = .readyToPlay
+        case .failed:
+            state = .error
+        default:
+            break
+        }
+    }
+
+    func itemBufferEmptyDidChange(_ item: AVPlayerItem) {
+        guard isItemAttached(item), item.isPlaybackBufferEmpty else { return }
+        state = .loading
+        checkNetworkInterruption()
+    }
+
+    func itemKeepUpDidChange(_ item: AVPlayerItem) {
+        guard isItemAttached(item) else { return }
+        state = item.isPlaybackLikelyToKeepUp ? .loadingFinished : .loading
+    }
+
+    func itemDurationDidChange(_ item: AVPlayerItem) {
+        guard isItemAttached(item) else { return }
+        durationDidChange(item.duration)
     }
 }
 
