@@ -164,9 +164,19 @@ open class FRadioPlayer: NSObject {
     
     /// Player time observer
     private var timeObserver: Any?
-    
+
     /// Item played to the end
     private var hasPlayedToEndTime = false
+
+    /// Recovery ladder for mid-playback stalls (bounded, cancelable)
+    private let stallRecovery = StallRecovery()
+
+    /// Modern playback progress signal, observed on the player
+    private var timeControlObservation: NSKeyValueObservation?
+
+    /// Whether the current item ever reached actual playback. Gates stall
+    /// recovery so slow initial loads are not punished with reloads.
+    private var didStartPlaying = false
     
     // MARK: - Initialization
     
@@ -210,6 +220,21 @@ open class FRadioPlayer: NSObject {
         
         // Setup Metadata Output Delegate
         metadataOutput.setDelegate(self, queue: DispatchQueue.main)
+
+        // Stall recovery wiring: attempts reload while the stall persists,
+        // gives up into a stopped + error state when the ladder exhausts
+        stallRecovery.onAttempt = { [weak self] in
+            guard let self = self, let item = self.playerItem else { return true }
+            if item.isPlaybackLikelyToKeepUp { return true } // recovered on its own
+            guard self.isConnected else { return false }     // offline: keep climbing
+            self.reloadItem()
+            return false // success surfaces as .playing, which cancels the ladder
+        }
+        stallRecovery.onExhausted = { [weak self] in
+            guard let self = self else { return }
+            self.stop()
+            self.state = .error
+        }
     }
     
     // MARK: - Control Methods
@@ -233,6 +258,7 @@ open class FRadioPlayer: NSObject {
      */
     open func pause() {
         guard let player = player else { return }
+        stallRecovery.cancel()
         player.pause()
         playbackState = .paused
     }
@@ -243,17 +269,22 @@ open class FRadioPlayer: NSObject {
      */
     open func stop() {
         guard let player = player else { return }
-        
+        stallRecovery.cancel()
+
         if duration != 0 {
             currentTime = 0
             player.pause()
             player.seek(to: .zero)
         } else {
+            // Drop the rate first: replacing the item alone leaves the player
+            // armed (rate 1, waiting), which is why stopping during loading
+            // used to not stick (issue #12)
+            player.pause()
             player.replaceCurrentItem(with: nil)
             currentMetadata = nil
             currentArtworkURL = nil
         }
-        
+
         playbackState = .stopped
     }
     
@@ -310,6 +341,7 @@ open class FRadioPlayer: NSObject {
             player = AVPlayer()
             // Removes black screen when connecting to appleTV
             player?.allowsExternalPlayback = false
+            observeTimeControlStatus()
         }
         
         playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: requiredAssetKeys)
@@ -336,6 +368,7 @@ open class FRadioPlayer: NSObject {
         }
         
         lastPlayerItem = playerItem
+        didStartPlaying = false
         currentMetadata = nil
         currentArtworkURL = nil
         
@@ -379,6 +412,10 @@ open class FRadioPlayer: NSObject {
         }
         
         stop()
+        stallRecovery.cancel()
+        timeControlObservation?.invalidate()
+        timeControlObservation = nil
+        didStartPlaying = false
         playerItem = nil
         lastPlayerItem = nil
         player = nil
@@ -424,6 +461,33 @@ open class FRadioPlayer: NSObject {
         #endif
     }
     
+    // MARK: - Stall detection (timeControlStatus)
+
+    private func observeTimeControlStatus() {
+        timeControlObservation?.invalidate()
+        timeControlObservation = player?.observe(\.timeControlStatus, options: [.new]) { [weak self] _, _ in
+            DispatchQueue.main.async { self?.timeControlStatusDidChange() }
+        }
+    }
+
+    private func timeControlStatusDidChange() {
+        guard let player = player else { return }
+
+        switch player.timeControlStatus {
+        case .playing:
+            didStartPlaying = true
+            stallRecovery.cancel()
+        case .waitingToPlayAtSpecifiedRate:
+            // Only recover mid-playback stalls: initial buffering manages itself
+            guard didStartPlaying, playbackState == .playing else { return }
+            stallRecovery.start()
+        case .paused:
+            break
+        @unknown default:
+            break
+        }
+    }
+
     private func networkPathDidChange(_ path: NWPath) {
         let isNowConnected = path.status == .satisfied
 
@@ -435,20 +499,17 @@ open class FRadioPlayer: NSObject {
         isConnected = isNowConnected
     }
 
-    // Check if the playback could keep up after a network interruption
+    // Buffer-empty and network-reconnect signals route into the recovery
+    // ladder. It is bounded, cancelable, and checks conditions at attempt
+    // time, which removes the old captured-item race.
     private func checkNetworkInterruption() {
         guard
             let item = playerItem,
             !item.isPlaybackLikelyToKeepUp,
-            isConnected else { return }
-        
-        player?.pause()
-        
-        // Wait 1 sec to recheck and make sure the reload is needed
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            if !item.isPlaybackLikelyToKeepUp { self.reloadItem() }
-            self.isPlaying ? self.player?.play() : self.player?.pause()
-        }
+            isConnected,
+            didStartPlaying, playbackState == .playing else { return }
+
+        stallRecovery.start()
     }
     
     // MARK: - Responding to Route Changes
