@@ -1,5 +1,5 @@
 <p align="center">
-<img alt="FRadioPlayer" src="https://fethica.com/assets/img/web/repo-hero.png" width="749">
+<img alt="FRadioPlayer" src="Assets/repo-hero.png" width="749">
 </p>
 
 # FRadioPlayer
@@ -199,7 +199,7 @@ func radioPlayer(_ player: FRadioPlayer, playTimeDidChange currentTime: TimeInte
 For more complete app features, check out [Swift Radio App](https://github.com/analogcode/Swift-Radio-Pro) based on **FRadioPlayer**
 
 <p align="center">
-    <img alt="Swift Radio" src="https://fethica.com/assets/img/web/swift-radio.jpg">
+    <img alt="Swift Radio" src="Assets/swift-radio.jpg">
 </p>
 
 ## Development
