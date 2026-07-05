@@ -90,6 +90,13 @@ class RadioPlayer: ObservableObject {
         radio.track = Track(artist: station.detail, name: station.name)
         radio.currentStationImageName = station.imageName
         radio.artworkURL = nil
+        // Lock screen shows the station's own artwork until iTunes art arrives
+        setNowPlayingArtwork(defaultStationImage())
+    }
+
+    private func defaultStationImage() -> UIImage? {
+        guard let imageName = radio.currentStationImageName else { return nil }
+        return UIImage(named: imageName)
     }
 }
 
@@ -125,16 +132,18 @@ extension RadioPlayer: FRadioPlayerObserver {
     func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?) {
         radio.artworkURL = artworkURL
         guard let url = artworkURL else {
-            setNowPlayingArtwork(nil)
+            // No track artwork (stopped, station changed, or lookup failed):
+            // fall back to the station's bundled image instead of blanking
+            setNowPlayingArtwork(defaultStationImage())
             return
         }
         Task {
             do {
                 let (data, _) = try await URLSession.shared.data(from: url)
                 let image = UIImage(data: data)
-                await MainActor.run { self.setNowPlayingArtwork(image) }
+                await MainActor.run { self.setNowPlayingArtwork(image ?? self.defaultStationImage()) }
             } catch {
-                await MainActor.run { self.setNowPlayingArtwork(nil) }
+                await MainActor.run { self.setNowPlayingArtwork(self.defaultStationImage()) }
             }
         }
     }
