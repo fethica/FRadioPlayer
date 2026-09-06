@@ -1,11 +1,16 @@
 <p align="center">
-<img alt="FRadioPlayer" src="Assets/repo-hero.png" width="749">
+  <img src="Assets/logo.png" width="128" alt="FRadioPlayer logo: a white transport bar under an artwork card on a coral-to-red tile">
 </p>
 
-# FRadioPlayer
+<h1 align="center">FRadioPlayer</h1>
 
-[![SPM](https://github.com/fethica/FRadioPlayer/actions/workflows/spm.yml/badge.svg)](https://github.com/fethica/FRadioPlayer/actions/workflows/spm.yml)
-[![Demo](https://github.com/fethica/FRadioPlayer/actions/workflows/demo.yml/badge.svg)](https://github.com/fethica/FRadioPlayer/actions/workflows/demo.yml)
+<p align="center">
+  <a href="https://github.com/fethica/FRadioPlayer/actions/workflows/spm.yml"><img src="https://github.com/fethica/FRadioPlayer/actions/workflows/spm.yml/badge.svg" alt="SPM"></a>
+  <a href="https://github.com/fethica/FRadioPlayer/actions/workflows/demo.yml"><img src="https://github.com/fethica/FRadioPlayer/actions/workflows/demo.yml/badge.svg" alt="Demo"></a>
+  <a href="https://github.com/fethica/FRadioPlayer/releases/latest"><img src="https://img.shields.io/github/v/release/fethica/FRadioPlayer" alt="Latest release"></a>
+  <a href="https://swiftpackageindex.com/fethica/FRadioPlayer"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Ffethica%2FFRadioPlayer%2Fbadge%3Ftype%3Dplatforms" alt="Platforms"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+</p>
 
 FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
 
