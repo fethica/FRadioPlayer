@@ -2,17 +2,55 @@ name: SPM
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ main, swift-6 ]
+    tags: [ '*' ]
   pull_request:
-    branches: [ master, main ]
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: macos-latest
+    # Current Xcode on the macOS 26 image (26.6 is its default)
+    runs-on: macos-26
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
     steps:
       - uses: actions/checkout@v4
       - name: Build (SwiftPM)
         run: swift build -v
-      - name: Test (SwiftPM)
+      - name: Test (SwiftPM, macOS)
         run: swift test -v
 
+  test-ios:
+    timeout-minutes: 15
+    # The interruption, route change and audio session paths only exist on
+    # iOS, so the suite also runs on a simulator. The image ships iOS 26.2,
+    # 26.4 and 26.5 runtimes; the OS is pinned so the destination resolves
+    # to one device.
+    runs-on: macos-26
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v4
+      - name: Boot iOS simulator
+        run: |
+          device_id=$(xcrun simctl list devices available -j | python3 -c 'import json, sys; devices = json.load(sys.stdin)["devices"]["com.apple.CoreSimulator.SimRuntime.iOS-26-5"]; print(next(d["udid"] for d in devices if d["name"] == "iPhone 17"))')
+          xcrun simctl bootstatus "$device_id" -b
+          echo "IOS_SIMULATOR_ID=$device_id" >> "$GITHUB_ENV"
+      - name: Test (iOS Simulator)
+        run: |
+          xcodebuild test \
+            -scheme FRadioPlayer \
+            -destination "platform=iOS Simulator,id=$IOS_SIMULATOR_ID" \
+            -parallel-testing-enabled NO \
+            CODE_SIGNING_ALLOWED=NO
+
+  build-minimum-xcode:
+    # The README states Xcode 16 as the minimum (tools version 6.0), so the
+    # oldest Xcode 16 on the macOS 15 image builds the library
+    runs-on: macos-15
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build (SwiftPM, Xcode 16.0)
+        run: swift build -v

@@ -2,13 +2,18 @@ name: Demo
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ main, swift-6 ]
+    tags: [ '*' ]
   pull_request:
-    branches: [ master, main ]
+    branches: [ main ]
 
 jobs:
   build-demo:
-    runs-on: macos-latest
+    # Current Xcode on the macOS 26 image (26.6 is its default). The demo is
+    # the Swift 5 language mode consumer of the library.
+    runs-on: macos-26
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
     steps:
       - uses: actions/checkout@v4
       - name: Install XcodeGen

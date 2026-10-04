@@ -42,8 +42,7 @@ open FRadioPlayerDemo.xcodeproj
 - iOS 14.0+
 - macOS 11.0+
 - tvOS 14.0+
-- Xcode 15+
-- Swift 5.9+
+- Xcode 16+ (Swift 6 toolchain; the package builds in Swift 6 language mode, your app can stay in Swift 5 mode)
 
 ## Installation
 
@@ -52,7 +51,7 @@ open FRadioPlayerDemo.xcodeproj
 FRadioPlayer is available through [SPM](https://github.com/apple/swift-package-manager). To add it in Xcode: File > Add Packages… and use the URL of this repository. Or add the dependency in `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/fethica/FRadioPlayer.git", from: "0.3.0")
+.package(url: "https://github.com/fethica/FRadioPlayer.git", from: "0.4.0")
 ```
 
 ## Quick Start
@@ -62,6 +61,7 @@ Add the package, then use the shared player and observe changes.
 ```swift
 import FRadioPlayer
 
+// Adopting FRadioPlayerObserver here makes the class main-actor isolated
 final class RadioController: NSObject, FRadioPlayerObserver {
     let player = FRadioPlayer.shared
 
@@ -79,15 +79,42 @@ final class RadioController: NSObject, FRadioPlayerObserver {
     }
 }
 
-// Elsewhere
-FRadioPlayer.shared.togglePlaying()   // Play/Pause
-FRadioPlayer.shared.stop()            // Stop
-FRadioPlayer.shared.volume = 0.8      // Set volume (0.0...1.0)
+// From a nonisolated context, hop to the main actor
+Task { @MainActor in
+    FRadioPlayer.shared.togglePlaying()   // Play/Pause
+    FRadioPlayer.shared.stop()            // Stop
+    FRadioPlayer.shared.volume = 0.8      // Set volume (0.0...1.0)
+}
 ```
 
 ### Manual
 
 Prefer SPM. If needed, drag `Sources/FRadioPlayer` into your Xcode project.
+
+## Concurrency
+
+Since 0.4.0 `FRadioPlayer` is bound to the main actor and the package builds in Swift 6 language mode.
+
+- Call the player from the main actor. From a background context, hop first: `Task { @MainActor in FRadioPlayer.shared.play() }`.
+- Observer callbacks arrive on the main actor. A class that adopts `FRadioPlayerObserver` in its declaration is inferred `@MainActor`. A conformance added in an extension keeps the type's own isolation and still compiles.
+- A controller that calls the player from its own methods must be main-actor isolated. Add `@MainActor` to the class, as the demo's `RadioPlayer` does. This applies in Swift 5 mode too: calling an isolated method from a nonisolated one is an error, not a warning.
+- `FRadioPlayer.State` and `FRadioPlayer.PlaybackState` are `Sendable`. `FRadioPlayer.Metadata` is not, because it carries `AVTimedMetadataGroup` values; keep it on the main actor.
+- Custom `FRadioArtworkAPI` providers receive a `@Sendable` completion and may call it from any queue. Existing providers written with a plain completion keep compiling.
+- AVFoundation and audio session callbacks that can arrive off the main thread are received `nonisolated` inside the library and hopped explicitly. Nothing is marked `@unchecked Sendable` or `nonisolated(unsafe)`.
+
+See the [0.4.0 release notes and migration guide](.github/release-notes/0.4.0.md) when upgrading from 0.3.x.
+
+## Audio session
+
+On iOS and tvOS the player sets the shared `AVAudioSession` category to `.playback`, with the default mode and no category options, when `FRadioPlayer.shared` is first accessed. The playback category supports AirPlay and Bluetooth A2DP without additional options on iOS.
+
+An app that owns its audio session opts out before its first access to `shared`, for example in its `App` initializer or `application(_:didFinishLaunchingWithOptions:)`:
+
+```swift
+FRadioPlayer.configuresAudioSession = false
+```
+
+Setting it after `shared` exists has no effect. The player never activates or deactivates the session.
 
 ## Usage
 
@@ -141,6 +168,7 @@ player.radioURL = URL(string: "http://example.com/station.mp3")
 - `currentArtworkURL: URL?` Last resolved artwork URL.
 - `duration: TimeInterval` Total duration, 0 for live streams.
 - `currentTime: Double` Current playback time in seconds.
+- `FRadioPlayer.configuresAudioSession: Bool` (static) Whether the player sets the audio session category, default `true`. See [Audio session](#audio-session).
 
 ### Playback controls
 
@@ -163,6 +191,17 @@ player.stop()
 ```swift
 player.togglePlaying()
 ```
+
+- Seek (files with a known duration)
+```swift
+player.seek(to: 30) {
+    // Called exactly once, on the main actor
+}
+```
+
+The completion is always called exactly once, on the main actor, after `seek` returns. That includes a live stream or an item whose duration isn't known yet (no seek happens), no loaded item, and a seek that is superseded by a newer one. Seeking keeps the playback intent: a playing player keeps playing, a paused or stopped player stays that way, and a pause issued while the seek is in flight wins.
+
+For live streams, `pause()` keeps the item and its connection, and resumes from the buffered position. `stop()` drops the connection and clears metadata and artwork; the next `play()` reconnects.
 
 ### Observer methods
 
@@ -214,7 +253,7 @@ swift build
 swift test
 ```
 
-The test suite covers the public API contract, metadata extraction, the artwork API (stubbed, no network), playback against bundled fixtures, and state machine regressions. CI runs it on every push and pull request. Bug fixes should come with a failing test first.
+The test suite covers the public API contract, metadata extraction, the artwork API (stubbed, no network), playback against bundled fixtures, and state machine regressions. CI runs it on macOS and on an iOS simulator for pull requests, pushes to `main` and tags. Bug fixes should come with a failing test first.
 
 ## Author
 
