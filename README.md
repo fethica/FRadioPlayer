@@ -257,7 +257,7 @@ The test suite covers the public API contract, metadata extraction, the artwork 
 
 ## Author
 
-[Fethi El Hassasna](https://twitter.com/fethica)
+[@fethica](https://fethica.com)
 
 ## License
 
