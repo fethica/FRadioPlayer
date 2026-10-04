@@ -8,6 +8,10 @@
 
 import Foundation
 
+/// Artwork lookup for the current metadata. The completion may be called on
+/// any queue; the player hops it back to the main actor. The requirement is
+/// `@preconcurrency` so conformers written before 0.4.0 keep compiling.
 public protocol FRadioArtworkAPI {
-    func getArtwork(for metadata: FRadioPlayer.Metadata, _ completion: @escaping (_ artworkURL: URL?) -> Void)
+    @preconcurrency
+    func getArtwork(for metadata: FRadioPlayer.Metadata, _ completion: @escaping @Sendable (_ artworkURL: URL?) -> Void)
 }

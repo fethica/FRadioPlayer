@@ -1,7 +1,7 @@
 name: Release
 
 # Pushing a version tag (bare numbers, matching the repo's history: 0.2.3)
-# creates a GitHub release with generated notes. SPM consumes the tag itself,
+# creates one GitHub release with versioned notes when available. SPM consumes the tag itself,
 # so there is no artifact to build or attach.
 
 on:
@@ -21,8 +21,17 @@ jobs:
 
       - name: Create GitHub release
         run: |
-          gh release create "$GITHUB_REF_NAME" \
-            --title "FRadioPlayer $GITHUB_REF_NAME" \
-            --generate-notes
+          notes=".github/release-notes/${GITHUB_REF_NAME}.md"
+          if [ -f "$notes" ]; then
+            gh release create "$GITHUB_REF_NAME" \
+              --verify-tag \
+              --title "FRadioPlayer $GITHUB_REF_NAME" \
+              --notes-file "$notes"
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              --verify-tag \
+              --title "FRadioPlayer $GITHUB_REF_NAME" \
+              --generate-notes
+          fi
         env:
           GH_TOKEN: ${{ github.token }}

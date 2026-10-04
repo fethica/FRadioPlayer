@@ -70,7 +70,7 @@ final class ArtworkAPITests: XCTestCase {
         let api = iTunesAPI(artworkSize: 300, session: stubbedSession())
 
         let done = expectation(description: "completion")
-        var result: URL?
+        nonisolated(unsafe) var result: URL?
         api.getArtwork(for: metadata(raw: "Artist - Song")) { url in
             result = url
             done.fulfill()
@@ -85,7 +85,7 @@ final class ArtworkAPITests: XCTestCase {
         let api = iTunesAPI(artworkSize: 100, session: stubbedSession())
 
         let done = expectation(description: "completion")
-        var result: URL?
+        nonisolated(unsafe) var result: URL?
         api.getArtwork(for: metadata(raw: "x")) { url in
             result = url
             done.fulfill()
@@ -99,7 +99,7 @@ final class ArtworkAPITests: XCTestCase {
         let api = iTunesAPI(artworkSize: 300, session: stubbedSession())
 
         let done = expectation(description: "completion")
-        var result: URL? = URL(string: "https://sentinel.invalid")
+        nonisolated(unsafe) var result: URL? = URL(string: "https://sentinel.invalid")
         api.getArtwork(for: metadata(raw: nil)) { url in
             result = url
             done.fulfill()
@@ -115,7 +115,7 @@ final class ArtworkAPITests: XCTestCase {
         let api = iTunesAPI(artworkSize: 300, session: stubbedSession())
 
         let done = expectation(description: "completion")
-        var result: URL? = URL(string: "https://sentinel.invalid")
+        nonisolated(unsafe) var result: URL? = URL(string: "https://sentinel.invalid")
         api.getArtwork(for: metadata(raw: "Artist - Song")) { url in
             result = url
             done.fulfill()

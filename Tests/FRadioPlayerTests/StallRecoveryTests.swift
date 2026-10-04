@@ -8,6 +8,7 @@
 import XCTest
 @testable import FRadioPlayer
 
+@MainActor
 final class StallRecoveryTests: XCTestCase {
 
     func testClimbsAllIntervalsThenExhausts() {

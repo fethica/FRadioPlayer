@@ -13,7 +13,7 @@ public extension FRadioPlayer {
     /**
      `State` is the Player status enum
      */
-    enum State: Int {
+    enum State: Int, Sendable {
        
        /// URL not set
        case urlNotSet

@@ -11,14 +11,27 @@ import Network
 
 /**
  FRadioPlayer is a wrapper around AVPlayer to handle internet radio playback.
- */
 
+ The player is bound to the main actor: call it from the main actor, and every
+ observer callback is delivered there. AVFoundation and audio session callbacks
+ that can arrive on other threads are received `nonisolated` and hopped onto the
+ main actor before they touch player state.
+ */
+@MainActor
 open class FRadioPlayer: NSObject {
     
     // MARK: - Properties
     
     /// Returns the singleton `FRadioPlayer` instance.
     public static let shared = FRadioPlayer()
+
+    /// Whether the player sets the shared `AVAudioSession` category to
+    /// `.playback` when `shared` is first accessed (default `true`).
+    ///
+    /// An app that configures its own audio session sets this to `false`
+    /// before its first access to `FRadioPlayer.shared`. Changing it later
+    /// has no effect. Ignored on macOS, which has no `AVAudioSession`.
+    public static var configuresAudioSession = true
     
     /// Enable / disable `playImmediately`. More info: https://developer.apple.com/documentation/avfoundation/avplayer/1643480-playimmediately
     open var isPlayImmediately: Bool = false
@@ -137,11 +150,8 @@ open class FRadioPlayer: NSObject {
     /// Last player item
     private var lastPlayerItem: AVPlayerItem?
     
-    /// Check for headphones, used to handle audio route change
-    private var headphonesConnected: Bool = false
-    
     /// Default player item
-    private var playerItem: AVPlayerItem? {
+    private(set) var playerItem: AVPlayerItem? {
         didSet {
             playerItemDidChange()
         }
@@ -152,9 +162,6 @@ open class FRadioPlayer: NSObject {
 
     /// Current network connectivity
     private var isConnected = false
-    
-    /// Key-value observing context
-    private var playerItemContext = 0
     
     /// Key-value observing context
     private let requiredAssetKeys = [
@@ -169,7 +176,16 @@ open class FRadioPlayer: NSObject {
     private var hasPlayedToEndTime = false
 
     /// Recovery ladder for mid-playback stalls (bounded, cancelable)
-    private let stallRecovery = StallRecovery()
+    let stallRecovery = StallRecovery()
+
+    /// Whether playback resumes when the current interruption ends with
+    /// `shouldResume`. Nil outside an interruption, and cleared by any
+    /// explicit play, pause or stop, so a user decision always wins.
+    private var resumeAfterInterruption: Bool?
+
+    /// Identifies the latest artwork lookup. A lookup that completes after
+    /// newer metadata (or none) has arrived is dropped.
+    private var artworkRequest = 0
 
     /// Modern playback progress signal, observed on the player
     private var timeControlObservation: NSKeyValueObservation?
@@ -185,34 +201,16 @@ open class FRadioPlayer: NSObject {
         
         super.init()
 
-        #if !os(macOS)
-        let options: AVAudioSession.CategoryOptions
-
-        // Enable AirPlay and Bluetooth A2DP for playback
-        #if os(iOS)
-        options = [.allowAirPlay, .allowBluetoothA2DP]
-        #else
-        options = []
-        #endif
-
-        // Start audio session
-        let audioSession = AVAudioSession.sharedInstance()
-        try? audioSession.setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default, options: options)
-        #endif
+        Self.configureAudioSessionIfNeeded { try? Self.applyPlaybackCategory() }
 
         // Notifications
         setupNotifications()
         
-        // Check for headphones
-        #if os(iOS)
-        checkHeadphonesConnection(outputs: AVAudioSession.sharedInstance().currentRoute.outputs)
-        #endif
-
         // Network path monitoring config. The handler fires once right after
         // start with the current path, which seeds `isConnected`; the
         // reload check it may trigger is inert at init (playerItem is nil).
         pathMonitor.pathUpdateHandler = { [weak self] path in
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 self?.networkPathDidChange(path)
             }
         }
@@ -225,6 +223,9 @@ open class FRadioPlayer: NSObject {
         // gives up into a stopped + error state when the ladder exhausts
         stallRecovery.onAttempt = { [weak self] in
             guard let self = self, let item = self.playerItem else { return true }
+            // Defense in depth: every path that leaves .playing cancels the
+            // ladder, but an attempt must never reload against user intent
+            guard self.playbackState == .playing else { return true }
             if item.isPlaybackLikelyToKeepUp { return true } // recovered on its own
             guard self.isConnected else { return false }     // offline: keep climbing
             self.reloadItem()
@@ -235,6 +236,22 @@ open class FRadioPlayer: NSObject {
         }
     }
     
+    // MARK: - Audio session
+
+    /// Runs `apply` unless the app opted out with `configuresAudioSession`.
+    static func configureAudioSessionIfNeeded(_ apply: () -> Void) {
+        guard configuresAudioSession else { return }
+        apply()
+    }
+
+    static func applyPlaybackCategory() throws {
+        #if !os(macOS)
+        // Playback supports AirPlay and A2DP by default. Explicit allowAirPlay is
+        // only valid for playAndRecord and makes physical devices reject this category.
+        try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+        #endif
+    }
+
     // MARK: - Control Methods
     
     /**
@@ -242,6 +259,8 @@ open class FRadioPlayer: NSObject {
      
      */
     open func play() {
+        resumeAfterInterruption = nil
+
         // A failed pipeline is terminal (failed AVPlayerItems can never play
         // again): pressing play after an error rebuilds from the URL instead
         // of reattaching the dead item
@@ -262,6 +281,7 @@ open class FRadioPlayer: NSObject {
      Trigger the pause function of the radio player
      */
     open func pause() {
+        resumeAfterInterruption = nil
         guard let player = player else { return }
         stallRecovery.cancel()
         player.pause()
@@ -273,6 +293,14 @@ open class FRadioPlayer: NSObject {
      
      */
     open func stop() {
+        stopPlayback(endingLoad: true)
+    }
+
+    /// - parameter endingLoad: whether an in-flight load reports
+    ///   `.loadingFinished`. A failure passes `false` and reports `.error`
+    ///   instead, so observers never see a transient "finished" state.
+    private func stopPlayback(endingLoad: Bool) {
+        resumeAfterInterruption = nil
         guard let player = player else { return }
         stallRecovery.cancel()
 
@@ -293,7 +321,7 @@ open class FRadioPlayer: NSObject {
         // Stopping an in-flight load detaches the item, so the loading
         // lifecycle is over: without this, `state` freezes on .loading
         // (a proper .stopped/.idle case in State is a v1.0 vocabulary change)
-        if state == .loading {
+        if endingLoad, state == .loading {
             state = .loadingFinished
         }
 
@@ -301,20 +329,50 @@ open class FRadioPlayer: NSObject {
     }
     
     /**
-     Triggers the seek to a given time
-     
+     Seeks the current item to a given time.
+
+     The completion is called exactly once, on the main actor, after this
+     method returns. That holds on every path: a live stream or an item whose
+     duration is not known yet (no seek happens), no loaded item, a seek that
+     AVFoundation reports as unfinished, and a seek superseded by a newer one.
+
+     Seeking keeps the playback intent: a player that is playing keeps
+     playing, and a paused or stopped player stays that way. A pause or stop
+     issued while the seek is in flight wins.
+
      - parameter seconds: time in seconds to seek to
-     - parameter completion: optional completion
+     - parameter completion: optional completion, called once on the main actor
      */
     open func seek(to seconds: TimeInterval, completion: (() -> Void)?) {
-        guard duration != 0 else { return }
-        
-        let seekTime = CMTime(seconds: seconds, preferredTimescale: 1)
-        
-        player?.seek(to: seekTime, toleranceBefore: .zero, toleranceAfter: .positiveInfinity, completionHandler: { [weak self] _ in
-            self?.play()
-            completion?()
+        // Bind the caller's completion to the main actor here; AVPlayer calls
+        // its own handler on an unspecified queue
+        let completion: (@MainActor () -> Void)? = completion.map { done in
+            return { @MainActor in done() }
+        }
+
+        guard let player = player, duration != 0 else {
+            if let completion = completion {
+                Task { @MainActor in completion() }
+            }
+            return
+        }
+
+        let wasPlaying = playbackState == .playing
+        let seekTime = CMTime(seconds: seconds, preferredTimescale: 600)
+
+        player.seek(to: seekTime, toleranceBefore: .zero, toleranceAfter: .positiveInfinity, completionHandler: { [weak self] finished in
+            Task { @MainActor in
+                self?.seekDidComplete(finished: finished, wasPlaying: wasPlaying)
+                completion?()
+            }
         })
+    }
+
+    /// Resumes only a player that was playing when the seek was issued and
+    /// still is. An unfinished seek leaves playback to whatever superseded it.
+    private func seekDidComplete(finished: Bool, wasPlaying: Bool) {
+        guard finished, wasPlaying, playbackState == .playing else { return }
+        play()
     }
     
     /**
@@ -343,7 +401,10 @@ open class FRadioPlayer: NSObject {
     private func rebuildPipeline(with url: URL) {
         state = .loading
 
-        var options: [String: Any] = [AVURLAssetPreferPreciseDurationAndTimingKey: false]
+        // No AVURLAssetPreferPreciseDurationAndTimingKey: `false` is already
+        // the default, and passing it explicitly stopped a rebuilt item from
+        // loading after an earlier failure on iOS (play-after-error)
+        var options: [String: Any] = [:]
 
         if let httpHeaderFields = httpHeaderFields {
             options["AVURLAssetHTTPHeaderFieldsKey"] = httpHeaderFields
@@ -393,10 +454,10 @@ open class FRadioPlayer: NSObject {
         if let item = playerItem {
             NotificationCenter.default.addObserver(self, selector: #selector(itemDidPlayToEnd), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
 
-            item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: &playerItemContext)
-            item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackBufferEmpty), options: [.old, .new], context: &playerItemContext)
-            item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp), options: [.old, .new], context: &playerItemContext)
-            item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.duration), options: [.old, .new], context: &playerItemContext)
+            item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: FRadioPlayer.itemKVOContext)
+            item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackBufferEmpty), options: [.old, .new], context: FRadioPlayer.itemKVOContext)
+            item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp), options: [.old, .new], context: FRadioPlayer.itemKVOContext)
+            item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.duration), options: [.old, .new], context: FRadioPlayer.itemKVOContext)
             item.add(metadataOutput)
             
             player?.replaceCurrentItem(with: item)
@@ -405,15 +466,23 @@ open class FRadioPlayer: NSObject {
     }
     
     private func shouldGetArtwork(for metadata: FRadioPlayer.Metadata?, _ enabled: Bool) {
+        // Any newer metadata, including none after a station change or a
+        // stop, supersedes a lookup still in flight
+        artworkRequest += 1
+        let request = artworkRequest
+
         guard enabled else { return }
         guard let metadata = metadata else {
             currentArtworkURL = nil
             return
         }
         
-        artworkAPI.getArtwork(for: metadata) { [weak self] artworlURL in
-            DispatchQueue.main.async {
-                self?.currentArtworkURL = artworlURL
+        // Providers may complete on any queue. The protocol has no cancel
+        // hook, so a superseded lookup still runs; its result is dropped.
+        artworkAPI.getArtwork(for: metadata) { [weak self] artworkURL in
+            Task { @MainActor in
+                guard let self = self, self.artworkRequest == request else { return }
+                self.currentArtworkURL = artworkURL
             }
         }
     }
@@ -442,7 +511,9 @@ open class FRadioPlayer: NSObject {
     }
     
     deinit {
-        resetPlayer()
+        // Runs off the actor, so only nonisolated teardown belongs here.
+        // The shared instance never deinitializes; a player that did would
+        // still hold its item observers until the item is released.
         pathMonitor.cancel()
         NotificationCenter.default.removeObserver(self)
     }
@@ -459,7 +530,9 @@ open class FRadioPlayer: NSObject {
     
     // MARK: - Responding to Interruptions
     
-    @objc private func handleInterruption(notification: Notification) {
+    /// AVAudioSession posts this on the main thread, but a selector carries
+    /// no isolation: receive it nonisolated and hop explicitly
+    @objc nonisolated private func handleInterruption(notification: Notification) {
         #if os(iOS)
         guard let userInfo = notification.userInfo,
             let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
@@ -468,15 +541,36 @@ open class FRadioPlayer: NSObject {
         }
         switch type {
         case .began:
-            DispatchQueue.main.async { self.pause() }
+            Task { @MainActor in self.interruptionBegan() }
         case .ended:
             guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { break }
-            let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
-            DispatchQueue.main.async { options.contains(.shouldResume) ? self.play() : self.pause() }
+            let shouldResume = AVAudioSession.InterruptionOptions(rawValue: optionsValue).contains(.shouldResume)
+            Task { @MainActor in self.interruptionEnded(shouldResume: shouldResume) }
         @unknown default:
             break
         }
         #endif
+    }
+
+    /// Pauses and remembers whether playback was running. A repeated
+    /// `.began` keeps the intent recorded by the first one.
+    func interruptionBegan() {
+        let resume = resumeAfterInterruption ?? (playbackState == .playing)
+        pause()
+        resumeAfterInterruption = resume
+    }
+
+    /// Resumes only when the system allows it and the player was playing
+    /// when the interruption began. Does nothing when no interruption is
+    /// pending or the user already played, paused or stopped during it.
+    func interruptionEnded(shouldResume: Bool) {
+        guard let resume = resumeAfterInterruption else { return }
+        resumeAfterInterruption = nil
+        if shouldResume, resume {
+            play()
+        } else {
+            pause()
+        }
     }
     
     // MARK: - Stall detection (timeControlStatus)
@@ -484,7 +578,7 @@ open class FRadioPlayer: NSObject {
     private func observeTimeControlStatus() {
         timeControlObservation?.invalidate()
         timeControlObservation = player?.observe(\.timeControlStatus, options: [.new]) { [weak self] _, _ in
-            DispatchQueue.main.async { self?.timeControlStatusDidChange() }
+            Task { @MainActor in self?.timeControlStatusDidChange() }
         }
     }
 
@@ -542,56 +636,77 @@ open class FRadioPlayer: NSObject {
     
     // MARK: - Responding to Route Changes
     #if os(iOS)
-    private func checkHeadphonesConnection(outputs: [AVAudioSessionPortDescription]) {
-        for output in outputs where output.portType == .headphones {
-            headphonesConnected = true
-            break
-        }
-        headphonesConnected = false
-    }
-    
-    @objc private func handleRouteChange(notification: Notification) {
+    /// AVAudioSession posts route changes on a secondary thread
+    @objc nonisolated private func handleRouteChange(notification: Notification) {
 
         guard let userInfo = notification.userInfo,
             let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
             let reason = AVAudioSession.RouteChangeReason(rawValue:reasonValue) else { return }
         
         switch reason {
-        case .newDeviceAvailable:
-            checkHeadphonesConnection(outputs: AVAudioSession.sharedInstance().currentRoute.outputs)
         case .oldDeviceUnavailable:
-            guard let previousRoute = userInfo[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription else { return }
-            checkHeadphonesConnection(outputs: previousRoute.outputs);
-            DispatchQueue.main.async { self.headphonesConnected ? () : self.pause() }
+            // 0.3.0 behavior, unchanged: losing a route pauses. The
+            // headphones check that appeared to gate this never held (its
+            // flag was always false), so it is gone; a route-aware pause
+            // policy is 0.4.x work
+            Task { @MainActor in self.pause() }
         default: break
         }
     }
     #endif
     // MARK: - KVO
     
+    /// Context for the player item observations: the address of an object
+    /// that lives for the whole process, so nonisolated code can compare it
+    /// without touching actor state
+    nonisolated static var itemKVOContext: UnsafeMutableRawPointer {
+        Unmanaged.passUnretained(itemKVOContextToken).toOpaque()
+    }
+
     /// :nodoc:
-    override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        
-        // Only handle observations for the playerItemContext
-        guard context == &playerItemContext else {
+    /// AVPlayerItem serializes its KVO on the main queue by default
+    /// (AVPlayerItem.h), but a detached item has no player to serialize on.
+    /// The change is reduced to Sendable values before it crosses to the
+    /// main actor: synchronously when it arrives on the main thread, through
+    /// an explicit hop otherwise.
+    nonisolated override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        guard context == FRadioPlayer.itemKVOContext else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             return
         }
-        
-        if let item = object as? AVPlayerItem, let keyPath = keyPath, item == self.playerItem {
+        guard let keyPath = keyPath, let item = object as? AVPlayerItem else { return }
 
-            switch keyPath {
-            case #keyPath(AVPlayerItem.status):
-                itemStatusDidChange(item, change: change)
-            case #keyPath(AVPlayerItem.isPlaybackBufferEmpty):
-                itemBufferEmptyDidChange(item)
-            case #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp):
-                itemKeepUpDidChange(item)
-            case #keyPath(AVPlayerItem.duration):
-                itemDurationDidChange(item)
-            default:
-                break
-            }
+        receiveItemKVO(PlayerItemKVOEvent(
+            keyPath: keyPath,
+            itemID: ObjectIdentifier(item),
+            newStatus: (change?[.newKey] as? NSNumber)?.intValue
+        ))
+    }
+
+    nonisolated func receiveItemKVO(_ event: PlayerItemKVOEvent) {
+        if Thread.isMainThread {
+            MainActor.assumeIsolated { handleItemKVO(event) }
+        } else {
+            Task { @MainActor [weak self] in self?.handleItemKVO(event) }
+        }
+    }
+
+    private func handleItemKVO(_ event: PlayerItemKVOEvent) {
+        // Only the current item drives state; a replaced item's late
+        // notifications are dropped
+        guard let item = playerItem, ObjectIdentifier(item) == event.itemID else { return }
+
+        switch event.keyPath {
+        case #keyPath(AVPlayerItem.status):
+            itemStatusDidChange(item, newStatus: event.newStatus.flatMap(AVPlayerItem.Status.init(rawValue:)))
+        case #keyPath(AVPlayerItem.isPlaybackBufferEmpty):
+            itemBufferEmptyDidChange(item)
+        case #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp):
+            itemKeepUpDidChange(item)
+        case #keyPath(AVPlayerItem.duration):
+            itemDurationDidChange(item)
+        default:
+            break
         }
     }
 
@@ -604,15 +719,9 @@ open class FRadioPlayer: NSObject {
         player?.currentItem === item
     }
 
-    func itemStatusDidChange(_ item: AVPlayerItem, change: [NSKeyValueChangeKey: Any]?) {
+    func itemStatusDidChange(_ item: AVPlayerItem, newStatus: AVPlayerItem.Status?) {
         guard isItemAttached(item) else { return }
-
-        let status: AVPlayerItem.Status
-        if let statusNumber = change?[.newKey] as? NSNumber, let statusValue = AVPlayerItem.Status(rawValue: statusNumber.intValue) {
-            status = statusValue
-        } else {
-            status = .unknown
-        }
+        let status = newStatus ?? .unknown
 
         switch status {
         case .readyToPlay:
@@ -627,7 +736,7 @@ open class FRadioPlayer: NSObject {
     /// A fatal playback failure: stop cleanly (releases the connection,
     /// resets the playback state so play buttons don't lie) and report error.
     private func failPlayback() {
-        stop()
+        stopPlayback(endingLoad: false)
         state = .error
     }
 
@@ -648,10 +757,15 @@ open class FRadioPlayer: NSObject {
     }
 }
 
-extension FRadioPlayer: AVPlayerItemMetadataOutputPushDelegate {
+// The player hands AVFoundation the main queue in `setDelegate(_:queue:)`,
+// so delivery is on the main actor by construction. The payload
+// (`AVTimedMetadataGroup`) is not Sendable and cannot be hopped, so the
+// method stays isolated and the `@preconcurrency` conformance has the
+// compiler check the delivery queue at runtime.
+extension FRadioPlayer: @preconcurrency AVPlayerItemMetadataOutputPushDelegate {
     
+    /// :nodoc:
     public func metadataOutput(_ output: AVPlayerItemMetadataOutput, didOutputTimedMetadataGroups groups: [AVTimedMetadataGroup], from track: AVPlayerItemTrack?) {
-        
         currentMetadata = metadataExtractor.extract(from: groups)
     }
 }
@@ -702,7 +816,7 @@ private extension FRadioPlayer {
 
 // MARK: - Audio file support
 
-private extension FRadioPlayer {
+extension FRadioPlayer {
     
     private func periodicTimeUpdate(_ time: CMTime) {
         guard !hasPlayedToEndTime else { return }
@@ -710,12 +824,18 @@ private extension FRadioPlayer {
         currentTime = playedTime
     }
     
-    @objc private func itemDidPlayToEnd() {
+    /// AVPlayerItemDidPlayToEndTime may post on a thread other than the
+    /// one that registered for it
+    @objc nonisolated func itemDidPlayToEnd() {
+        Task { @MainActor in self.playbackDidReachEnd() }
+    }
+
+    private func playbackDidReachEnd() {
         pause()
         hasPlayedToEndTime = true
-        
+
         player?.seek(to: .zero) { [weak self] _ in
-            self?.hasPlayedToEndTime = false
+            Task { @MainActor in self?.hasPlayedToEndTime = false }
         }
     }
     
@@ -735,9 +855,24 @@ private extension FRadioPlayer {
             self.duration = Double(CMTimeGetSeconds(duration))
             let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
             
+            // Registered on the main queue, so the block runs on the actor
             timeObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
-                self?.periodicTimeUpdate(time)
+                MainActor.assumeIsolated {
+                    self?.periodicTimeUpdate(time)
+                }
             })
         }
     }
 }
+
+/// An item KVO notification reduced to Sendable values, so it can cross
+/// from AVFoundation's thread to the main actor
+struct PlayerItemKVOEvent: Sendable {
+    let keyPath: String
+    let itemID: ObjectIdentifier
+    let newStatus: Int?
+}
+
+/// Its address is the KVO context for player item observations
+private final class ItemKVOContextToken: Sendable {}
+private let itemKVOContextToken = ItemKVOContextToken()

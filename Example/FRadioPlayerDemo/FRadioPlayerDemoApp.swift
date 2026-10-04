@@ -32,6 +32,8 @@ struct Radio {
     var currentStationImageName: String? = nil
 }
 
+// FRadioPlayer is main-actor bound since 0.4.0, so its controller is too
+@MainActor
 class RadioPlayer: ObservableObject {
     
     @Published var radio = Radio()
@@ -49,10 +51,9 @@ class RadioPlayer: ObservableObject {
                 detail: "NZ's number one Rock music station.",
                 url: URL(string: "https://20593.live.streamtheworld.com/CKGEFMAAC.aac")!,
                 imageName: "station6"),
-        Station(name: "Classic Rock",
-                detail: "Your Lifestyle... Your Music!",
-                url: URL(string: "https://rfcm.streamguys1.com/classicrock-mp3")!,
-                imageName: "station7"),
+        Station(name: "Choice Classic Rock",
+                detail: "Classic rock hits and deep tracks",
+                url: URL(string: "https://streamer.radio.co/s66f2626b4/listen")!),
         Station(name: "Absolute Country Hits Radio",
                 detail: "The Music Starts Here",
                 url: URL(string: "http://strm112.1.fm/acountry_mobile_mp3")!,
@@ -72,8 +73,10 @@ class RadioPlayer: ObservableObject {
         }
     }
     
-    init(player: FRadioPlayer = FRadioPlayer.shared) {
-        self.player = player
+    // No isolated default argument: Swift 5 mode evaluates defaults
+    // outside the actor, so the shared instance is resolved in the body
+    init(player: FRadioPlayer? = nil) {
+        self.player = player ?? FRadioPlayer.shared
         self.player.addObserver(self)
         self.player.artworkAPI = iTunesAPI(artworkSize: 500)
         self.player.isAutoPlay = true
@@ -172,43 +175,44 @@ extension RadioPlayer {
     func setupRemoteTransportControls() {
         // Get the shared MPRemoteCommandCenter
         let commandCenter = MPRemoteCommandCenter.shared()
-        
+
+        // MediaPlayer does not document the thread it calls these handlers
+        // on, so each one is @Sendable and hops onto the main actor before
+        // touching the player, instead of assuming the controller's isolation
+
         // Add handler for Play Command
-        commandCenter.playCommand.addTarget { [unowned self] event in
-            if self.player.rate == 0.0 {
-                self.player.play()
-                return .success
+        commandCenter.playCommand.addTarget { @Sendable [unowned self] _ in
+            Task { @MainActor in
+                if self.player.rate == 0.0 { self.player.play() }
             }
-            return .commandFailed
+            return .success
         }
-        
+
         // Add handler for Pause Command
-        commandCenter.pauseCommand.addTarget { [unowned self] event in
-            if self.player.rate == 1.0 {
-                self.player.pause()
-                return .success
+        commandCenter.pauseCommand.addTarget { @Sendable [unowned self] _ in
+            Task { @MainActor in
+                if self.player.rate == 1.0 { self.player.pause() }
             }
-            return .commandFailed
+            return .success
         }
-        
+
         // Add handler for Stop Command (shown for live streams instead of pause)
-        commandCenter.stopCommand.addTarget { [unowned self] event in
-            if self.player.isPlaying {
-                self.player.stop()
-                return .success
+        commandCenter.stopCommand.addTarget { @Sendable [unowned self] _ in
+            Task { @MainActor in
+                if self.player.isPlaying { self.player.stop() }
             }
-            return .commandFailed
+            return .success
         }
 
         // Add handler for Next Command
-        commandCenter.nextTrackCommand.addTarget { [unowned self] event in
-            self.currentIndex += 1
+        commandCenter.nextTrackCommand.addTarget { @Sendable [unowned self] _ in
+            Task { @MainActor in self.currentIndex += 1 }
             return .success
         }
-        
+
         // Add handler for Previous Command
-        commandCenter.previousTrackCommand.addTarget { [unowned self] event in
-            self.currentIndex -= 1
+        commandCenter.previousTrackCommand.addTarget { @Sendable [unowned self] _ in
+            Task { @MainActor in self.currentIndex -= 1 }
             return .success
         }
     }

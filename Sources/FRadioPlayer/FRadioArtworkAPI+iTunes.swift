@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - iTunes API
-public struct iTunesAPI: FRadioArtworkAPI {
+public struct iTunesAPI: FRadioArtworkAPI, Sendable {
     
     let artworkSize: Int
     private let session: URLSession
@@ -18,7 +18,7 @@ public struct iTunesAPI: FRadioArtworkAPI {
         self.session = session
     }
     
-    public func getArtwork(for metadata: FRadioPlayer.Metadata, _ completion: @escaping (URL?) -> Void) {
+    public func getArtwork(for metadata: FRadioPlayer.Metadata, _ completion: @escaping @Sendable (URL?) -> Void) {
         
         guard !metadata.isEmpty, let rawValue = metadata.rawValue, let url = getURL(with: rawValue) else {
             completion(nil)

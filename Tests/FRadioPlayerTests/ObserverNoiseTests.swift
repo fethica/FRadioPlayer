@@ -10,6 +10,7 @@
 import XCTest
 import FRadioPlayer
 
+@MainActor
 final class ObserverNoiseTests: XCTestCase {
 
     private final class Recorder: FRadioPlayerObserver {
@@ -31,8 +32,10 @@ final class ObserverNoiseTests: XCTestCase {
     private var recorder: Recorder!
     private var fixture: URL!
 
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    // The async overrides run on the main actor in a @MainActor test class;
+    // the synchronous setUp/tearDown overrides would stay nonisolated
+    override func setUp() async throws {
+        try await super.setUp()
         fixture = try XCTUnwrap(
             Bundle.module.url(forResource: "silence", withExtension: "wav", subdirectory: "Fixtures")
         )
@@ -43,12 +46,12 @@ final class ObserverNoiseTests: XCTestCase {
         FRadioPlayer.shared.addObserver(recorder)
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         FRadioPlayer.shared.removeObserver(recorder)
         recorder = nil
         FRadioPlayer.shared.radioURL = nil
         FRadioPlayer.shared.isAutoPlay = true
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testSettingURLNotifiesItemChangeExactlyOnce() {
