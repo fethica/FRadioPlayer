@@ -13,7 +13,7 @@ public extension FRadioPlayer {
     /**
      `FRadioPlayingState` is the Player playing state enum
      */
-    enum PlaybackState: Int {
+    enum PlaybackState: Int, Sendable {
         
         /// Player is playing
         case playing

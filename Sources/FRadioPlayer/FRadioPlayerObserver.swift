@@ -10,7 +10,13 @@ import Foundation
 
 /**
  The `FRadioPlayerObserver` protocol defines methods you can implement to respond to playback events associated with an `FRadioPlayer` object.
+
+ Every callback is delivered on the main actor. A type that declares the
+ conformance in its primary declaration becomes main-actor isolated; the
+ protocol is `@preconcurrency`, so conformers written before 0.4.0 that are
+ not main-actor bound keep compiling and are still called on the main thread.
  */
+@preconcurrency @MainActor
 public protocol FRadioPlayerObserver: AnyObject {
     
     /**

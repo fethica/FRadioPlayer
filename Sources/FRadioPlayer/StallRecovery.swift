@@ -9,13 +9,15 @@
 
 import Foundation
 
+/// Main-actor bound like its owner: attempts are scheduled on the main
+/// queue and re-enter the actor when they fire.
+@MainActor
 final class StallRecovery {
 
     /// Delays between recovery attempts. When the ladder is exhausted,
     /// `onExhausted` fires instead of another attempt.
-    let intervals: [TimeInterval]
+    var intervals: [TimeInterval]
 
-    private let queue: DispatchQueue
     private var pending: DispatchWorkItem?
     private var attemptIndex = 0
 
@@ -28,9 +30,8 @@ final class StallRecovery {
 
     private(set) var isActive = false
 
-    init(intervals: [TimeInterval] = [2, 4, 8], queue: DispatchQueue = .main) {
+    init(intervals: [TimeInterval] = [2, 4, 8]) {
         self.intervals = intervals
-        self.queue = queue
     }
 
     /// Starts the ladder from the first interval. No-op if already active,
@@ -61,14 +62,16 @@ final class StallRecovery {
         attemptIndex += 1
 
         let work = DispatchWorkItem { [weak self] in
-            guard let self = self, self.isActive else { return }
-            if self.onAttempt?() == true {
-                self.cancel()
-            } else {
-                self.scheduleNext()
+            MainActor.assumeIsolated {
+                guard let self = self, self.isActive else { return }
+                if self.onAttempt?() == true {
+                    self.cancel()
+                } else {
+                    self.scheduleNext()
+                }
             }
         }
         pending = work
-        queue.asyncAfter(deadline: .now() + delay, execute: work)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: work)
     }
 }

@@ -11,6 +11,7 @@
 import XCTest
 import FRadioPlayer
 
+@MainActor
 final class PlaybackFixtureTests: XCTestCase {
 
     private final class StateRecorder: FRadioPlayerObserver {
@@ -22,14 +23,14 @@ final class PlaybackFixtureTests: XCTestCase {
 
     private var recorder: StateRecorder?
 
-    override func tearDown() {
+    override func tearDown() async throws {
         if let recorder = recorder {
             FRadioPlayer.shared.removeObserver(recorder)
         }
         recorder = nil
         FRadioPlayer.shared.radioURL = nil
         FRadioPlayer.shared.isAutoPlay = true
-        super.tearDown()
+        try await super.tearDown()
     }
 
     func testLocalFileReachesReadyToPlay() throws {

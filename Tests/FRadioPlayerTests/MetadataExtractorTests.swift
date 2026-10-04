@@ -12,6 +12,7 @@ import XCTest
 import AVFoundation
 import FRadioPlayer
 
+@MainActor
 final class MetadataExtractorTests: XCTestCase {
 
     // The default extractor, reached through the public API

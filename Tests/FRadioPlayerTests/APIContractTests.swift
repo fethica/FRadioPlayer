@@ -12,6 +12,7 @@ import XCTest
 import AVFoundation
 import FRadioPlayer
 
+@MainActor
 final class APIContractTests: XCTestCase {
 
     // Explicit conformance: locks the exact signature of every callback.
@@ -75,6 +76,10 @@ final class APIContractTests: XCTestCase {
         player.artworkAPI = CustomArtworkAPI()
         player.metadataExtractor = originalExtractor
         player.artworkAPI = originalArtworkAPI
+
+        // Static configuration, set before the first access to `shared`
+        let configuresAudioSession: Bool = FRadioPlayer.configuresAudioSession
+        FRadioPlayer.configuresAudioSession = configuresAudioSession
 
         // Control methods: function references verify signatures without invoking
         let _: () -> Void = player.play
