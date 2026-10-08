@@ -123,6 +123,21 @@ public protocol FRadioPlayerObserver: AnyObject {
      Called when playback fails, after playback stops and `lastFailure` is
      set, and before the `.error` state is published. Since 0.5.0.
 
+     Do not drive the player from inside this call. The player publishes
+     `.error` right after it returns, so a `play()`, `stop(discardingItem:)`
+     or `radioURL` change made here is overwritten by that state. Schedule
+     control actions to run after the callback returns:
+
+     ```swift
+     func radioPlayer(_ player: FRadioPlayer, didFail failure: FRadioPlayer.Failure) {
+         guard failure.kind != .notFound, failure.kind != .decode else { return }
+         DispatchQueue.main.asyncAfter(deadline: .now() + retryDelay) {
+             player.stop(discardingItem: true)
+             player.play()
+         }
+     }
+     ```
+
      - parameter player: FRadioPlayer
      - parameter failure: the classified failure
      */
