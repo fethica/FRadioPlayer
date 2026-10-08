@@ -209,9 +209,10 @@ open class FRadioPlayer: NSObject {
     /// observer is removed. Feeds `didObserveProgress` and nothing else.
     private(set) var liveProgressObserver: Any?
 
-    /// True while `playerItemConfigurator` runs, so a play() from inside it
-    /// does not rebuild the pipeline again
-    private var isCreatingItem = false
+    /// Set by stop(discardingItem: true): the next play() builds a fresh
+    /// item for the kept URL. Consumed by that play() before it builds, and
+    /// cleared by any new item or URL change.
+    private var needsFreshItem = false
 
     /// Whether the player is waiting for data while playback is wanted
     private(set) var isBuffering = false
@@ -308,10 +309,12 @@ open class FRadioPlayer: NSObject {
 
         // A failed pipeline is terminal (failed AVPlayerItems can never play
         // again): pressing play after an error rebuilds from the URL instead
-        // of reattaching the dead item. So does play after
-        // stop(discardingItem: true), the only way to have a URL and no item
-        // (outside the configurator call, which must not rebuild again).
-        if state == .error || (playerItem == nil && !isCreatingItem), let url = radioURL {
+        // of reattaching the dead item. So does the first play after
+        // stop(discardingItem: true). The request is consumed before the
+        // build starts, so a play() nested in a callback the build fires
+        // (`.loading`, the configurator) cannot start a second build.
+        if state == .error || needsFreshItem, let url = radioURL {
+            needsFreshItem = false
             rebuildPipeline(with: url)
         }
 
@@ -366,6 +369,7 @@ open class FRadioPlayer: NSObject {
         removeFileTimeObserver()
         removeLiveProgressObserver()
         player?.replaceCurrentItem(with: nil)
+        needsFreshItem = true
         // playerItemDidChange detaches the observers, forgets lastPlayerItem
         // and clears metadata and artwork
         playerItem = nil
@@ -511,9 +515,8 @@ open class FRadioPlayer: NSObject {
         lastFailure = nil
         let item = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: requiredAssetKeys)
         itemGeneration += 1
-        isCreatingItem = true
+        needsFreshItem = false
         playerItemConfigurator?(item)
-        isCreatingItem = false
         playerItem = item
     }
         
@@ -597,6 +600,7 @@ open class FRadioPlayer: NSObject {
         timeControlObservation?.invalidate()
         timeControlObservation = nil
         didStartPlaying = false
+        needsFreshItem = false
         playerItem = nil
         lastPlayerItem = nil
         player = nil
