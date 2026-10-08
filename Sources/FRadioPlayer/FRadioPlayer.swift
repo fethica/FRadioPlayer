@@ -145,6 +145,18 @@ open class FRadioPlayer: NSObject {
         }
     }
 
+    /// Called with every newly created `AVPlayerItem`, on the main actor,
+    /// before the item is attached to the player: the place to install an
+    /// `audioMix` (for example a processing tap). It is not called when
+    /// `play()` reattaches a kept item. Do not retain the item; it is
+    /// replaced on every `radioURL` change, on `play()` after an error and
+    /// after `stop(discardingItem: true)`. Default `nil`. Since 0.5.0.
+    public var playerItemConfigurator: (@MainActor (AVPlayerItem) -> Void)?
+
+    /// Increments every time the player creates a new item, so a host can
+    /// tell a fresh item from a reattached one. Since 0.5.0.
+    public private(set) var itemGeneration = 0
+
     /// The failure behind the latest `.error` state, set just before
     /// observers get `radioPlayer(_:didFail:)`. Cleared when a new item is
     /// created (a radioURL change, or play() rebuilding after an error).
@@ -448,7 +460,10 @@ open class FRadioPlayer: NSObject {
         }
         
         lastFailure = nil
-        playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: requiredAssetKeys)
+        let item = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: requiredAssetKeys)
+        itemGeneration += 1
+        playerItemConfigurator?(item)
+        playerItem = item
     }
         
     /** Reset all player item observers and create new ones
