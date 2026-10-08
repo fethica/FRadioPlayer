@@ -237,6 +237,10 @@ open class FRadioPlayer: NSObject {
     /// The latest creation whose item was attached
     private var committedCreation = 0
 
+    /// Counts radioURL assignments, separately from item creations: a
+    /// rebuild for the same URL is not a new assignment
+    private var urlAssignment = 0
+
     /// Whether the player is waiting for data while playback is wanted
     private(set) var isBuffering = false
 
@@ -503,6 +507,8 @@ open class FRadioPlayer: NSObject {
     // MARK: - Private helpers
     
     private func radioURLDidChange(with url: URL?) {
+        urlAssignment += 1
+        let assignment = urlAssignment
         resetPlayer()
 
         // Exactly one itemDidChange per radioURL change, after all setup work
@@ -512,9 +518,13 @@ open class FRadioPlayer: NSObject {
             return
         }
 
-        // A URL switch from inside the configurator already reported the
-        // item that replaced this one
-        if rebuildPipeline(with: url) != .superseded {
+        // Reported when this assignment's item was attached (always the
+        // case without a configurator, as in 0.4.0) or when no newer
+        // assignment happened meanwhile. A newer assignment from inside the
+        // configurator (to nil, or to a URL whose creation was then stopped
+        // or replaced) already reported; a nested same-URL rebuild did not.
+        let creation = rebuildPipeline(with: url)
+        if creation == .committed || assignment == urlAssignment {
             itemChange(with: url)
         }
     }
