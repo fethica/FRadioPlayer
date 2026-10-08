@@ -107,6 +107,15 @@ public protocol FRadioPlayerObserver: AnyObject {
      - parameter reason: the signal that was observed
      */
     func radioPlayerDidDetectStall(_ player: FRadioPlayer, reason: FRadioPlayer.StallReason)
+
+    /**
+     Called when playback fails, after playback stops and `lastFailure` is
+     set, and before the `.error` state is published. Since 0.5.0.
+
+     - parameter player: FRadioPlayer
+     - parameter failure: the classified failure
+     */
+    func radioPlayer(_ player: FRadioPlayer, didFail failure: FRadioPlayer.Failure)
 }
 
 
@@ -123,4 +132,5 @@ public extension FRadioPlayerObserver {
     func radioPlayer(_ player: FRadioPlayer, bufferingDidChange isBuffering: Bool) {}
     func radioPlayer(_ player: FRadioPlayer, didObserveProgress time: TimeInterval) {}
     func radioPlayerDidDetectStall(_ player: FRadioPlayer, reason: FRadioPlayer.StallReason) {}
+    func radioPlayer(_ player: FRadioPlayer, didFail failure: FRadioPlayer.Failure) {}
 }

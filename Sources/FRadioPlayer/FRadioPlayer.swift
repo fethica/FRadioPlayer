@@ -145,6 +145,11 @@ open class FRadioPlayer: NSObject {
         }
     }
 
+    /// The failure behind the latest `.error` state, set just before
+    /// observers get `radioPlayer(_:didFail:)`. Cleared when a new item is
+    /// created (a radioURL change, or play() rebuilding after an error).
+    public private(set) var lastFailure: Failure?
+
     // MARK: - Internal / Private properties
     
     /// Observations
@@ -248,7 +253,8 @@ open class FRadioPlayer: NSObject {
             return false // success surfaces as .playing, which cancels the ladder
         }
         stallRecovery.onExhausted = { [weak self] in
-            self?.failPlayback()
+            guard let self = self else { return }
+            self.failPlayback(.stalledExhausted(attempts: self.stallRecovery.intervals.count))
         }
     }
     
@@ -441,6 +447,7 @@ open class FRadioPlayer: NSObject {
             observeTimeControlStatus()
         }
         
+        lastFailure = nil
         playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: requiredAssetKeys)
     }
         
@@ -765,7 +772,7 @@ open class FRadioPlayer: NSObject {
         case .readyToPlay:
             state = .readyToPlay
         case .failed:
-            failPlayback()
+            failPlayback(.classify(error: item.error, errorLog: item.errorLog()?.events.last.map(ErrorLogEntry.init)))
         default:
             break
         }
@@ -773,8 +780,14 @@ open class FRadioPlayer: NSObject {
 
     /// A fatal playback failure: stop cleanly (releases the connection,
     /// resets the playback state so play buttons don't lie) and report error.
-    private func failPlayback() {
+    /// The failure is recorded and reported after playback stops and
+    /// before `.error` is published.
+    private func failPlayback(_ failure: Failure) {
         stopPlayback(endingLoad: false)
+        lastFailure = failure
+        notifiyObservers { observer in
+            observer.radioPlayer(self, didFail: failure)
+        }
         state = .error
     }
 
