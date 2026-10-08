@@ -719,6 +719,12 @@ open class FRadioPlayer: NSObject {
         player?.currentItem === item
     }
 
+    /// The item the AVPlayer currently holds (nil when detached). Tests use
+    /// it to tell a retained item from a reattached or fresh one.
+    var attachedItem: AVPlayerItem? {
+        player?.currentItem
+    }
+
     func itemStatusDidChange(_ item: AVPlayerItem, newStatus: AVPlayerItem.Status?) {
         guard isItemAttached(item) else { return }
         let status = newStatus ?? .unknown
