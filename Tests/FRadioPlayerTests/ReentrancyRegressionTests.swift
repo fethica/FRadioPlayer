@@ -184,4 +184,65 @@ final class ReentrancyRegressionTests: XCTestCase {
         XCTAssertEqual(recorder.items.last, other, "observers end on the URL actually in use")
         XCTAssertFalse(recorder.items.contains(fixture), "the superseded URL never became an item")
     }
+
+    // MARK: - S26-06: progress after a legacy playTimeDidChange callback
+
+    /// Acts once from playTimeDidChange, then logs what follows in the same
+    /// main-queue turn. Progress is tagged with the generation of the item
+    /// that was current when the action ran: a sample tagged "old" right
+    /// after the action is the stale one. A new item may legitimately tick
+    /// at once (its observer fires when added), which is tagged "new".
+    private final class ActOnTick: FRadioPlayerObserver {
+        var action: ((FRadioPlayer) -> Void)?
+        var events: [String] = []
+        private var actedGeneration: Int?
+
+        func radioPlayer(_ player: FRadioPlayer, playTimeDidChange currentTime: TimeInterval, duration: TimeInterval) {
+            guard currentTime > 0, let action = action else { return }
+            self.action = nil
+            events.append("acted")
+            actedGeneration = player.itemGeneration
+            action(player)
+            // Runs after the time observer block that delivered this tick
+            DispatchQueue.main.async { self.events.append("turn") }
+        }
+        func radioPlayer(_ player: FRadioPlayer, didObserveProgress time: TimeInterval) {
+            guard let acted = actedGeneration else { events.append("progress"); return }
+            // A sample for a newer item is legitimate; one delivered while
+            // no item, or the acted-on item's time, is stale
+            let fresh = player.playerItem != nil && player.itemGeneration > acted && time < 0.1
+            events.append(fresh ? "progress-new" : "progress-old")
+        }
+
+        /// Events between the action and the end of that main-queue turn
+        var sameTurn: [String] {
+            guard let start = events.firstIndex(of: "acted") else { return [] }
+            let rest = events[(start + 1)...]
+            return Array(rest.prefix { $0 != "turn" }).filter { $0 != "progress-new" }
+        }
+    }
+
+    private func runTickAction(_ action: @escaping (FRadioPlayer) -> Void) throws -> ActOnTick {
+        let file = try TestAudio.silentWAV(seconds: 5)
+        addTeardownBlock { try? FileManager.default.removeItem(at: file) }
+        let recorder = observe(ActOnTick())
+        recorder.action = action
+        FRadioPlayer.shared.isAutoPlay = true
+        FRadioPlayer.shared.radioURL = file
+        XCTAssertTrue(waitUntil(timeout: 5) { recorder.events.contains("turn") }, "events: \(recorder.events)")
+        return recorder
+    }
+
+    func testDiscardFromPlayTimeDidChangeDropsTheOldSample() throws {
+        let recorder = try runTickAction { $0.stop(discardingItem: true) }
+        XCTAssertEqual(recorder.sameTurn, [], "no progress for the discarded item")
+        XCTAssertNil(FRadioPlayer.shared.playerItem)
+    }
+
+    func testURLReplacementFromPlayTimeDidChangeDropsTheOldSample() throws {
+        let fixture = self.fixture!
+        let recorder = try runTickAction { $0.radioURL = fixture }
+        XCTAssertEqual(recorder.sameTurn, [], "no old-item progress against the new item")
+        XCTAssertEqual(FRadioPlayer.shared.radioURL, fixture)
+    }
 }

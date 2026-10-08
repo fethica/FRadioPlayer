@@ -1059,10 +1059,17 @@ private extension FRadioPlayer {
 
 extension FRadioPlayer {
     
-    private func periodicTimeUpdate(_ time: CMTime) {
+    /// - parameter generation: the item generation the observer was
+    ///   installed for. A tick already queued when its observer was removed
+    ///   still runs, and the legacy playTimeDidChange callback may discard
+    ///   or replace the item: progress is only reported for the item the
+    ///   sample was taken from, still current after the legacy callback.
+    private func periodicTimeUpdate(_ time: CMTime, generation: Int) {
         guard !hasPlayedToEndTime else { return }
+        let item = playerItem
         let playedTime = CMTimeGetSeconds(time)
         currentTime = playedTime
+        guard let item = item, playerItem === item, itemGeneration == generation else { return }
         reportProgress(time)
     }
     
@@ -1109,9 +1116,10 @@ extension FRadioPlayer {
             self.duration = Double(CMTimeGetSeconds(duration))
             
             // Registered on the main queue, so the block runs on the actor
+            let generation = itemGeneration
             timeObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
                 MainActor.assumeIsolated {
-                    self?.periodicTimeUpdate(time)
+                    self?.periodicTimeUpdate(time, generation: generation)
                 }
             })
         }
