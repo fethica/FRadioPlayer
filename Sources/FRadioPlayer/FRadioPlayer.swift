@@ -136,6 +136,15 @@ open class FRadioPlayer: NSObject {
         }
     }
     
+    /// Who recovers a stalled stream (default `.automatic`, the 0.4.0
+    /// ladder). Switching to `.hostManaged` cancels any pending library
+    /// reload. See `RecoveryPolicy`.
+    public var recoveryPolicy: RecoveryPolicy = .automatic {
+        didSet {
+            if recoveryPolicy == .hostManaged { stallRecovery.cancel() }
+        }
+    }
+
     // MARK: - Internal / Private properties
     
     /// Observations
@@ -171,6 +180,13 @@ open class FRadioPlayer: NSObject {
     
     /// Player time observer
     private var timeObserver: Any?
+
+    /// Progress-only time observer for live streams, where the file time
+    /// observer is removed. Feeds `didObserveProgress` and nothing else.
+    private(set) var liveProgressObserver: Any?
+
+    /// Whether the player is waiting for data while playback is wanted
+    private(set) var isBuffering = false
 
     /// Item played to the end
     private var hasPlayedToEndTime = false
@@ -285,6 +301,7 @@ open class FRadioPlayer: NSObject {
         guard let player = player else { return }
         stallRecovery.cancel()
         player.pause()
+        setBuffering(false)
         playbackState = .paused
     }
     
@@ -303,6 +320,7 @@ open class FRadioPlayer: NSObject {
         resumeAfterInterruption = nil
         guard let player = player else { return }
         stallRecovery.cancel()
+        setBuffering(false)
 
         if duration != 0 {
             currentTime = 0
@@ -439,6 +457,7 @@ open class FRadioPlayer: NSObject {
             if isPlaying { pause() }
 
             NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: item)
+            NotificationCenter.default.removeObserver(self, name: .AVPlayerItemPlaybackStalled, object: item)
             item.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
             item.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackBufferEmpty))
             item.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp))
@@ -453,6 +472,7 @@ open class FRadioPlayer: NSObject {
         
         if let item = playerItem {
             NotificationCenter.default.addObserver(self, selector: #selector(itemDidPlayToEnd), name: .AVPlayerItemDidPlayToEndTime, object: playerItem)
+            NotificationCenter.default.addObserver(self, selector: #selector(itemPlaybackStalled(_:)), name: .AVPlayerItemPlaybackStalled, object: item)
 
             item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: [.old, .new], context: FRadioPlayer.itemKVOContext)
             item.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackBufferEmpty), options: [.old, .new], context: FRadioPlayer.itemKVOContext)
@@ -497,6 +517,7 @@ open class FRadioPlayer: NSObject {
             player?.removeTimeObserver(timeObserver)
             self.timeObserver = nil
         }
+        removeLiveProgressObserver()
         
         stop()
         stallRecovery.cancel()
@@ -594,27 +615,37 @@ open class FRadioPlayer: NSObject {
             stallRecovery.cancel()
             // Audio is flowing: a lingering .loading would be out of sync
             if state == .loading { state = .loadingFinished }
+            setBuffering(false)
         case .waitingToPlayAtSpecifiedRate:
             // Waiting with playback intent is loading, whatever came before
             // (keeps state in sync when a stopped item is reattached by play)
             if playbackState == .playing, state != .error {
                 state = .loading
             }
-            // Only recover mid-playback stalls: initial buffering manages itself
-            guard didStartPlaying, playbackState == .playing else { return }
+            if playbackState == .playing { setBuffering(true) }
+            // Only recover mid-playback stalls: initial buffering manages
+            // itself. A host-managed player never schedules a reload.
+            guard recoveryPolicy == .automatic, didStartPlaying, playbackState == .playing else { return }
             stallRecovery.start()
         case .paused:
-            break
+            setBuffering(false)
         @unknown default:
             break
         }
     }
 
     private func networkPathDidChange(_ path: NWPath) {
-        let isNowConnected = path.status == .satisfied
+        connectivityDidChange(isConnected: path.status == .satisfied)
+    }
 
+    func connectivityDidChange(isConnected isNowConnected: Bool) {
         // Recover playback when the connection comes back after being lost
         if isNowConnected, !isConnected {
+            if playerItem != nil, playbackState == .playing {
+                reportStall(.networkReconnected)
+            }
+            // 0.4.0 behaviour kept as is: `isConnected` is still false here,
+            // so this call never starts the ladder (see the 0.5.0 notes)
             checkNetworkInterruption()
         }
 
@@ -626,6 +657,7 @@ open class FRadioPlayer: NSObject {
     // time, which removes the old captured-item race.
     private func checkNetworkInterruption() {
         guard
+            recoveryPolicy == .automatic,
             let item = playerItem,
             !item.isPlaybackLikelyToKeepUp,
             isConnected,
@@ -747,9 +779,66 @@ open class FRadioPlayer: NSObject {
     }
 
     func itemBufferEmptyDidChange(_ item: AVPlayerItem) {
-        guard isItemAttached(item), item.isPlaybackBufferEmpty else { return }
+        bufferEmptyDidChange(item, isEmpty: item.isPlaybackBufferEmpty)
+    }
+
+    func bufferEmptyDidChange(_ item: AVPlayerItem, isEmpty: Bool) {
+        guard isItemAttached(item), isEmpty else { return }
         state = .loading
+        if playbackState == .playing {
+            setBuffering(true)
+            reportStall(.bufferEmpty)
+        }
         checkNetworkInterruption()
+    }
+
+    // MARK: - Host watchdog signals
+
+    /// AVFoundation posts this on an unspecified thread: reduce it to the
+    /// item's identity, then hop like the item KVO does
+    @objc nonisolated func itemPlaybackStalled(_ notification: Notification) {
+        guard let item = notification.object as? AVPlayerItem else { return }
+        let itemID = ObjectIdentifier(item)
+        if Thread.isMainThread {
+            MainActor.assumeIsolated { playbackStalled(itemID: itemID) }
+        } else {
+            Task { @MainActor [weak self] in self?.playbackStalled(itemID: itemID) }
+        }
+    }
+
+    private func playbackStalled(itemID: ObjectIdentifier) {
+        guard let item = playerItem, ObjectIdentifier(item) == itemID,
+              playbackState == .playing else { return }
+        reportStall(.playbackStalledNotification)
+    }
+
+    private func reportStall(_ reason: StallReason) {
+        notifiyObservers { observer in
+            observer.radioPlayerDidDetectStall(self, reason: reason)
+        }
+    }
+
+    private func setBuffering(_ value: Bool) {
+        guard isBuffering != value else { return }
+        isBuffering = value
+        notifiyObservers { observer in
+            observer.radioPlayer(self, bufferingDidChange: value)
+        }
+    }
+
+    func reportProgress(_ time: CMTime) {
+        let seconds = CMTimeGetSeconds(time)
+        guard seconds.isFinite else { return }
+        notifiyObservers { observer in
+            observer.radioPlayer(self, didObserveProgress: seconds)
+        }
+    }
+
+    private func removeLiveProgressObserver() {
+        if let observer = liveProgressObserver {
+            player?.removeTimeObserver(observer)
+            liveProgressObserver = nil
+        }
     }
 
     func itemKeepUpDidChange(_ item: AVPlayerItem) {
@@ -828,6 +917,7 @@ extension FRadioPlayer {
         guard !hasPlayedToEndTime else { return }
         let playedTime = CMTimeGetSeconds(time)
         currentTime = playedTime
+        reportProgress(time)
     }
     
     /// AVPlayerItemDidPlayToEndTime may post on a thread other than the
@@ -845,8 +935,9 @@ extension FRadioPlayer {
         }
     }
     
-    private func durationDidChange(_ duration: CMTime) {
-        
+    func durationDidChange(_ duration: CMTime) {
+        let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+
         if CMTIME_IS_INDEFINITE(duration) || duration == .zero {
             // Live stream
             self.duration = 0
@@ -855,11 +946,21 @@ extension FRadioPlayer {
                 player?.removeTimeObserver(timeObserver)
                 self.timeObserver = nil
             }
+
+            // Progress only, for host watchdogs: currentTime stays as 0.4.0
+            // left it and playTimeDidChange is not called
+            if liveProgressObserver == nil {
+                liveProgressObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
+                    MainActor.assumeIsolated {
+                        self?.reportProgress(time)
+                    }
+                })
+            }
             
         } else {
             // Audio file
+            removeLiveProgressObserver()
             self.duration = Double(CMTimeGetSeconds(duration))
-            let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
             
             // Registered on the main queue, so the block runs on the actor
             timeObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in

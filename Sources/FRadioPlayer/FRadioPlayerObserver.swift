@@ -75,6 +75,38 @@ public protocol FRadioPlayerObserver: AnyObject {
      - parameter totalTime: player item total time
      */
     func radioPlayer(_ player: FRadioPlayer, playTimeDidChange currentTime: TimeInterval, duration: TimeInterval)
+
+    /**
+     Called when the player starts or stops waiting for data while playback
+     is wanted (`timeControlStatus == .waitingToPlayAtSpecifiedRate`, or the
+     current item's buffer running empty). Ends with `false` on playing,
+     pause and stop. Consecutive duplicates are not reported. Since 0.5.0.
+
+     - parameter player: FRadioPlayer
+     - parameter isBuffering: whether the player is waiting for data
+     */
+    func radioPlayer(_ player: FRadioPlayer, bufferingDidChange isBuffering: Bool)
+
+    /**
+     Called on every tick of the player's periodic time observer (every 0.5
+     seconds while time advances), for files and live streams alike. Meant
+     for host watchdogs; unlike `playTimeDidChange` it is not deduplicated
+     and does not change `currentTime`. Since 0.5.0.
+
+     - parameter player: FRadioPlayer
+     - parameter time: the current item time in seconds
+     */
+    func radioPlayer(_ player: FRadioPlayer, didObserveProgress time: TimeInterval)
+
+    /**
+     Called when a stall signal arrives while playback is wanted, under
+     every `RecoveryPolicy`. Under `.hostManaged` this is the only reaction
+     the library has: no reload is scheduled. Since 0.5.0.
+
+     - parameter player: FRadioPlayer
+     - parameter reason: the signal that was observed
+     */
+    func radioPlayerDidDetectStall(_ player: FRadioPlayer, reason: FRadioPlayer.StallReason)
 }
 
 
@@ -88,4 +120,7 @@ public extension FRadioPlayerObserver {
     func radioPlayer(_ player: FRadioPlayer, artworkDidChange artworkURL: URL?) {}
     func radioPlayer(_ player: FRadioPlayer, playTimeDidChange currentTime: TimeInterval, duration: TimeInterval) {}
     func radioPlayer(_ player: FRadioPlayer, durationDidChange duration: TimeInterval) {}
+    func radioPlayer(_ player: FRadioPlayer, bufferingDidChange isBuffering: Bool) {}
+    func radioPlayer(_ player: FRadioPlayer, didObserveProgress time: TimeInterval) {}
+    func radioPlayerDidDetectStall(_ player: FRadioPlayer, reason: FRadioPlayer.StallReason) {}
 }
