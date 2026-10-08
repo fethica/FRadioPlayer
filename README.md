@@ -36,6 +36,7 @@ open FRadioPlayerDemo.xcodeproj
 - [x] Support bluetooth playback
 - [x] Network interruptions handling
 - [x] Automatic stall recovery with bounded retries (reload with backoff, clean error state when the stream is gone)
+- [x] Host-managed recovery, classified failures and item seams for apps that own playback (0.5.0)
 - [x] Support for Swift Package Manager SPM
 
 ## Requirements
@@ -108,13 +109,73 @@ See the [0.4.0 release notes and migration guide](.github/release-notes/0.4.0.md
 
 On iOS and tvOS the player sets the shared `AVAudioSession` category to `.playback`, with the default mode and no category options, when `FRadioPlayer.shared` is first accessed. The playback category supports AirPlay and Bluetooth A2DP without additional options on iOS.
 
-An app that owns its audio session opts out before its first access to `shared`, for example in its `App` initializer or `application(_:didFinishLaunchingWithOptions:)`:
+An app that owns its audio session opts out on the main actor before its first access to `shared`, for example in its `App` initializer or `application(_:didFinishLaunchingWithOptions:)`:
 
 ```swift
 FRadioPlayer.configuresAudioSession = false
 ```
 
 Setting it after `shared` exists has no effect. The player never activates or deactivates the session.
+
+## Host-managed recovery and seams
+
+Since 0.5.0 an app that wants to own retries, interruptions or the audio pipeline can take them over. Every seam is opt-in: with the defaults the player behaves exactly as in 0.4.0.
+
+| Seam | Default | What it lets the host do |
+| --- | --- | --- |
+| `recoveryPolicy` | `.automatic` | `.hostManaged` stops the built-in 2/4/8 s reload ladder. The player only reports stalls. |
+| `radioPlayerDidDetectStall(_:reason:)` | no-op | Hear about `.bufferEmpty`, `.networkReconnected` and `.playbackStalledNotification` while playback is wanted, under either policy. |
+| `radioPlayer(_:bufferingDidChange:)` | no-op | Track waiting-for-data periods (deduplicated; ends on playing, pause and stop). |
+| `radioPlayer(_:didObserveProgress:)` | no-op | A tick every 0.5 s while time advances, for files and live streams, for watchdogs. |
+| `lastFailure`, `radioPlayer(_:didFail:)` | no-op | A classified `Failure` (`.notFound`, `.forbidden`, `.unauthorized`, `.network`, `.timeout`, `.decode`, `.stalledExhausted`, `.unknown`, plus domain, code and HTTP status) delivered before the `.error` state. |
+| `stop(discardingItem:)` | `stop()` keeps the item | `true` drops the item, metadata and artwork, so the next `play()` reconnects with a fresh item. |
+| `playerItemConfigurator` | `nil` | Configure every new `AVPlayerItem` before it is attached, for example to install an `audioMix`. |
+| `itemGeneration` | starts at 0 | Increments on every new item, to tell a fresh item from a reattached one. |
+| `resumesAfterInterruption`, `radioPlayer(_:interruptionEnded:)` | `true`, no-op | `false` keeps the player paused when an interruption ends; the callback says whether resuming is warranted. |
+
+A host that owns its retry ladder:
+
+```swift
+@MainActor
+final class PlaybackAuthority: FRadioPlayerObserver {
+    let player = FRadioPlayer.shared
+
+    init() {
+        player.recoveryPolicy = .hostManaged
+        player.resumesAfterInterruption = false
+        player.playerItemConfigurator = { item in
+            item.audioMix = makeLoudnessMix(for: item)   // your tap
+        }
+        player.addObserver(self)
+    }
+
+    func radioPlayerDidDetectStall(_ player: FRadioPlayer, reason: FRadioPlayer.StallReason) {
+        scheduleRetry()   // your backoff, which ends in retry()
+    }
+
+    func radioPlayer(_ player: FRadioPlayer, didFail failure: FRadioPlayer.Failure) {
+        switch failure.kind {
+        case .notFound, .decode: break          // terminal: tell the user
+        default: scheduleRetry()
+        }
+    }
+
+    func radioPlayer(_ player: FRadioPlayer, interruptionEnded shouldResume: Bool) {
+        if shouldResume { player.play() }
+    }
+
+    func retry() {
+        player.stop(discardingItem: true)   // reconnect, don't resume
+        player.play()
+    }
+}
+```
+
+Notes:
+
+- Callbacks arrive on the main actor. Don't drive the player from inside `didFail`; it runs before `.error` is published, so schedule the retry instead.
+- The configurator runs on the main actor for every new item (URL change, `play()` after an error, `play()` after `stop(discardingItem: true)`), never for a reattached one. Don't retain the item.
+- Switching `recoveryPolicy` to `.hostManaged` cancels a reload the library already scheduled.
 
 ## Usage
 

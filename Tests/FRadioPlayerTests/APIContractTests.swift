@@ -97,6 +97,47 @@ final class APIContractTests: XCTestCase {
         player.removeObserver(empty)
     }
 
+    // 0.5.0 host seams: explicit conformance locks the new callbacks
+    private final class SeamObserver: FRadioPlayerObserver {
+        func radioPlayer(_ player: FRadioPlayer, bufferingDidChange isBuffering: Bool) {}
+        func radioPlayer(_ player: FRadioPlayer, didObserveProgress time: TimeInterval) {}
+        func radioPlayerDidDetectStall(_ player: FRadioPlayer, reason: FRadioPlayer.StallReason) {}
+        func radioPlayer(_ player: FRadioPlayer, didFail failure: FRadioPlayer.Failure) {}
+        func radioPlayer(_ player: FRadioPlayer, interruptionEnded shouldResume: Bool) {}
+    }
+
+    func testHostSeamSurfaceCompiles() {
+        let player = FRadioPlayer.shared
+
+        let policy: FRadioPlayer.RecoveryPolicy = player.recoveryPolicy
+        player.recoveryPolicy = policy
+        let resumes: Bool = player.resumesAfterInterruption
+        player.resumesAfterInterruption = resumes
+        let configurator: (@MainActor (AVPlayerItem) -> Void)? = player.playerItemConfigurator
+        player.playerItemConfigurator = configurator
+        let _: Int = player.itemGeneration
+        let _: FRadioPlayer.Failure? = player.lastFailure
+        let _: (Bool) -> Void = player.stop(discardingItem:)
+
+        // Defaults keep 0.4.0 behaviour
+        XCTAssertEqual(policy, .automatic)
+        XCTAssertTrue(resumes)
+        XCTAssertNil(configurator)
+
+        let failure = FRadioPlayer.Failure(kind: .network, domain: "d", code: 1, httpStatus: nil, message: "m")
+        XCTAssertEqual(failure, FRadioPlayer.Failure(kind: .network, domain: "d", code: 1, httpStatus: nil, message: "m"))
+        let kinds: [FRadioPlayer.Failure.Kind] = [.notFound, .forbidden, .unauthorized, .network, .timeout, .decode, .stalledExhausted, .unknown]
+        XCTAssertEqual(kinds.count, 8)
+        let reasons: [FRadioPlayer.StallReason] = [.bufferEmpty, .networkReconnected, .playbackStalledNotification]
+        XCTAssertEqual(reasons.count, 3)
+        let policies: [FRadioPlayer.RecoveryPolicy] = [.automatic, .hostManaged]
+        XCTAssertEqual(policies.count, 2)
+
+        let seams = SeamObserver()
+        player.addObserver(seams)
+        player.removeObserver(seams)
+    }
+
     func testStateEnumIsStable() {
         // Exhaustive switch: adding/renaming a case breaks compilation here.
         let all: [FRadioPlayer.State] = [.urlNotSet, .readyToPlay, .loading, .loadingFinished, .error]
