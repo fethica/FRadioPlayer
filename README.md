@@ -174,7 +174,7 @@ final class PlaybackAuthority: FRadioPlayerObserver {
 Notes:
 
 - Callbacks arrive on the main actor. Don't drive the player from inside `didFail`; it runs before `.error` is published, so schedule the retry instead.
-- The configurator runs on the main actor for every new item (URL change, `play()` after an error, `play()` after `stop(discardingItem: true)`), never for a reattached one. Don't retain the item. A stop, discard or URL change made inside the configurator wins: that item is dropped, not attached.
+- The configurator runs on the main actor for every new item (URL change, `play()` after an error, `play()` after `stop(discardingItem: true)`), never for a reattached one. Don't retain the item. A stop, discard or URL change made inside the configurator wins: that item is dropped, not attached. The same holds for one made from the `.loading` callback of the rebuild that follows `stop(discardingItem: true)`. Metadata already queued for a discarded or replaced item is dropped.
 - Switching `recoveryPolicy` to `.hostManaged` cancels a reload the library already scheduled.
 
 ## Usage
@@ -262,7 +262,7 @@ player.seek(to: 30) {
 
 The completion is always called exactly once, on the main actor, after `seek` returns. That includes a live stream or an item whose duration isn't known yet (no seek happens), no loaded item, and a seek that is superseded by a newer one. Seeking keeps the playback intent: a playing player keeps playing, a paused or stopped player stays that way, and a pause issued while the seek is in flight wins.
 
-For live streams, `pause()` keeps the item and its connection, and resumes from the buffered position. `stop()` drops the connection and clears metadata and artwork; the next `play()` reconnects.
+For live streams, `pause()` keeps the item attached and resumes from the buffered position. `stop()` detaches the item and clears metadata and artwork, but keeps the item: the next `play()` reattaches that same item, it does not build a new one. To reconnect with a fresh asset and item, call `stop(discardingItem: true)` before `play()`.
 
 ### Observer methods
 
