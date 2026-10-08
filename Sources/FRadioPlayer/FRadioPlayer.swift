@@ -195,8 +195,21 @@ open class FRadioPlayer: NSObject {
     /// Network path monitor for interruption handling
     private let pathMonitor = NWPathMonitor()
 
+    /// Network connectivity as last reported by the path monitor
+    struct Connectivity {
+        /// Whether the latest path was satisfied
+        var isConnected = false
+        /// Whether any path was received yet. The monitor delivers the
+        /// current path right after it starts: that first snapshot seeds
+        /// connectivity, it is not a restoration.
+        var hasSnapshot = false
+    }
+
+    /// Internal so tests can replay a cold start
+    var connectivity = Connectivity()
+
     /// Current network connectivity
-    private var isConnected = false
+    private var isConnected: Bool { connectivity.isConnected }
     
     /// Key-value observing context
     private let requiredAssetKeys = [
@@ -785,7 +798,9 @@ open class FRadioPlayer: NSObject {
     func connectivityDidChange(isConnected isNowConnected: Bool) {
         // Recover playback when the connection comes back after being lost
         if isNowConnected, !isConnected {
-            if playerItem != nil, playbackState == .playing {
+            // Only a path restored after a known unsatisfied one is a
+            // reconnect; the monitor's first snapshot just seeds the state
+            if connectivity.hasSnapshot, playerItem != nil, playbackState == .playing {
                 reportStall(.networkReconnected)
             }
             // 0.4.0 behaviour kept as is: `isConnected` is still false here,
@@ -793,7 +808,8 @@ open class FRadioPlayer: NSObject {
             checkNetworkInterruption()
         }
 
-        isConnected = isNowConnected
+        connectivity.isConnected = isNowConnected
+        connectivity.hasSnapshot = true
     }
 
     // Buffer-empty and network-reconnect signals route into the recovery

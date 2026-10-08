@@ -31,7 +31,9 @@ public extension FRadioPlayer {
         /// wanted.
         case bufferEmpty
 
-        /// The network path came back while playback was wanted.
+        /// The network path came back after the monitor had reported it
+        /// unsatisfied, while playback was wanted. The monitor's first
+        /// snapshot is never reported.
         case networkReconnected
 
         /// AVFoundation posted `AVPlayerItemPlaybackStalled` for the
