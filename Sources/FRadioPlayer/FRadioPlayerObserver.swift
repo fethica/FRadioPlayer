@@ -78,9 +78,15 @@ public protocol FRadioPlayerObserver: AnyObject {
 
     /**
      Called when the player starts or stops waiting for data while playback
-     is wanted (`timeControlStatus == .waitingToPlayAtSpecifiedRate`, or the
-     current item's buffer running empty). Ends with `false` on playing,
-     pause and stop. Consecutive duplicates are not reported. Since 0.5.0.
+     is wanted. The sources are exactly these:
+     - `true`: `timeControlStatus` becomes `.waitingToPlayAtSpecifiedRate`,
+       or the attached item's buffer runs empty, with playback wanted.
+     - `false`: `timeControlStatus` becomes `.playing` or `.paused`, or
+       `pause()`, `stop()` or a failure ends playback.
+     `isPlaybackLikelyToKeepUp` is deliberately not a source: it is a
+     prediction that can flip while audio keeps playing, and it still only
+     drives the legacy `state` (`.loading` / `.loadingFinished`). Consecutive
+     duplicates are not reported. Since 0.5.0.
 
      - parameter player: FRadioPlayer
      - parameter isBuffering: whether the player is waiting for data

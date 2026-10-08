@@ -176,6 +176,16 @@ final class HostManagedRecoveryTests: XCTestCase {
         XCTAssertEqual(recorder.offMain, 0)
     }
 
+    /// Documented contract (review S26-07): keep-up KVO drives the legacy
+    /// state only, never bufferingDidChange
+    func testKeepUpChangesDoNotReportBuffering() throws {
+        let player = startFixture(policy: .hostManaged)
+        let item = try XCTUnwrap(player.playerItem)
+        player.itemKeepUpDidChange(item)
+        player.itemKeepUpDidChange(item)
+        XCTAssertEqual(recorder.buffering, [])
+    }
+
     // MARK: - Progress
 
     /// Ticks that prove time moved on the periodic observer, not only the

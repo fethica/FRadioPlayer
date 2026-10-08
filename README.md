@@ -125,7 +125,7 @@ Since 0.5.0 an app that wants to own retries, interruptions or the audio pipelin
 | --- | --- | --- |
 | `recoveryPolicy` | `.automatic` | `.hostManaged` stops the built-in 2/4/8 s reload ladder. The player only reports stalls. |
 | `radioPlayerDidDetectStall(_:reason:)` | no-op | Hear about `.bufferEmpty`, `.networkReconnected` and `.playbackStalledNotification` while playback is wanted, under either policy. |
-| `radioPlayer(_:bufferingDidChange:)` | no-op | Track waiting-for-data periods (deduplicated; ends on playing, pause and stop). |
+| `radioPlayer(_:bufferingDidChange:)` | no-op | Track waiting-for-data periods (deduplicated). Starts on `timeControlStatus` waiting or buffer-empty with playback wanted; ends on `timeControlStatus` playing or paused, pause, stop and failure. `isPlaybackLikelyToKeepUp` is not a source (it only drives the legacy `state`). |
 | `radioPlayer(_:didObserveProgress:)` | no-op | A tick every 0.5 s while time advances, for files and live streams (from attachment, even if the duration stays indefinite), for watchdogs. AVPlayer also ticks on start, stop and time jumps: compare successive times. |
 | `lastFailure`, `radioPlayer(_:didFail:)` | no-op | A classified `Failure` (`.notFound`, `.forbidden`, `.unauthorized`, `.network`, `.timeout`, `.decode`, `.stalledExhausted`, `.unknown`, plus domain, code and HTTP status) delivered before the `.error` state. |
 | `stop(discardingItem:)` | `stop()` keeps the item | `true` drops the item, metadata and artwork, so the next `play()` reconnects with a fresh item. |
