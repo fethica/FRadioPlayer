@@ -150,7 +150,9 @@ open class FRadioPlayer: NSObject {
     /// `audioMix` (for example a processing tap). It is not called when
     /// `play()` reattaches a kept item. Do not retain the item; it is
     /// replaced on every `radioURL` change, on `play()` after an error and
-    /// after `stop(discardingItem: true)`. Default `nil`. Since 0.5.0.
+    /// after `stop(discardingItem: true)`. A stop, discard or `radioURL`
+    /// change made from inside the call wins: the item being configured is
+    /// then dropped instead of attached. Default `nil`. Since 0.5.0.
     public var playerItemConfigurator: (@MainActor (AVPlayerItem) -> Void)?
 
     /// Increments every time the player creates a new item, so a host can
@@ -213,6 +215,13 @@ open class FRadioPlayer: NSObject {
     /// item for the kept URL. Consumed by that play() before it builds, and
     /// cleared by any new item or URL change.
     private var needsFreshItem = false
+
+    /// Identifies the item creation in flight; bumped by every new creation
+    /// and by every stop, discard or URL change (see `setupPlayer`)
+    private var itemCreation = 0
+
+    /// The latest creation whose item was attached
+    private var committedCreation = 0
 
     /// Whether the player is waiting for data while playback is wanted
     private(set) var isBuffering = false
@@ -315,7 +324,8 @@ open class FRadioPlayer: NSObject {
         // (`.loading`, the configurator) cannot start a second build.
         if state == .error || needsFreshItem, let url = radioURL {
             needsFreshItem = false
-            rebuildPipeline(with: url)
+            // A stop or URL change issued from the configurator wins
+            guard rebuildPipeline(with: url) == .committed else { return }
         }
 
         guard let player = player else { return }
@@ -366,6 +376,7 @@ open class FRadioPlayer: NSObject {
     }
 
     private func discardItem() {
+        invalidateItemCreation()
         removeFileTimeObserver()
         removeLiveProgressObserver()
         player?.replaceCurrentItem(with: nil)
@@ -389,6 +400,7 @@ open class FRadioPlayer: NSObject {
     ///   instead, so observers never see a transient "finished" state.
     private func stopPlayback(endingLoad: Bool) {
         resumeAfterInterruption = nil
+        invalidateItemCreation()
         guard let player = player else { return }
         stallRecovery.cancel()
         setBuffering(false)
@@ -478,16 +490,23 @@ open class FRadioPlayer: NSObject {
         resetPlayer()
 
         // Exactly one itemDidChange per radioURL change, after all setup work
-        defer { itemChange(with: url) }
+        guard let url = url else {
+            state = .urlNotSet
+            itemChange(with: nil)
+            return
+        }
 
-        guard let url = url else { state = .urlNotSet; return }
-
-        rebuildPipeline(with: url)
+        // A URL switch from inside the configurator already reported the
+        // item that replaced this one
+        if rebuildPipeline(with: url) != .superseded {
+            itemChange(with: url)
+        }
     }
 
     /// Builds a fresh asset + item for the URL. Used on every radioURL change
     /// and on play() after a fatal error (failed items cannot be reused).
-    private func rebuildPipeline(with url: URL) {
+    @discardableResult
+    private func rebuildPipeline(with url: URL) -> ItemCreation {
         state = .loading
 
         // No AVURLAssetPreferPreciseDurationAndTimingKey: `false` is already
@@ -500,10 +519,27 @@ open class FRadioPlayer: NSObject {
         }
 
         let asset = AVURLAsset(url: url, options: options)
-        setupPlayer(with: asset)
+        return setupPlayer(with: asset)
     }
-    
-    private func setupPlayer(with asset: AVURLAsset) {
+
+    /// How an item creation ended once the configurator returned
+    enum ItemCreation {
+        /// The item was attached (and autoplayed if `isAutoPlay`)
+        case committed
+        /// A stop or discard during the configurator call: the item is
+        /// dropped and the next play() builds a fresh one
+        case stopped
+        /// A radioURL change during the configurator call created a newer
+        /// item, which stays
+        case superseded
+    }
+
+    /// Any stop, discard or URL change invalidates a creation in flight
+    private func invalidateItemCreation() {
+        itemCreation += 1
+    }
+
+    private func setupPlayer(with asset: AVURLAsset) -> ItemCreation {
 
         if player == nil {
             player = AVPlayer()
@@ -516,8 +552,21 @@ open class FRadioPlayer: NSObject {
         let item = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: requiredAssetKeys)
         itemGeneration += 1
         needsFreshItem = false
+        itemCreation += 1
+        let creation = itemCreation
         playerItemConfigurator?(item)
+
+        // The configurator may have stopped, discarded or switched URL:
+        // attaching (and autoplaying) this item now would undo that
+        guard creation == itemCreation else {
+            if committedCreation > creation { return .superseded }
+            if playerItem != nil { discardItem() }
+            needsFreshItem = true
+            return .stopped
+        }
+        committedCreation = creation
         playerItem = item
+        return .committed
     }
         
     /** Reset all player item observers and create new ones

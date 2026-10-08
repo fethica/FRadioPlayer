@@ -96,4 +96,92 @@ final class ReentrancyRegressionTests: XCTestCase {
         XCTAssertIdentical(player.attachedItem, item)
         XCTAssertEqual(player.playbackState, .playing)
     }
+
+    // MARK: - S26-05: controls issued from inside the configurator
+
+    private final class ItemRecorder: FRadioPlayerObserver {
+        var items: [URL?] = []
+        var playbackStates: [FRadioPlayer.PlaybackState] = []
+        func radioPlayer(_ player: FRadioPlayer, itemDidChange url: URL?) {
+            items.append(url)
+        }
+        func radioPlayer(_ player: FRadioPlayer, playbackStateDidChange state: FRadioPlayer.PlaybackState) {
+            playbackStates.append(state)
+        }
+    }
+
+    private func assetURL(_ item: AVPlayerItem?) -> URL? {
+        (item?.asset as? AVURLAsset)?.url
+    }
+
+    func testStopDiscardingInConfiguratorOnURLChangeSticks() throws {
+        let player = FRadioPlayer.shared
+        var calls = 0
+        player.playerItemConfigurator = { _ in
+            calls += 1
+            if calls == 1 { player.stop(discardingItem: true) }
+        }
+        let recorder = observe(ItemRecorder())
+
+        player.radioURL = fixture
+        XCTAssertEqual(player.playbackState, .stopped, "the STOP issued in the hook wins")
+        XCTAssertFalse(recorder.playbackStates.contains(.playing), "no autoplay of the abandoned item")
+        XCTAssertNil(player.playerItem)
+        XCTAssertNil(player.attachedItem)
+        XCTAssertEqual(player.radioURL, fixture)
+        XCTAssertEqual(recorder.items, [fixture], "the URL change itself is still reported once")
+
+        // The next play() connects fresh
+        let generation = player.itemGeneration
+        player.play()
+        XCTAssertEqual(calls, 2)
+        XCTAssertEqual(player.itemGeneration, generation + 1)
+        XCTAssertNotNil(player.playerItem)
+        XCTAssertIdentical(player.attachedItem, player.playerItem)
+        XCTAssertEqual(player.playbackState, .playing)
+    }
+
+    func testStopInConfiguratorOnPlayAfterDiscardSticks() throws {
+        let player = FRadioPlayer.shared
+        player.radioURL = fixture
+        player.stop(discardingItem: true)
+
+        var calls = 0
+        player.playerItemConfigurator = { _ in
+            calls += 1
+            if calls == 1 { player.stop() }
+        }
+        player.play()
+        XCTAssertEqual(player.playbackState, .stopped, "a plain stop in the hook also wins")
+        XCTAssertNil(player.attachedItem)
+        XCTAssertNil(player.playerItem, "the abandoned item is never kept")
+
+        player.play()
+        XCTAssertEqual(calls, 2, "and the next play() builds again")
+        XCTAssertEqual(player.playbackState, .playing)
+        XCTAssertIdentical(player.attachedItem, player.playerItem)
+    }
+
+    func testURLSwitchInConfiguratorKeepsTheNewURLsItem() throws {
+        let player = FRadioPlayer.shared
+        let other = try TestAudio.silentWAV(seconds: 1)
+        defer { try? FileManager.default.removeItem(at: other) }
+
+        var calls = 0
+        player.playerItemConfigurator = { _ in
+            calls += 1
+            if calls == 1 { player.radioURL = other }
+        }
+        let recorder = observe(ItemRecorder())
+
+        player.radioURL = fixture
+        XCTAssertEqual(calls, 2)
+        XCTAssertEqual(player.radioURL, other)
+        let item = try XCTUnwrap(player.playerItem)
+        XCTAssertEqual(assetURL(item), other, "the outer setup must not overwrite the newer item")
+        XCTAssertIdentical(player.attachedItem, item)
+        XCTAssertEqual(player.playbackState, .playing)
+        XCTAssertEqual(recorder.items.last, other, "observers end on the URL actually in use")
+        XCTAssertFalse(recorder.items.contains(fixture), "the superseded URL never became an item")
+    }
 }

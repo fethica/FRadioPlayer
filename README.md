@@ -174,7 +174,7 @@ final class PlaybackAuthority: FRadioPlayerObserver {
 Notes:
 
 - Callbacks arrive on the main actor. Don't drive the player from inside `didFail`; it runs before `.error` is published, so schedule the retry instead.
-- The configurator runs on the main actor for every new item (URL change, `play()` after an error, `play()` after `stop(discardingItem: true)`), never for a reattached one. Don't retain the item.
+- The configurator runs on the main actor for every new item (URL change, `play()` after an error, `play()` after `stop(discardingItem: true)`), never for a reattached one. Don't retain the item. A stop, discard or URL change made inside the configurator wins: that item is dropped, not attached.
 - Switching `recoveryPolicy` to `.hostManaged` cancels a reload the library already scheduled.
 
 ## Usage
