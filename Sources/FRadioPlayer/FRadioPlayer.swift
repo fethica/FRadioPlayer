@@ -202,6 +202,10 @@ open class FRadioPlayer: NSObject {
     /// observer is removed. Feeds `didObserveProgress` and nothing else.
     private(set) var liveProgressObserver: Any?
 
+    /// True while `playerItemConfigurator` runs, so a play() from inside it
+    /// does not rebuild the pipeline again
+    private var isCreatingItem = false
+
     /// Whether the player is waiting for data while playback is wanted
     private(set) var isBuffering = false
 
@@ -297,8 +301,10 @@ open class FRadioPlayer: NSObject {
 
         // A failed pipeline is terminal (failed AVPlayerItems can never play
         // again): pressing play after an error rebuilds from the URL instead
-        // of reattaching the dead item
-        if state == .error, let url = radioURL {
+        // of reattaching the dead item. So does play after
+        // stop(discardingItem: true), the only way to have a URL and no item
+        // (outside the configurator call, which must not rebuild again).
+        if state == .error || (playerItem == nil && !isCreatingItem), let url = radioURL {
             rebuildPipeline(with: url)
         }
 
@@ -329,6 +335,42 @@ open class FRadioPlayer: NSObject {
      */
     open func stop() {
         stopPlayback(endingLoad: true)
+    }
+
+    /**
+     Stops playback and optionally drops the current item.
+
+     `stop(discardingItem: false)` is `stop()`: the item is kept and the
+     next `play()` reattaches it. With `true` the item is also detached and
+     released along with its metadata, artwork, duration and time, so the
+     next `play()` for the same `radioURL` builds a fresh asset and item
+     (`itemGeneration` increments and `playerItemConfigurator` runs). Use it
+     for a live stop that must reconnect, not resume. Since 0.5.0.
+
+     - parameter discardingItem: whether to drop the current item
+     */
+    public func stop(discardingItem: Bool) {
+        stop()
+        guard discardingItem else { return }
+        discardItem()
+    }
+
+    private func discardItem() {
+        removeFileTimeObserver()
+        removeLiveProgressObserver()
+        player?.replaceCurrentItem(with: nil)
+        // playerItemDidChange detaches the observers, forgets lastPlayerItem
+        // and clears metadata and artwork
+        playerItem = nil
+        duration = 0
+        currentTime = 0
+    }
+
+    private func removeFileTimeObserver() {
+        if let timeObserver = timeObserver {
+            player?.removeTimeObserver(timeObserver)
+            self.timeObserver = nil
+        }
     }
 
     /// - parameter endingLoad: whether an in-flight load reports
@@ -462,7 +504,9 @@ open class FRadioPlayer: NSObject {
         lastFailure = nil
         let item = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: requiredAssetKeys)
         itemGeneration += 1
+        isCreatingItem = true
         playerItemConfigurator?(item)
+        isCreatingItem = false
         playerItem = item
     }
         
