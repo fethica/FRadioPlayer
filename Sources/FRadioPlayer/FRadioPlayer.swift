@@ -157,6 +157,13 @@ open class FRadioPlayer: NSObject {
     /// tell a fresh item from a reattached one. Since 0.5.0.
     public private(set) var itemGeneration = 0
 
+    /// Whether the player calls `play()` itself when an interruption ends
+    /// with `shouldResume` and playback was running when it began (default
+    /// `true`, the 0.4.0 behaviour). With `false` the player stays paused
+    /// and `radioPlayer(_:interruptionEnded:)` tells the host whether a
+    /// resume is warranted. Since 0.5.0.
+    public var resumesAfterInterruption = true
+
     /// The failure behind the latest `.error` state, set just before
     /// observers get `radioPlayer(_:didFail:)`. Cleared when a new item is
     /// created (a radioURL change, or play() rebuilding after an error).
@@ -650,13 +657,27 @@ open class FRadioPlayer: NSObject {
     /// Resumes only when the system allows it and the player was playing
     /// when the interruption began. Does nothing when no interruption is
     /// pending or the user already played, paused or stopped during it.
+    /// Observers then get `interruptionEnded` with whether a resume is
+    /// warranted, after the player acted on it (or, with
+    /// `resumesAfterInterruption == false`, left it to the host).
     func interruptionEnded(shouldResume: Bool) {
-        guard let resume = resumeAfterInterruption else { return }
+        guard let resume = resumeAfterInterruption else {
+            reportInterruptionEnded(shouldResume: false)
+            return
+        }
         resumeAfterInterruption = nil
-        if shouldResume, resume {
-            play()
+        let warranted = shouldResume && resume
+        if warranted {
+            if resumesAfterInterruption { play() }
         } else {
             pause()
+        }
+        reportInterruptionEnded(shouldResume: warranted)
+    }
+
+    private func reportInterruptionEnded(shouldResume: Bool) {
+        notifiyObservers { observer in
+            observer.radioPlayer(self, interruptionEnded: shouldResume)
         }
     }
     

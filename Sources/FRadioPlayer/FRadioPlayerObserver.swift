@@ -116,6 +116,18 @@ public protocol FRadioPlayerObserver: AnyObject {
      - parameter failure: the classified failure
      */
     func radioPlayer(_ player: FRadioPlayer, didFail failure: FRadioPlayer.Failure)
+
+    /**
+     Called when an audio session interruption ends. `shouldResume` is true
+     only when the system allows resuming, playback was running when the
+     interruption began, and the user did not play, pause or stop since.
+     With `resumesAfterInterruption == true` (default) the player already
+     resumed; with `false` resuming is the host's call. Since 0.5.0.
+
+     - parameter player: FRadioPlayer
+     - parameter shouldResume: whether resuming is warranted
+     */
+    func radioPlayer(_ player: FRadioPlayer, interruptionEnded shouldResume: Bool)
 }
 
 
@@ -133,4 +145,5 @@ public extension FRadioPlayerObserver {
     func radioPlayer(_ player: FRadioPlayer, didObserveProgress time: TimeInterval) {}
     func radioPlayerDidDetectStall(_ player: FRadioPlayer, reason: FRadioPlayer.StallReason) {}
     func radioPlayer(_ player: FRadioPlayer, didFail failure: FRadioPlayer.Failure) {}
+    func radioPlayer(_ player: FRadioPlayer, interruptionEnded shouldResume: Bool) {}
 }
