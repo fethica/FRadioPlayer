@@ -107,6 +107,28 @@ final class FailureClassificationTests: XCTestCase {
         XCTAssertEqual(Failure.classify(error: avWrapping(cannotDecode), errorLog: nil).kind, .decode)
     }
 
+    /// Malformed or unsupported media is permanent: a retry cannot fix it
+    func testParseAndUnsupportedFormatAreDecode() {
+        XCTAssertEqual(AVError.fileFailedToParse.rawValue, -11829)
+        XCTAssertEqual(AVError.formatUnsupported.rawValue, -11864)
+        for code in [AVError.fileFailedToParse, .formatUnsupported] {
+            let bare = NSError(domain: AVFoundationErrorDomain, code: code.rawValue)
+            XCTAssertEqual(Failure.classify(error: bare, errorLog: nil).kind, .decode, "\(code)")
+            let wrapped = avWrapping(bare)
+            XCTAssertEqual(Failure.classify(error: wrapped, errorLog: nil).kind, .decode, "wrapped \(code)")
+        }
+    }
+
+    /// Temporary decoder or media-services trouble may clear on a retry, so
+    /// it must not look like the terminal decode kind
+    func testTemporaryDecoderUnavailabilityIsNotDecode() {
+        // -11819 is AVErrorMediaServicesWereReset, which Swift hides on macOS
+        for code in [AVError.decoderTemporarilyUnavailable.rawValue, -11819] {
+            let error = NSError(domain: AVFoundationErrorDomain, code: code)
+            XCTAssertEqual(Failure.classify(error: error, errorLog: nil).kind, .unknown, "\(code)")
+        }
+    }
+
     func testMissingFileIsNotFound() {
         let cause = NSError(domain: NSURLErrorDomain, code: NSURLErrorFileDoesNotExist)
         XCTAssertEqual(Failure.classify(error: avWrapping(cause), errorLog: nil).kind, .notFound)

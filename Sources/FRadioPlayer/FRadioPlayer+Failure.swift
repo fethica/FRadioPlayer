@@ -171,7 +171,11 @@ extension FRadioPlayer.Failure {
             }
         case AVFoundationErrorDomain:
             switch AVError.Code(rawValue: error.code) {
-            case .decodeFailed, .fileFormatNotRecognized, .failedToParse, .undecodableMediaData, .decoderNotFound:
+            // Permanent: malformed or unsupported media. Temporary decoder
+            // or media-services trouble (decoderTemporarilyUnavailable,
+            // mediaServicesWereReset) stays unclassified, so a host retries.
+            case .decodeFailed, .fileFormatNotRecognized, .failedToParse, .fileFailedToParse,
+                 .undecodableMediaData, .decoderNotFound, .formatUnsupported:
                 return .decode
             case .contentIsNotAuthorized:
                 return .unauthorized
