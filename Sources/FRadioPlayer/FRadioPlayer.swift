@@ -176,7 +176,8 @@ open class FRadioPlayer: NSObject {
     /// Observations
     var observations = [ObjectIdentifier : Observation]()
     
-    /// Metadata Output
+    /// Metadata output of the current item. A detached item's output is
+    /// replaced, so a delivery already queued for it is recognised as stale.
     var metadataOutput: AVPlayerItemMetadataOutput
     
     /// AVPlayer
@@ -272,6 +273,7 @@ open class FRadioPlayer: NSObject {
         metadataOutput = AVPlayerItemMetadataOutput(identifiers: nil)
         
         super.init()
+        metadataOutput.setDelegate(self, queue: DispatchQueue.main)
 
         Self.configureAudioSessionIfNeeded { try? Self.applyPlaybackCategory() }
 
@@ -287,9 +289,6 @@ open class FRadioPlayer: NSObject {
             }
         }
         pathMonitor.start(queue: DispatchQueue(label: "FRadioPlayer.pathMonitor"))
-        
-        // Setup Metadata Output Delegate
-        metadataOutput.setDelegate(self, queue: DispatchQueue.main)
 
         // Stall recovery wiring: attempts reload while the stall persists,
         // gives up into a stopped + error state when the ladder exhausts
@@ -638,6 +637,9 @@ open class FRadioPlayer: NSObject {
             item.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp))
             item.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.duration))
             item.remove(metadataOutput)
+            // Groups the old output already queued must not describe what
+            // comes next (a discard, a fresh item, another station)
+            metadataOutput = makeMetadataOutput()
         }
         
         lastPlayerItem = playerItem
@@ -664,6 +666,12 @@ open class FRadioPlayer: NSObject {
         }
     }
     
+    private func makeMetadataOutput() -> AVPlayerItemMetadataOutput {
+        let output = AVPlayerItemMetadataOutput(identifiers: nil)
+        output.setDelegate(self, queue: DispatchQueue.main)
+        return output
+    }
+
     private func shouldGetArtwork(for metadata: FRadioPlayer.Metadata?, _ enabled: Bool) {
         // Any newer metadata, including none after a station change or a
         // stop, supersedes a lookup still in flight
@@ -1083,6 +1091,10 @@ extension FRadioPlayer: @preconcurrency AVPlayerItemMetadataOutputPushDelegate {
     
     /// :nodoc:
     public func metadataOutput(_ output: AVPlayerItemMetadataOutput, didOutputTimedMetadataGroups groups: [AVTimedMetadataGroup], from track: AVPlayerItemTrack?) {
+        // Only the current item's output counts: a delivery queued before
+        // its item was discarded or replaced is dropped (no metadata, no
+        // artwork lookup)
+        guard output === metadataOutput else { return }
         currentMetadata = metadataExtractor.extract(from: groups)
     }
 }
