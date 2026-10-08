@@ -89,9 +89,14 @@ public protocol FRadioPlayerObserver: AnyObject {
 
     /**
      Called on every tick of the player's periodic time observer (every 0.5
-     seconds while time advances), for files and live streams alike. Meant
-     for host watchdogs; unlike `playTimeDidChange` it is not deduplicated
-     and does not change `currentTime`. Since 0.5.0.
+     seconds while time advances), for files and live streams alike, from
+     the moment an item is attached: a live stream whose duration stays
+     indefinite still ticks. AVPlayer also ticks when playback starts or
+     stops and on time jumps, so a tick alone does not prove audio is
+     advancing: compare successive times. Samples for a discarded or
+     replaced item are dropped. Meant for host watchdogs; unlike
+     `playTimeDidChange` it is not deduplicated and does not change
+     `currentTime`. Since 0.5.0.
 
      - parameter player: FRadioPlayer
      - parameter time: the current item time in seconds

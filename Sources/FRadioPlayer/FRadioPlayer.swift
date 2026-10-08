@@ -606,6 +606,10 @@ open class FRadioPlayer: NSObject {
             item.add(metadataOutput)
             
             player?.replaceCurrentItem(with: item)
+            // A live item's duration starts indefinite and may never change,
+            // so progress cannot wait for a duration notification. A finite
+            // duration later swaps this for the file observer.
+            installLiveProgressObserver()
             if isAutoPlay { play() }
         }
     }
@@ -980,6 +984,25 @@ open class FRadioPlayer: NSObject {
         }
     }
 
+    /// Progress only, for host watchdogs: legacy `currentTime` and
+    /// `playTimeDidChange` are untouched. Bound to the current item
+    /// generation, so a tick queued for an older item is dropped.
+    private func installLiveProgressObserver() {
+        removeLiveProgressObserver()
+        let generation = itemGeneration
+        let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        liveProgressObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
+            MainActor.assumeIsolated {
+                self?.liveProgressTick(time, generation: generation)
+            }
+        })
+    }
+
+    private func liveProgressTick(_ time: CMTime, generation: Int) {
+        guard playerItem != nil, itemGeneration == generation else { return }
+        reportProgress(time)
+    }
+
     private func removeLiveProgressObserver() {
         if let observer = liveProgressObserver {
             player?.removeTimeObserver(observer)
@@ -1100,14 +1123,9 @@ extension FRadioPlayer {
                 self.timeObserver = nil
             }
 
-            // Progress only, for host watchdogs: currentTime stays as 0.4.0
-            // left it and playTimeDidChange is not called
+            // Usually installed when the item was attached already
             if liveProgressObserver == nil {
-                liveProgressObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
-                    MainActor.assumeIsolated {
-                        self?.reportProgress(time)
-                    }
-                })
+                installLiveProgressObserver()
             }
             
         } else {
