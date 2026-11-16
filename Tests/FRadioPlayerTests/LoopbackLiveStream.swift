@@ -10,7 +10,22 @@
 
 import AVFoundation
 import Network
-import os
+
+/// A value behind a lock. OSAllocatedUnfairLock needs iOS 16, and the
+/// tests build at the package floor (iOS 14) on the simulator.
+private final class LockedState<Value>: @unchecked Sendable {
+
+    private let lock = NSLock()
+    private var value: Value
+
+    init(_ value: Value) { self.value = value }
+
+    func withLock<Result>(_ body: (inout Value) -> Result) -> Result {
+        lock.lock()
+        defer { lock.unlock() }
+        return body(&value)
+    }
+}
 
 final class LoopbackLiveStream: Sendable {
 
@@ -23,7 +38,7 @@ final class LoopbackLiveStream: Sendable {
         var connections: [NWConnection] = []
         var stopped = false
     }
-    private let state = OSAllocatedUnfairLock(initialState: State())
+    private let state = LockedState(State())
 
     /// Starts listening on an ephemeral loopback port
     init() throws {
@@ -86,7 +101,7 @@ final class LoopbackLiveStream: Sendable {
     /// Sends 2 s of audio every 1.5 s, slightly ahead of real time, until
     /// the connection goes away or the stream stops
     private static func pump(_ chunk: Data, to connection: NWConnection, on queue: DispatchQueue,
-                             state: OSAllocatedUnfairLock<State>) {
+                             state: LockedState<State>) {
         guard !state.withLock({ $0.stopped }) else { return }
         connection.send(content: chunk, completion: .contentProcessed { error in
             guard error == nil else { return }
